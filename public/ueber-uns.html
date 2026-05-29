@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Über uns — Der Kreisschülerrat Rheingau-Taunus-Kreis vertritt Schülerinnen und Schüler auf Kreisebene.">
+  <title>Über uns — KSR Rheingau-Taunus</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23E63946'/><text x='4' y='24' font-family='system-ui' font-weight='700' font-size='18' fill='white'>KSR</text></svg>">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo">
+        <img src="images/ksr2025.jpg" alt="KSR Logo" width="52" height="52" style="border-radius: 6px; object-fit: contain;">
+        Kreisschülerrat
+      </a>
+      <nav class="header__nav">
+        <ul class="header__nav-list">
+          <li><a href="index.html" class="header__nav-link">Start</a></li>
+          <li><a href="ueber-uns.html" class="header__nav-link active">Über uns</a></li>
+          <li><a href="wuensche.html" class="header__nav-link">Wünsche</a></li>
+          <li><a href="termine.html" class="header__nav-link">Termine</a></li>
+          <li><a href="kontakt.html" class="header__nav-link">Kontakt</a></li>
+          <li><a href="links.html" class="header__nav-link">Links</a></li>
+          <li><a href="impressum.html" class="header__nav-link">Impressum</a></li>
+        </ul>
+      </nav>
+      <div class="header__actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="Design wechseln">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Navigation öffnen">
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+  <nav class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav__header">
+      <a href="index.html" class="mobile-nav__logo"><img src="images/ksr2025.jpg" alt="KSR Logo" width="52" height="52" style="border-radius: 6px; object-fit: contain;"> KSR</a>
+      <button class="mobile-nav__close" id="mobileNavClose" aria-label="Navigation schließen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <ul class="mobile-nav__list">
+      <li><a href="index.html" class="mobile-nav__link">Start</a></li>
+      <li><a href="ueber-uns.html" class="mobile-nav__link active">Über uns</a></li>
+      <li><a href="wuensche.html" class="mobile-nav__link">Wünsche</a></li>
+      <li><a href="termine.html" class="mobile-nav__link">Termine</a></li>
+      <li><a href="kontakt.html" class="mobile-nav__link">Kontakt</a></li>
+      <li><a href="links.html" class="mobile-nav__link">Links</a></li>
+      <li><a href="impressum.html" class="mobile-nav__link">Impressum</a></li>
+    </ul>
+    <div class="mobile-nav__footer">
+      <a href="https://www.facebook.com/KEB.RTK" target="_blank" rel="noopener" class="mobile-nav__social-link" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/keb.rtk/" target="_blank" rel="noopener" class="mobile-nav__social-link" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <main>
+
+      <!-- PAGE HEADER -->
+      <div class="container">
+        <div class="page-header">
+          <p class="page-header__label">Über uns</p>
+          <h1 class="page-header__title">Wir sind der Kreisschülerrat.</h1>
+        </div>
+      </div>
+
+      <!-- INTRO -->
+      <section class="section section--tight">
+        <div class="container">
+          <div class="intro-grid">
+            <div class="intro-text">
+              <p class="text-lg" style="color: var(--color-text-secondary); line-height: var(--line-height-relaxed); margin-bottom: var(--space-5);">
+                Der Kreisschülerrat (KSR) ist die Vertretung der Schülerinnen und Schüler im Rheingau-Taunus-Kreis. Wir setzen uns für bessere Schulen, mehr Mitbestimmung und starke Schülerräte ein — auf Kreisebene, in Wiesbaden und in ganz Hessen.
+              </p>
+              <p class="text-md" style="color: var(--color-text-secondary); line-height: var(--line-height-relaxed);">
+                Unser Kreis ist vielfältig: von der Grundschule bis zum Gymnasium, von Rüdesheim bis Idstein. Wir holen die Perspektive von Schülern da rein, wo Entscheidungen getroffen werden.
+              </p>
+            </div>
+            <div class="intro-stats">
+              <div class="stat-card">
+                <span class="stat-card__number">1977</span>
+                <span class="stat-card__label">Gegründet</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-card__number">189k</span>
+                <span class="stat-card__label">Einwohner im Kreis</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-card__number">3</span>
+                <span class="stat-card__label">Kernthemen</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHAT WE DO -->
+      <section class="section section--tight">
+        <div class="container">
+          <h2 class="display-md" style="margin-bottom: var(--space-6);">Was wir tun</h2>
+          <div class="grid-2">
+            <div class="task-item">
+              <div class="task-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div>
+                <h3 class="task-item__title">Beraten</h3>
+                <p class="task-item__text">Schülerräte mit ungelösten Problemen? Wir beraten bei Konflikten, Schulordnung, Schulgesetz-Fragen — schnell und direkt.</p>
+              </div>
+            </div>
+            <div class="task-item">
+              <div class="task-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              <div>
+                <h3 class="task-item__title">Vernetzen</h3>
+                <p class="task-item__text">Schülerräte im ganzen Kreis kennenlernen, Erfahrungen austauschen, gemeinsam Forderungen stellen — das ist unser Netzwerk.</p>
+              </div>
+            </div>
+            <div class="task-item">
+              <div class="task-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              </div>
+              <div>
+                <h3 class="task-item__title">Mitgestalten</h3>
+                <p class="task-item__text">Schulentwicklungspläne kommentieren, neue Schulen bewerten, Ganztagskonzepte mitdenken — Schülerstimmen in der Planung.</p>
+              </div>
+            </div>
+            <div class="task-item">
+              <div class="task-item__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div>
+                <h3 class="task-item__title">Durchsetzen</h3>
+                <p class="task-item__text">Unsere Wünsche durchsetzen — von kostenlosem Schülertransport bis zu besseren Rahmenbedingungen. Nicht immer leicht, aber immer nötig.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TEAM -->
+      <section class="section section--tight team-section">
+        <div class="container">
+          <h2 class="display-md" style="margin-bottom: var(--space-6);">KSR Mitglieder</h2>
+          <div class="team-grid">
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/RobertStrobach_Portrait.jpg" alt="Robert Strobach" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Robert Strobach</h3>
+                <p class="team-card__role">Kreisschulsprecher</p>
+              </div>
+            </div>
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/LillyNitzsche_Portrait.jpg" alt="Lilly Nitzsche" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Lilly Nitzsche</h3>
+                <p class="team-card__role">Stellv. Kreisschulsprecherin</p>
+              </div>
+            </div>
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/RaphaelBaum_Portrait.jpg" alt="Raphael Baum" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Raphael Baum</h3>
+                <p class="team-card__role">Stellv. Kreisschulsprecher</p>
+              </div>
+            </div>
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/TedKrämer.jpg" alt="Ted Krämer" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Ted Krämer</h3>
+                <p class="team-card__role">LSV-Delegierter</p>
+              </div>
+            </div>
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/Merle.jpg" alt="Merle Plötz" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Merle Plötz</h3>
+                <p class="team-card__role">Stellv. LSV-Delegierte</p>
+              </div>
+            </div>
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/Armando.jpeg" alt="Armando Moreno" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Armando Moreno</h3>
+                <p class="team-card__role">Beisitzer</p>
+              </div>
+            </div>
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/Erdem.jpeg" alt="Erdem Yavuz" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Erdem Yavuz</h3>
+                <p class="team-card__role">Beisitzer</p>
+              </div>
+            </div>
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/nix-bild.webp" alt="Tabassum Shirzad" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Tabassum Shirzad</h3>
+                <p class="team-card__role">Beisitzerin</p>
+              </div>
+            </div>
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/nix-bild.webp" alt="Samuel Neuman" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Samuel Neuman</h3>
+                <p class="team-card__role">Beisitzer</p>
+              </div>
+            </div>
+            <div class="team-card">
+              <div class="team-card__photo">
+                <img src="images/nix-bild.webp" alt="Malik Liban" loading="lazy">
+              </div>
+              <div class="team-card__info">
+                <h3 class="team-card__name">Malik Liban</h3>
+                <p class="team-card__role">Beisitzer</p>
+              </div>
+            </div>
+          </div>
+          <div class="team-email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:kreisschuelerrat.rtk@gmail.com">kreisschuelerrat.rtk@gmail.com</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRIORITIES -->
+      <section class="section section--tight priorities-section">
+        <div class="container">
+          <h2 class="display-md" style="margin-bottom: var(--space-6);">Unsere Prioritäten</h2>
+          <div class="priorities-grid">
+            <div class="priority-card">
+              <span class="priority-card__accent">01</span>
+              <h3 class="priority-card__title">Moderne Schulen</h3>
+              <p class="priority-card__text">Schulen, die Standards erfüllen und Schülern gerecht werden — baulich und pädagogisch.</p>
+            </div>
+            <div class="priority-card">
+              <span class="priority-card__accent">02</span>
+              <h3 class="priority-card__title">Lehrendeckung</h3>
+              <p class="priority-card__text">Genug Lehrer, die wirklich da sind. Keine Vertretungsdeppen, keine endlosen Wartelisten.</p>
+            </div>
+            <div class="priority-card">
+              <span class="priority-card__accent">03</span>
+              <h3 class="priority-card__title">Kostenloser ÖPNV</h3>
+              <p class="priority-card__text">Für alle Schüler. Jeden Tag. Ohne Wenn und Aber. Mobilität ist Bildung.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT PROMPT -->
+      <section class="section section--tight">
+        <div class="container">
+          <div class="contact-prompt">
+            <div>
+              <h2 class="display-md" style="margin-bottom: var(--space-3);">Du hast ein Anliegen?</h2>
+              <p style="color: var(--color-text-secondary);">Schreib uns direkt. Wir melden uns schnell.</p>
+            </div>
+            <a href="kontakt.html" class="btn btn--primary">Kontakt aufnehmen</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer__grid">
+          <div class="footer__col">
+            <p class="footer__col-title">Navigation</p>
+            <ul class="footer__nav-list">
+              <li><a href="index.html" class="footer__nav-link">Start</a></li>
+              <li><a href="ueber-uns.html" class="footer__nav-link">Über uns</a></li>
+              <li><a href="wuensche.html" class="footer__nav-link">Wünsche</a></li>
+              <li><a href="termine.html" class="footer__nav-link">Termine</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <p class="footer__col-title">Mehr</p>
+            <ul class="footer__nav-list">
+              <li><a href="kontakt.html" class="footer__nav-link">Kontakt</a></li>
+              <li><a href="links.html" class="footer__nav-link">Links</a></li>
+              <li><a href="impressum.html" class="footer__nav-link">Impressum</a></li>
+            </ul>
+          </div>
+          <div class="footer__col">
+            <p class="footer__col-title">Folge uns</p>
+            <div class="footer__social-links">
+              <a href="https://www.facebook.com/KEB.RTK" target="_blank" rel="noopener" class="footer__social-link" aria-label="Facebook">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              </a>
+              <a href="https://www.instagram.com/keb.rtk/" target="_blank" rel="noopener" class="footer__social-link" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="footer__bottom">
+          <p class="footer__legal">Der Kreisschülerrat ist eine Schülervertretung auf Kreisebene.</p>
+          <p class="footer__legal"><a href="impressum.html">Impressum</a> · <a href="links.html">Links</a></p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <style>
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    @media (min-width: 768px) {
+      .intro-grid {
+        grid-template-columns: 1.5fr 1fr;
+      }
+    }
+
+    .intro-stats {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    @media (min-width: 480px) {
+      .intro-stats {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .stat-card {
+      background-color: var(--color-bg-secondary);
+      border: 1px solid var(--color-border-secondary);
+      border-radius: var(--border-radius-lg);
+      padding: var(--space-5);
+      text-align: center;
+    }
+
+    .stat-card__number {
+      display: block;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-extrabold);
+      color: var(--color-accent-primary);
+      line-height: 1;
+      margin-bottom: var(--space-2);
+    }
+
+    .stat-card__label {
+      display: block;
+      font-size: var(--font-size-xs);
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: var(--letter-spacing-wide);
+    }
+
+    .task-item {
+      display: flex;
+      gap: var(--space-5);
+      padding: var(--space-5);
+      background-color: var(--color-bg-secondary);
+      border: 1px solid var(--color-border-secondary);
+      border-radius: var(--border-radius-lg);
+      margin-bottom: var(--space-4);
+    }
+
+    .task-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .task-item__icon {
+      flex-shrink: 0;
+      width: 3rem;
+      height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-accent-primary);
+      color: white;
+      border-radius: var(--border-radius-md);
+    }
+
+    .task-item__title {
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-2);
+    }
+
+    .task-item__text {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .priorities-section {
+      background-color: var(--color-bg-tertiary);
+    }
+
+    .priorities-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+
+    @media (min-width: 768px) {
+      .priorities-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .priority-card {
+      padding: var(--space-6);
+      background-color: var(--color-bg-secondary);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--color-border-secondary);
+    }
+
+    .priority-card__accent {
+      display: block;
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-extrabold);
+      color: var(--color-border-primary);
+      line-height: 1;
+      margin-bottom: var(--space-3);
+    }
+
+    .priority-card__title {
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-3);
+    }
+
+    .priority-card__text {
+      font-size: var(--font-size-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .contact-prompt {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-6);
+      padding: var(--space-7) var(--space-6);
+      background-color: var(--color-bg-inverse);
+      color: var(--color-text-inverse);
+      border-radius: var(--border-radius-lg);
+      flex-wrap: wrap;
+    }
+
+    .contact-prompt h2 {
+      color: var(--color-text-inverse);
+    }
+
+    .contact-prompt p {
+      color: rgba(255,255,255,0.65);
+    }
+
+    .contact-prompt .btn--primary {
+      background-color: var(--color-accent-primary);
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .contact-prompt .btn--primary:hover {
+      background-color: var(--color-accent-primary-hover);
+    }
+
+    @media (max-width: 767px) {
+      .contact-prompt {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    /* === TEAM === */
+    .team-section {
+      background-color: var(--color-bg-tertiary);
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+      gap: var(--space-5);
+      margin-bottom: var(--space-6);
+    }
+
+    .team-card {
+      background-color: var(--color-bg-secondary);
+      border: 1px solid var(--color-border-secondary);
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      transition: box-shadow var(--duration-fast), transform var(--duration-fast);
+    }
+
+    .team-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .team-card__photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background-color: var(--color-bg-tertiary);
+    }
+
+    .team-card__photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    .team-card__info {
+      padding: var(--space-4);
+      text-align: center;
+    }
+
+    .team-card__name {
+      font-family: var(--font-family-display);
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-1);
+    }
+
+    .team-card__role {
+      font-size: var(--font-size-xs);
+      color: var(--color-accent-primary);
+      text-transform: uppercase;
+      letter-spacing: var(--letter-spacing-wide);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .team-email {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      padding: var(--space-5);
+      background-color: var(--color-bg-secondary);
+      border: 1px solid var(--color-border-secondary);
+      border-radius: var(--border-radius-lg);
+      font-size: var(--font-size-base);
+    }
+
+    .team-email a {
+      color: var(--color-text-link);
+      text-decoration: none;
+    }
+
+    .team-email a:hover {
+      color: var(--color-accent-primary);
+    }
+  </style>
+
+  <script src="main.js"></script>
+</body>
+</html>
