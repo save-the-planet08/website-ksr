@@ -33,7 +33,7 @@ import { wuensche } from '../data/wuensche';
   </nav>
 
   {wuensche.map((w, i) => (
-    <section id={`wunsch-${w.nr}`} data-kapitel={w.wort} class:list={['wunsch-voll', i % 2 === 1 && 'wunsch-voll--kehr']}>
+    <section id={`wunsch-${w.nr}`} class:list={['wunsch-voll', i % 2 === 1 && 'wunsch-voll--kehr']}>
       <div class="huelle wunsch-voll__gitter">
         <div class="wunsch-voll__marke">
           <span class="wunsch-voll__zahl" aria-hidden="true" data-auftritt="zahl">{w.nr}</span>
@@ -49,7 +49,7 @@ import { wuensche } from '../data/wuensche';
     </section>
   ))}
 
-  <section class="abschnitt abschnitt--rebe" id="und-jetzt" data-kapitel="Und jetzt">
+  <section class="abschnitt abschnitt--rebe" id="und-jetzt">
     <div class="huelle schluss">
       <h2 class="titel-2" data-auftritt="zeile">Und jetzt?</h2>
       <p class="lead schluss__lead" data-auftritt="wort" style="--verzug:180ms">

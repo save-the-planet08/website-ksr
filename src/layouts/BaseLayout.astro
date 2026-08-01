@@ -2,7 +2,6 @@
 import '../styles/global.css';
 import Kopf from '../components/Kopf.astro';
 import Fuss from '../components/Fuss.astro';
-import Begleiter from '../components/Begleiter.astro';
 
 interface Props {
   titel: string;
@@ -44,7 +43,6 @@ const voll = `${titel} — KSR Rheingau-Taunus-Kreis`;
   <a href="#inhalt" class="sprung">Zum Inhalt springen</a>
 
   <Kopf aktiv={aktiv} />
-  <Begleiter />
 
   <main id="inhalt">
     <slot />
