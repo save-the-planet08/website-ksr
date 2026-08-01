@@ -33,31 +33,31 @@ import { wuensche } from '../data/wuensche';
   </nav>
 
   {wuensche.map((w, i) => (
-    <section id={`wunsch-${w.nr}`} class:list={['wunsch-voll', i % 2 === 1 && 'wunsch-voll--kehr']}>
+    <section id={`wunsch-${w.nr}`} data-kapitel={w.wort} class:list={['wunsch-voll', i % 2 === 1 && 'wunsch-voll--kehr']}>
       <div class="huelle wunsch-voll__gitter">
         <div class="wunsch-voll__marke">
-          <span class="wunsch-voll__zahl" aria-hidden="true">{w.nr}</span>
-          <span class="wunsch-voll__wort" aria-hidden="true">{w.wort}</span>
+          <span class="wunsch-voll__zahl" aria-hidden="true" data-auftritt="zahl">{w.nr}</span>
+          <span class="wunsch-voll__wort" aria-hidden="true" data-auftritt="maske" style="--verzug:260ms">{w.wort}</span>
         </div>
 
         <div class="wunsch-voll__inhalt">
-          <h2 class="titel-2 wunsch-voll__titel" data-auftritt>{w.titel}</h2>
-          <p class="lead wunsch-voll__kurz" data-auftritt style="--verzug:80ms">{w.kurz}</p>
-          <p class="fliess wunsch-voll__text" data-auftritt style="--verzug:160ms">{w.text}</p>
+          <h2 class="titel-2 wunsch-voll__titel" data-auftritt="zeile">{w.titel}</h2>
+          <p class="lead wunsch-voll__kurz" data-auftritt="wort" style="--verzug:220ms">{w.kurz}</p>
+          <p class="fliess wunsch-voll__text" data-auftritt={i % 2 ? 'seit' : 'hoch'} data-auftritt-seite="rechts" style="--verzug:340ms">{w.text}</p>
         </div>
       </div>
     </section>
   ))}
 
-  <section class="abschnitt abschnitt--rebe">
+  <section class="abschnitt abschnitt--rebe" id="und-jetzt" data-kapitel="Und jetzt">
     <div class="huelle schluss">
-      <h2 class="titel-2" data-auftritt>Und jetzt?</h2>
-      <p class="lead schluss__lead" data-auftritt style="--verzug:100ms">
+      <h2 class="titel-2" data-auftritt="zeile">Und jetzt?</h2>
+      <p class="lead schluss__lead" data-auftritt="wort" style="--verzug:180ms">
         Diese Wünsche sind kein Wunschzettel. Sie sind die Tagesordnung. Wenn du
         an deiner Schule einen davon voranbringen willst, melde dich — wir haben
         die Argumente und die Kontakte schon einmal gesammelt.
       </p>
-      <div class="schluss__knoepfe" data-auftritt style="--verzug:180ms">
+      <div class="schluss__knoepfe" data-auftritt="staffel" style="--verzug:340ms">
         <a href="/kontakt" class="knopf">
           Schreib uns
           <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">

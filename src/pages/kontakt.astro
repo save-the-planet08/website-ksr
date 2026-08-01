@@ -38,20 +38,20 @@ const adresse = 'kontakt@ksr-rtk.de';
     zeichen="loewe"
   />
 
-  <section class="abschnitt">
+  <section class="abschnitt" id="direkt" data-kapitel="Direkt">
     <div class="huelle kontakt">
       <div class="kontakt__haupt">
-        <p class="marke" data-auftritt>Direkt</p>
-        <a href={`mailto:${adresse}`} class="kontakt__adresse" data-auftritt style="--verzug:60ms">
+        <p class="marke" data-auftritt="maske">Direkt</p>
+        <a href={`mailto:${adresse}`} class="kontakt__adresse" data-auftritt="zeile" style="--verzug:120ms">
           {adresse}
         </a>
-        <p class="fliess kontakt__notiz" data-auftritt style="--verzug:120ms">
+        <p class="fliess kontakt__notiz" data-auftritt="wort" style="--verzug:300ms">
           Wir lesen mit, auch in den Ferien. Anliegen, die eine einzelne Person
           betreffen, behandeln wir vertraulich und geben sie nicht an Schulen weiter,
           ohne vorher zu fragen.
         </p>
 
-        <div class="hinweis" data-auftritt>
+        <div class="hinweis" data-auftritt="maske">
           <p>
             <strong>Noch einzurichten:</strong> Diese Adresse ist ein Platzhalter. Der KSR
             braucht ein eigenes Postfach — die bisher genutzte Adresse gehört dem
@@ -62,9 +62,9 @@ const adresse = 'kontakt@ksr-rtk.de';
         </div>
       </div>
 
-      <ul class="kontakt__wege">
+      <ul class="kontakt__wege" data-auftritt="staffel">
         {wege.map((w, i) => (
-          <li class="weg" data-auftritt style={`--verzug:${i * 90}ms`}>
+          <li class="weg">
             <a href={`mailto:${adresse}?subject=${encodeURIComponent(w.betreff)}`} class="weg__flaeche">
               <p class="marke">{w.marke}</p>
               <h2 class="weg__titel">{w.titel}</h2>
@@ -82,21 +82,21 @@ const adresse = 'kontakt@ksr-rtk.de';
     </div>
   </section>
 
-  <section class="abschnitt abschnitt--dunkel">
+  <section class="abschnitt abschnitt--dunkel" id="wo" data-kapitel="Wo wir sind">
     <div class="huelle wo">
       <div>
-        <p class="marke" data-auftritt>Wo wir sind</p>
-        <h2 class="titel-2 wo__titel" data-auftritt style="--verzug:80ms">
-          Der ganze Kreis,<br>kein festes Büro.
+        <p class="marke" data-auftritt="maske">Wo wir sind</p>
+        <h2 class="titel-2 wo__titel" data-auftritt="zeile">
+          Der ganze Kreis, kein festes Büro.
         </h2>
       </div>
       <div class="wo__text">
-        <p class="fliess" data-auftritt>
+        <p class="fliess" data-auftritt="wort">
           Der Kreisschülerrat hat keine eigenen Räume. Wir tagen dort, wo Platz ist —
           in der Kreisverwaltung, in Schulen, gelegentlich digital. Der jeweilige Ort
           steht immer beim Termin.
         </p>
-        <a href="/termine" class="verweis wo__verweis" data-auftritt style="--verzug:80ms">
+        <a href="/termine" class="verweis wo__verweis" data-auftritt="maske" style="--verzug:300ms">
           Zu den Terminen
           <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <path d="M5 12h14M13 6l6 6-6 6"/>

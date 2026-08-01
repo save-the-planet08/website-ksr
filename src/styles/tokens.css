@@ -67,6 +67,8 @@
   --r-10: 11rem;
   --r-11: 16rem;
 
+  /* Der Begleiter am linken Rand ist 14px bzw. 56px breit — der Satzspiegel
+     muss ihn freihalten, sonst läuft die Rebe durch den Text. */
   --rand:      clamp(1.25rem, 4.5vw, 5rem);
   --breite:    82rem;
   --breite-eng: 46rem;
@@ -87,6 +89,10 @@
   --z-inhalt:   10;
   --z-kopf:     100;
   --z-schub:    200;
+}
+
+@media (min-width: 62rem) {
+  :root { --rand: clamp(4.75rem, 5vw, 6.5rem); }
 }
 
 @media (prefers-reduced-motion: reduce) {

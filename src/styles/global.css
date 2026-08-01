@@ -252,31 +252,38 @@ a {
    Auftritt beim Scrollen — Standardbewegung der Seite
    =========================================================================== */
 
-/* Alle Startzustände hängen an `.js` — fällt das Skript aus, ist der
+/* Nur der Startzustand steht hier — die Bewegung selbst kommt aus
+   src/lib/auftritt.ts. Alles hängt an `.js`: fällt das Skript aus, ist der
    Inhalt einfach da. Eine unsichtbare Seite ist schlimmer als eine
    unbewegte. */
-.js [data-auftritt] {
-  opacity: 0;
-  transform: translate3d(0, 1.75rem, 0);
-  transition:
-    opacity var(--d-ruhig) var(--e-aus),
-    transform var(--d-ruhig) var(--e-aus);
-  transition-delay: var(--verzug, 0ms);
-}
+.js [data-auftritt] { opacity: 0; }
 
-.js [data-auftritt].ist-da {
-  opacity: 1;
-  transform: none;
+/* Zerlegter Text. Die Maske schneidet die Zeile ab, der Kern fährt darin
+   hoch — deshalb zwei Ebenen. */
+.a-zeile {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
 }
+.a-zeile__kern { display: block; will-change: transform; }
+
+.a-wort {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.a-wort__kern { display: inline-block; will-change: transform; }
+
+/* Für die gekippten Wörter. */
+[data-auftritt='wort'] { perspective: 800px; }
 
 .zeilen-maske { overflow: hidden; display: block; }
 
 @media (prefers-reduced-motion: reduce) {
-  .js [data-auftritt] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
+  .js [data-auftritt] { opacity: 1; }
 }
 
 /* ===========================================================================

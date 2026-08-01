@@ -39,14 +39,14 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
     zeichen="trauben"
   />
 
-  <section class="abschnitt">
+  <section class="abschnitt" id="kommend" data-kapitel="Kommend">
     <div class="huelle">
-      <p class="marke" data-auftritt>Kommende Termine</p>
+      <p class="marke" data-auftritt="maske">Kommende Termine</p>
 
       {kommend.length > 0 ? (
         <ol class="termine">
           {kommend.map((t, i) => (
-            <li class="termin" data-auftritt style={`--verzug:${i * 80}ms`}>
+            <li class="termin" data-auftritt={i % 2 ? 'seit' : 'hoch'} style={`--verzug:${i * 90}ms`}>
               <time class="termin__datum" datetime={iso(t.data.date)}>
                 <span class="termin__tag">{tag(t.data.date)}</span>
                 <span class="termin__monat">{monat(t.data.date)}</span>
@@ -73,7 +73,7 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
           ))}
         </ol>
       ) : (
-        <div class="leer" data-auftritt>
+        <div class="leer" data-auftritt="maske">
           <p class="titel-3">Zurzeit ist kein Termin eingetragen.</p>
           <p class="fliess leer__text">
             Die Sitzungstermine für das laufende Schuljahr werden zu Beginn festgelegt
@@ -89,7 +89,7 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
         </div>
       )}
 
-      <div class="hinweis" data-auftritt>
+      <div class="hinweis" data-auftritt="maske">
         <p>
           <strong>Noch zu prüfen:</strong> Die hier hinterlegten Termine stammen aus dem
           Altbestand und liegen in der Vergangenheit. Neue Termine werden als Datei in
@@ -100,14 +100,14 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
   </section>
 
   {vergangen.length > 0 && (
-    <section class="abschnitt abschnitt--dunkel">
+    <section class="abschnitt abschnitt--dunkel" id="rueckblick" data-kapitel="Rückblick">
       <div class="huelle">
-        <p class="marke" data-auftritt>Was war</p>
-        <h2 class="titel-2 rueckblick__titel" data-auftritt style="--verzug:80ms">Rückblick</h2>
+        <p class="marke" data-auftritt="maske">Was war</p>
+        <h2 class="titel-2 rueckblick__titel" data-auftritt="zeile">Rückblick</h2>
 
-        <ol class="rueckblick">
+        <ol class="rueckblick" data-auftritt="staffel">
           {vergangen.map((t, i) => (
-            <li class="rueckblick__glied" data-auftritt style={`--verzug:${i * 60}ms`}>
+            <li class="rueckblick__glied">
               <time datetime={iso(t.data.date)} class="rueckblick__datum">
                 {t.data.date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}
               </time>

@@ -43,7 +43,7 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   <!-- ===================================================================
        AKT II — Der Löwe: Haltung
        =================================================================== -->
-  <section class="haltung abschnitt--dunkel" id="haltung">
+  <section class="haltung abschnitt--dunkel" id="haltung" data-kapitel="Haltung">
     <div class="haltung__tier" aria-hidden="true">
       <Logo
         teile={['loewe']}
@@ -53,20 +53,20 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
     </div>
 
     <div class="huelle haltung__inhalt">
-      <p class="marke" data-auftritt>Der Löwe — Hessen, aufrecht</p>
+      <p class="marke" data-auftritt="maske">Der Löwe — Hessen, aufrecht</p>
 
-      <h2 class="titel-2 haltung__satz" data-auftritt style="--verzug:80ms">
+      <h2 class="titel-2 haltung__satz" data-auftritt="zeile">
         Schülervertretung ist kein Ehrenamt für Ruhige.
       </h2>
 
       <div class="haltung__spalten">
-        <p class="fliess" data-auftritt style="--verzug:160ms">
+        <p class="fliess" data-auftritt="seit">
           Der Kreisschülerrat ist die gewählte Vertretung aller Schülerinnen und Schüler
           im Rheingau-Taunus-Kreis. Jede Schule entsendet ihre Schulsprecherinnen und
           Schulsprecher — zusammen sind wir das Gremium, das für den ganzen Kreis
           spricht. Nicht als Symbol. Als Adresse.
         </p>
-        <p class="fliess" data-auftritt style="--verzug:240ms">
+        <p class="fliess" data-auftritt="seit" data-auftritt-seite="rechts" style="--verzug:120ms">
           Wir sitzen mit dem Schulträger an einem Tisch, wir schicken Delegierte in die
           Landesschülervertretung Hessen, und wir sind da, wenn an einer Schule etwas
           schiefläuft und niemand mehr weiterweiß. Der Löwe im Wappen steht aufrecht.
@@ -74,8 +74,8 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
         </p>
       </div>
 
-      <ul class="haltung__saeulen">
-        <li class="saeule" data-auftritt style="--verzug:80ms">
+      <ul class="haltung__saeulen" data-auftritt="staffel">
+        <li class="saeule">
           <span class="saeule__nr">01</span>
           <h3 class="saeule__titel">Beraten</h3>
           <p class="saeule__text">
@@ -83,7 +83,7 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
             wo man überhaupt anfängt — sind wir die erste Nummer, die man wählt.
           </p>
         </li>
-        <li class="saeule" data-auftritt style="--verzug:160ms">
+        <li class="saeule">
           <span class="saeule__nr">02</span>
           <h3 class="saeule__titel">Verbinden</h3>
           <p class="saeule__text">
@@ -91,7 +91,7 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
             Argument. Wir bringen die Schülervertretungen des Kreises zusammen.
           </p>
         </li>
-        <li class="saeule" data-auftritt style="--verzug:240ms">
+        <li class="saeule">
           <span class="saeule__nr">03</span>
           <h3 class="saeule__titel">Einmischen</h3>
           <p class="saeule__text">
@@ -101,7 +101,7 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
         </li>
       </ul>
 
-      <a href="/der-rat" class="verweis haltung__verweis" data-auftritt>
+      <a href="/der-rat" class="verweis haltung__verweis" data-auftritt="maske">
         Wie der Rat arbeitet
         <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <path d="M5 12h14M13 6l6 6-6 6"/>
@@ -113,14 +113,14 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   <!-- ===================================================================
        AKT III — Der Doppelbalken wird zur Liste: acht Wünsche
        =================================================================== -->
-  <section class="wuensche" id="wuensche" data-wuensche>
+  <section class="wuensche" id="wuensche" data-wuensche data-kapitel="Wünsche">
     <div class="huelle">
       <header class="wuensche__kopf">
-        <p class="marke" data-auftritt>Der Doppelbalken — acht Mal</p>
-        <h2 class="titel-2" data-auftritt style="--verzug:80ms">
-          Acht Wünsche.<br>Keiner davon unbezahlbar.
+        <p class="marke" data-auftritt="maske">Der Doppelbalken — acht Mal</p>
+        <h2 class="titel-2" data-auftritt="zeile">
+          Acht Wünsche. Keiner davon unbezahlbar.
         </h2>
-        <p class="lead wuensche__lead" data-auftritt style="--verzug:160ms">
+        <p class="lead wuensche__lead" data-auftritt="wort" style="--verzug:120ms">
           Das ist die Liste, mit der wir in jedes Gespräch gehen. Sie ist nicht
           verhandelbar zusammengestellt worden, sondern aus dem, was uns an den
           Schulen im Kreis tatsächlich begegnet.
@@ -129,7 +129,7 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
 
       <ol class="wuensche__liste">
         {wuensche.map((w, i) => (
-          <li class="wunsch" data-auftritt style={`--verzug:${i * 45}ms`}>
+          <li class="wunsch" data-auftritt={i % 3 === 1 ? 'seit' : 'hoch'} style={`--verzug:${i * 55}ms`}>
             <a href={`/wuensche#wunsch-${w.nr}`} class="wunsch__flaeche">
               <span class="wunsch__balken" aria-hidden="true"><i></i><i></i></span>
               <span class="wunsch__nr">{w.nr}</span>
@@ -146,7 +146,7 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
         ))}
       </ol>
 
-      <a href="/wuensche" class="knopf wuensche__knopf" data-auftritt>
+      <a href="/wuensche" class="knopf wuensche__knopf" data-auftritt="zahl">
         Alle acht im Detail
         <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <path d="M5 12h14M13 6l6 6-6 6"/>
@@ -158,12 +158,12 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   <!-- ===================================================================
        AKT IV — Die Ranke wächst durch den Kreis
        =================================================================== -->
-  <section class="kreis" id="kreis" data-kreis>
+  <section class="kreis" id="kreis" data-kreis data-kapitel="Der Kreis">
     <div class="huelle">
       <div class="kreis__kopf">
-        <p class="marke" data-auftritt>Die Rebe — Rheingau-Taunus</p>
-        <h2 class="titel-2" data-auftritt style="--verzug:80ms">
-          Ein Kreis, viele Schulen,<br>eine Vertretung.
+        <p class="marke" data-auftritt="maske">Die Rebe — Rheingau-Taunus</p>
+        <h2 class="titel-2" data-auftritt="zeile">
+          Ein Kreis, viele Schulen, eine Vertretung.
         </h2>
       </div>
     </div>
@@ -175,25 +175,25 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
     </div>
 
     <div class="huelle kreis__unten">
-      <p class="fliess kreis__text" data-auftritt>
+      <p class="fliess kreis__text" data-auftritt="wort">
         Von Rüdesheim bis Idstein, vom Gymnasium bis zur Berufsschule: Wir vertreten
         alle Schulformen im Kreis. Was in Taunusstein beschlossen wird, wirkt sich in
         Eltville aus — deshalb reden wir nicht schulweise, sondern für den Kreis.
       </p>
-      <div class="kreis__karten">
-        <a href="/termine" class="karte" data-auftritt>
+      <div class="kreis__karten" data-auftritt="staffel">
+        <a href="/termine" class="karte">
           <p class="marke">Nächster Termin</p>
           <h3 class="karte__titel">Sitzungen &amp; Treffen</h3>
           <p class="karte__text">Wann wir tagen, wer kommen darf, was auf der Tagesordnung steht.</p>
           <span class="karte__pfeil" aria-hidden="true">→</span>
         </a>
-        <a href="/kontakt" class="karte" data-auftritt style="--verzug:90ms">
+        <a href="/kontakt" class="karte">
           <p class="marke">Für Schülervertretungen</p>
           <h3 class="karte__titel">Problem an deiner Schule?</h3>
           <p class="karte__text">Schreib uns. Wir antworten, und wir behandeln es vertraulich.</p>
           <span class="karte__pfeil" aria-hidden="true">→</span>
         </a>
-        <a href="/links" class="karte" data-auftritt style="--verzug:180ms">
+        <a href="/links" class="karte">
           <p class="marke">Grundlagen</p>
           <h3 class="karte__titel">Deine Rechte als SV</h3>
           <p class="karte__text">Schulgesetz, Landesschülervertretung, Vorlagen — gesammelt an einem Ort.</p>
@@ -206,16 +206,16 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   <!-- ===================================================================
        AKT V — Aufruf
        =================================================================== -->
-  <section class="aufruf abschnitt--rebe">
+  <section class="aufruf abschnitt--rebe" id="mitmachen" data-kapitel="Mitmachen">
     <div class="huelle aufruf__inhalt">
-      <h2 class="titel-1 aufruf__satz" data-auftritt>
-        Wenn du das hier liest,<br>bist du wahrscheinlich<br>schon der Typ dafür.
+      <h2 class="titel-1 aufruf__satz" data-auftritt="zeile">
+        Wenn du das hier liest, bist du wahrscheinlich schon der Typ dafür.
       </h2>
-      <p class="lead aufruf__lead" data-auftritt style="--verzug:120ms">
+      <p class="lead aufruf__lead" data-auftritt="wort" style="--verzug:200ms">
         Der Kreisschülerrat lebt davon, dass Leute aus den Schulen kommen und
         mitmachen. Man muss nichts können außer hinzugehen.
       </p>
-      <div class="aufruf__knoepfe" data-auftritt style="--verzug:200ms">
+      <div class="aufruf__knoepfe" data-auftritt="staffel" style="--verzug:320ms">
         <a href="/kontakt" class="knopf">
           Mitmachen
           <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">

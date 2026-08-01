@@ -56,16 +56,16 @@ const arbeit = [
   />
 
   <!-- Drei Ebenen -->
-  <section class="abschnitt">
+  <section class="abschnitt" id="ebenen" data-kapitel="Drei Ebenen">
     <div class="huelle">
-      <p class="marke" data-auftritt>Von der Klasse bis ins Ministerium</p>
-      <h2 class="titel-2 stufen__titel" data-auftritt style="--verzug:80ms">
+      <p class="marke" data-auftritt="maske">Von der Klasse bis ins Ministerium</p>
+      <h2 class="titel-2 stufen__titel" data-auftritt="zeile">
         Drei Ebenen. Wir sind die mittlere.
       </h2>
 
       <ol class="stufen">
         {stufen.map((s, i) => (
-          <li class="stufe" data-auftritt style={`--verzug:${i * 110}ms`}>
+          <li class="stufe" data-auftritt="seit" data-auftritt-seite={i % 2 ? 'rechts' : 'links'} style={`--verzug:${i * 90}ms`}>
             <span class="stufe__balken" aria-hidden="true"><i></i><i></i></span>
             <div class="stufe__inhalt">
               <p class="marke">{s.nr} — {s.ebene}</p>
@@ -79,16 +79,16 @@ const arbeit = [
   </section>
 
   <!-- Was wir konkret machen -->
-  <section class="abschnitt abschnitt--dunkel">
+  <section class="abschnitt abschnitt--dunkel" id="alltag" data-kapitel="Der Alltag">
     <div class="huelle">
-      <p class="marke" data-auftritt>Der Alltag</p>
-      <h2 class="titel-2 arbeit__titel" data-auftritt style="--verzug:80ms">
+      <p class="marke" data-auftritt="maske">Der Alltag</p>
+      <h2 class="titel-2 arbeit__titel" data-auftritt="zeile">
         Was hier tatsächlich passiert.
       </h2>
 
-      <div class="arbeit">
+      <div class="arbeit" data-auftritt="staffel">
         {arbeit.map((a, i) => (
-          <article class="arbeit__stueck" data-auftritt style={`--verzug:${i * 90}ms`}>
+          <article class="arbeit__stueck">
             <h3 class="arbeit__stueck-titel">{a.titel}</h3>
             <p class="fliess">{a.text}</p>
           </article>
@@ -98,27 +98,27 @@ const arbeit = [
   </section>
 
   <!-- Mitmachen -->
-  <section class="abschnitt">
+  <section class="abschnitt" id="mitmachen" data-kapitel="Mitmachen">
     <div class="huelle mitmachen">
       <div class="mitmachen__wort">
-        <p class="marke" data-auftritt>Mitmachen</p>
-        <h2 class="titel-2" data-auftritt style="--verzug:80ms">
-          Die Hürde ist niedriger,<br>als du denkst.
+        <p class="marke" data-auftritt="maske">Mitmachen</p>
+        <h2 class="titel-2" data-auftritt="zeile">
+          Die Hürde ist niedriger, als du denkst.
         </h2>
       </div>
 
       <div class="mitmachen__text">
-        <p class="fliess" data-auftritt>
+        <p class="fliess" data-auftritt="wort">
           Du brauchst keine Erfahrung, kein Amt und keinen Notenschnitt. Du brauchst
           eine Schule im Rheingau-Taunus-Kreis und die Bereitschaft, hinzugehen. Der
           Rest ist Übungssache — und niemand hier hat mit Ahnung angefangen.
         </p>
-        <p class="fliess" data-auftritt style="--verzug:80ms">
+        <p class="fliess" data-auftritt="hoch" style="--verzug:120ms">
           Wenn deine Schule noch keine Delegierten entsendet, sprich deine SV oder
           Verbindungslehrkraft an. Wenn du nicht weiterkommst, schreib uns direkt —
           wir melden uns bei deiner Schule.
         </p>
-        <div class="mitmachen__knoepfe" data-auftritt style="--verzug:160ms">
+        <div class="mitmachen__knoepfe" data-auftritt="staffel" style="--verzug:200ms">
           <a href="/kontakt" class="knopf">
             Kontakt aufnehmen
             <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
@@ -128,7 +128,7 @@ const arbeit = [
           <a href="/termine" class="verweis">Nächste Sitzungen</a>
         </div>
 
-        <div class="hinweis" data-auftritt>
+        <div class="hinweis" data-auftritt="maske">
           <p>
             <strong>Noch zu ergänzen:</strong> Die Namen und Ämter des aktuellen Vorstands
             sowie die Liste der Mitgliedsschulen stehen hier noch nicht. Sobald der

@@ -65,16 +65,16 @@ const gruppen = [
   <section class="abschnitt">
     <div class="huelle">
       {gruppen.map((g, gi) => (
-        <div class="gruppe">
+        <div class="gruppe" id={`gruppe-${gi + 1}`} data-kapitel={g.marke}>
           <div class="gruppe__kopf">
-            <p class="marke" data-auftritt>{g.marke}</p>
-            <h2 class="titel-3 gruppe__titel" data-auftritt style="--verzug:60ms">{g.titel}</h2>
-            <p class="fliess" data-auftritt style="--verzug:120ms">{g.einleitung}</p>
+            <p class="marke" data-auftritt="maske">{g.marke}</p>
+            <h2 class="titel-3 gruppe__titel" data-auftritt="zeile">{g.titel}</h2>
+            <p class="fliess" data-auftritt="wort" style="--verzug:200ms">{g.einleitung}</p>
           </div>
 
-          <ul class="gruppe__liste">
+          <ul class="gruppe__liste" data-auftritt="staffel">
             {g.glieder.map((l, i) => (
-              <li data-auftritt style={`--verzug:${i * 80}ms`}>
+              <li>
                 <a href={l.url} class="quelle" target="_blank" rel="noopener noreferrer">
                   <span class="quelle__balken" aria-hidden="true"><i></i><i></i></span>
                   <span class="quelle__inhalt">
@@ -95,7 +95,7 @@ const gruppen = [
         </div>
       ))}
 
-      <div class="hinweis" data-auftritt>
+      <div class="hinweis" data-auftritt="maske">
         <p>
           <strong>Vor dem Livegang prüfen:</strong> Die Zieladressen sind auf die
           Startseiten der jeweiligen Stellen gesetzt. Direktlinks auf einzelne

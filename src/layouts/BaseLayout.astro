@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Kopf from '../components/Kopf.astro';
 import Fuss from '../components/Fuss.astro';
+import Begleiter from '../components/Begleiter.astro';
 
 interface Props {
   titel: string;
@@ -43,6 +44,7 @@ const voll = `${titel} — KSR Rheingau-Taunus-Kreis`;
   <a href="#inhalt" class="sprung">Zum Inhalt springen</a>
 
   <Kopf aktiv={aktiv} />
+  <Begleiter />
 
   <main id="inhalt">
     <slot />
@@ -52,21 +54,21 @@ const voll = `${titel} — KSR Rheingau-Taunus-Kreis`;
 
   <script>
     import { ankerVerbinden } from '../lib/scroll';
+    import { auftritteStarten } from '../lib/auftritt';
 
     ankerVerbinden();
+    auftritteStarten();
 
-    // Auftritt beim Scrollen — eine Beobachtung für die ganze Seite.
-    const beobachter = new IntersectionObserver((eintraege) => {
+    // Das Zusammensetzen des Logos im Fuß läuft über eine CSS-Klasse.
+    const schluss = new IntersectionObserver((eintraege) => {
       for (const e of eintraege) {
         if (!e.isIntersecting) continue;
         e.target.classList.add('ist-da');
-        beobachter.unobserve(e.target);
+        schluss.unobserve(e.target);
       }
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
 
-    document
-      .querySelectorAll('[data-auftritt], [data-schluss]')
-      .forEach((el) => beobachter.observe(el));
+    document.querySelectorAll('[data-schluss]').forEach((el) => schluss.observe(el));
   </script>
 </body>
 </html>
