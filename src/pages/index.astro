@@ -324,7 +324,7 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   @media (prefers-reduced-motion: reduce) {
     .buehne { height: auto; }
     .buehne__halt { position: static; height: auto; min-height: 100svh; padding-block: var(--r-9); }
-    .buehne__wort { opacity: 1; }
+    :global(html.js) .buehne__wort { opacity: 1; }
     .buehne__strich::after { animation: none; }
   }
 
