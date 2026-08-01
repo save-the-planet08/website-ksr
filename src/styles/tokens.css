@@ -1,0 +1,99 @@
+/* ===========================================================================
+   KSR — Design Tokens
+   Monochrom auf Papier, ein Akzent aus der Traube. Keine Fotos, nur Vektor.
+   Eine Schriftfamilie (Archivo Variable), Hierarchie über Gewicht und Breite.
+   =========================================================================== */
+
+:root {
+  /* --- Farbe ------------------------------------------------------------ */
+  --ink:            #0B0B0C;
+  --ink-80:         #3A3A3C;
+  --ink-60:         #6B6B6E;
+  --ink-40:         #9C9CA0;
+  --ink-20:         #CFCFD2;
+
+  --paper:          #F4F1EA;
+  --paper-warm:     #EDE9E0;
+  --paper-pure:     #FFFFFF;
+
+  /* Aus der Traube gezogen — der einzige Akzent der Seite. */
+  --rebe:           #6B1B32;
+  --rebe-hell:      #8E2643;
+  --rebe-tief:      #46101F;
+
+  --linie:          rgba(11, 11, 12, 0.14);
+  --linie-stark:    rgba(11, 11, 12, 0.28);
+
+  /* Umkehrung — für dunkle Sektionen */
+  --auf-dunkel-text:   #F4F1EA;
+  --auf-dunkel-linie:  rgba(244, 241, 234, 0.18);
+
+  /* --- Typografie ------------------------------------------------------- */
+  --schrift: 'Archivo Variable', 'Archivo', -apple-system, BlinkMacSystemFont,
+             'Segoe UI', system-ui, sans-serif;
+
+  /* Fluide Skala, 375px → 1600px */
+  --t-micro:   clamp(0.6875rem, 0.66rem + 0.12vw, 0.75rem);
+  --t-klein:   clamp(0.8125rem, 0.78rem + 0.16vw, 0.9375rem);
+  --t-basis:   clamp(1rem, 0.95rem + 0.24vw, 1.1875rem);
+  --t-gross:   clamp(1.125rem, 1.02rem + 0.5vw, 1.5rem);
+  --t-lead:    clamp(1.375rem, 1.15rem + 1.05vw, 2.25rem);
+  --t-h3:      clamp(1.5rem, 1.2rem + 1.4vw, 2.5rem);
+  --t-h2:      clamp(2.25rem, 1.55rem + 3.2vw, 5rem);
+  --t-h1:      clamp(3rem, 1.6rem + 6.6vw, 9rem);
+  --t-riese:   clamp(4.5rem, 0.5rem + 18vw, 22rem);
+
+  --zeile-eng:     0.92;
+  --zeile-titel:   1.02;
+  --zeile-normal:  1.5;
+  --zeile-weit:    1.65;
+
+  --sperr-eng:     -0.035em;
+  --sperr-titel:   -0.025em;
+  --sperr-null:    0;
+  --sperr-weit:    0.14em;
+  --sperr-weiter:  0.24em;
+
+  /* --- Raum ------------------------------------------------------------- */
+  --r-1:  0.25rem;
+  --r-2:  0.5rem;
+  --r-3:  0.75rem;
+  --r-4:  1rem;
+  --r-5:  1.5rem;
+  --r-6:  2rem;
+  --r-7:  3rem;
+  --r-8:  4.5rem;
+  --r-9:  7rem;
+  --r-10: 11rem;
+  --r-11: 16rem;
+
+  --rand:      clamp(1.25rem, 4.5vw, 5rem);
+  --breite:    82rem;
+  --breite-eng: 46rem;
+  --lesebreite: 34rem;
+
+  /* --- Bewegung --------------------------------------------------------- */
+  --d-schnell:  180ms;
+  --d-normal:   320ms;
+  --d-ruhig:    620ms;
+  --d-lang:     1100ms;
+
+  --e-aus:      cubic-bezier(0.16, 1, 0.3, 1);
+  --e-weich:    cubic-bezier(0.4, 0, 0.2, 1);
+  --e-rein:     cubic-bezier(0.7, 0, 0.84, 0);
+
+  /* --- Ebenen ----------------------------------------------------------- */
+  --z-buehne:   1;
+  --z-inhalt:   10;
+  --z-kopf:     100;
+  --z-schub:    200;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --d-schnell: 1ms;
+    --d-normal:  1ms;
+    --d-ruhig:   1ms;
+    --d-lang:    1ms;
+  }
+}

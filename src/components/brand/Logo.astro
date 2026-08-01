@@ -1,0 +1,73 @@
+---
+/**
+ * Das KSR-Logo als zerlegbare Vektorgrafik.
+ * Jedes Bauteil ist eine eigene Gruppe mit eigener ID — damit die Teile
+ * einzeln bewegt, gezoomt und gezeichnet werden können.
+ */
+import * as L from '../../lib/logo';
+
+type Teil = 'loewe' | 'balken' | 'wortmarke' | 'rheingau' | 'taunusKreis' | 'ranke' | 'trauben';
+
+interface Props {
+  teile?: Teil[];
+  /** Eigene viewBox, sonst das ganze Logo. */
+  box?: string;
+  /** 'fuellung' = massiv, 'kontur' = nur Umriss (für die Einzeichnung). */
+  modus?: 'fuellung' | 'kontur';
+  klasse?: string;
+  praefix?: string;
+  titel?: string;
+}
+
+const {
+  teile = ['loewe', 'balken', 'wortmarke', 'rheingau', 'taunusKreis', 'ranke', 'trauben'],
+  box = L.LOGO_VIEWBOX,
+  modus = 'fuellung',
+  klasse = '',
+  praefix = 'lg',
+  titel,
+} = Astro.props;
+
+const daten: Record<Teil, string[]> = {
+  loewe: L.loewe,
+  balken: L.balken,
+  wortmarke: L.wortmarke,
+  rheingau: L.rheingau,
+  taunusKreis: L.taunusKreis,
+  ranke: L.ranke,
+  trauben: L.trauben,
+};
+---
+
+<svg
+  class={`logo logo--${modus} ${klasse}`}
+  viewBox={box}
+  fill="none"
+  role={titel ? 'img' : 'presentation'}
+  aria-hidden={titel ? undefined : 'true'}
+  aria-label={titel}
+  xmlns="http://www.w3.org/2000/svg"
+>
+  {teile.map((teil) => (
+    <g id={`${praefix}-${teil}`} class={`logo__teil logo__teil--${teil}`} data-teil={teil}>
+      {daten[teil].map((d) => <path d={d} />)}
+    </g>
+  ))}
+</svg>
+
+<style>
+  .logo { width: 100%; height: auto; overflow: visible; }
+
+  .logo--fuellung path {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  /* Für die Einzeichnung: der Umriss wird als Linie gezogen, danach gefüllt. */
+  .logo--kontur path {
+    fill: currentColor;
+    stroke: currentColor;
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+  }
+</style>

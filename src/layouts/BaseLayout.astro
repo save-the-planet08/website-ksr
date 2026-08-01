@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import Kopf from '../components/Kopf.astro';
+import Fuss from '../components/Fuss.astro';
+
+interface Props {
+  titel: string;
+  beschreibung?: string;
+  aktiv?: string;
+}
+
+const {
+  titel,
+  beschreibung = 'Der Kreisschülerrat Rheingau-Taunus-Kreis ist die gewählte Vertretung aller Schülerinnen und Schüler im Kreis.',
+  aktiv = 'start',
+} = Astro.props;
+
+const voll = `${titel} — KSR Rheingau-Taunus-Kreis`;
+---
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{voll}</title>
+  <meta name="description" content={beschreibung} />
+  <meta name="theme-color" content="#0B0B0C" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta property="og:title" content={voll} />
+  <meta property="og:description" content={beschreibung} />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="de_DE" />
+  <script is:inline>
+    /* Muss vor dem ersten Anstrich laufen: alle Anfangszustände der
+       Scroll-Auftritte hängen an dieser Klasse. Ohne JavaScript bleibt der
+       Inhalt schlicht sichtbar, statt unsichtbar zu sein. */
+    document.documentElement.classList.add('js');
+  </script>
+</head>
+
+<body>
+  <a href="#inhalt" class="sprung">Zum Inhalt springen</a>
+
+  <Kopf aktiv={aktiv} />
+
+  <main id="inhalt">
+    <slot />
+  </main>
+
+  <Fuss />
+
+  <script>
+    import { ankerVerbinden } from '../lib/scroll';
+
+    ankerVerbinden();
+
+    // Auftritt beim Scrollen — eine Beobachtung für die ganze Seite.
+    const beobachter = new IntersectionObserver((eintraege) => {
+      for (const e of eintraege) {
+        if (!e.isIntersecting) continue;
+        e.target.classList.add('ist-da');
+        beobachter.unobserve(e.target);
+      }
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.12 });
+
+    document
+      .querySelectorAll('[data-auftritt], [data-schluss]')
+      .forEach((el) => beobachter.observe(el));
+  </script>
+</body>
+</html>

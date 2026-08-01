@@ -1,0 +1,226 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+
+const stufen = [
+  {
+    nr: '01',
+    ebene: 'Deine Schule',
+    titel: 'Die Schülervertretung',
+    text: 'Jede Klasse wählt Sprecherinnen und Sprecher, die Schule wählt daraus die Schulsprecher. Das ist die Ebene, auf der es um deinen Alltag geht: Stundenpläne, Pausen, Konflikte, Feste.',
+  },
+  {
+    nr: '02',
+    ebene: 'Der Kreis',
+    titel: 'Der Kreisschülerrat',
+    text: 'Die Schulen des Rheingau-Taunus-Kreises entsenden Delegierte. Zusammen sind wir der Kreisschülerrat und sprechen gegenüber dem Schulträger — also dem Kreis — für alle Schülerinnen und Schüler. Der KSR wählt aus seiner Mitte einen Vorstand.',
+  },
+  {
+    nr: '03',
+    ebene: 'Das Land',
+    titel: 'Die Landesschülervertretung',
+    text: 'Aus den Kreis- und Stadtschülerräten setzt sich die Landesschülervertretung Hessen zusammen. Was dort beschlossen wird, geht direkt ans Kultusministerium. Auch dorthin schicken wir Delegierte.',
+  },
+];
+
+const arbeit = [
+  {
+    titel: 'Sitzungen',
+    text: 'Wir tagen mehrmals im Schuljahr. Jede Schule im Kreis hat Sitz und Stimme. Anträge kann jede Delegierte und jeder Delegierte stellen — auch beim ersten Mal.',
+  },
+  {
+    titel: 'Gremien',
+    text: 'Der KSR ist in den Gremien des Schulträgers vertreten. Dort werden Schulbau, Ausstattung und Schulentwicklungsplanung verhandelt — Dinge, die man sonst nur als Ergebnis mitbekommt.',
+  },
+  {
+    titel: 'Beratung',
+    text: 'Wenn eine SV nicht weiterkommt, helfen wir: bei Rechten, bei Konflikten mit der Schulleitung, bei der Frage, wie man einen Antrag überhaupt formuliert.',
+  },
+  {
+    titel: 'Öffentlichkeit',
+    text: 'Manches lässt sich nur lösen, wenn es jemand ausspricht. Wir nehmen Stellung, wenn es nötig ist — abgestimmt, aber ohne Umweg.',
+  },
+];
+---
+
+<BaseLayout
+  titel="Der Rat"
+  beschreibung="Wie der Kreisschülerrat Rheingau-Taunus-Kreis aufgebaut ist, was er tut und wie man mitmacht."
+  aktiv="der-rat"
+>
+  <Seitenkopf
+    marke="Der Rat"
+    titel="Gewählt, nicht ernannt."
+    lead="Der Kreisschülerrat ist keine Arbeitsgemeinschaft und kein Verein. Er ist die im Hessischen Schulgesetz vorgesehene Vertretung aller Schülerinnen und Schüler eines Landkreises — mit dem Recht, gehört zu werden."
+    zeichen="loewe"
+  />
+
+  <!-- Drei Ebenen -->
+  <section class="abschnitt">
+    <div class="huelle">
+      <p class="marke" data-auftritt>Von der Klasse bis ins Ministerium</p>
+      <h2 class="titel-2 stufen__titel" data-auftritt style="--verzug:80ms">
+        Drei Ebenen. Wir sind die mittlere.
+      </h2>
+
+      <ol class="stufen">
+        {stufen.map((s, i) => (
+          <li class="stufe" data-auftritt style={`--verzug:${i * 110}ms`}>
+            <span class="stufe__balken" aria-hidden="true"><i></i><i></i></span>
+            <div class="stufe__inhalt">
+              <p class="marke">{s.nr} — {s.ebene}</p>
+              <h3 class="stufe__titel">{s.titel}</h3>
+              <p class="fliess">{s.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Was wir konkret machen -->
+  <section class="abschnitt abschnitt--dunkel">
+    <div class="huelle">
+      <p class="marke" data-auftritt>Der Alltag</p>
+      <h2 class="titel-2 arbeit__titel" data-auftritt style="--verzug:80ms">
+        Was hier tatsächlich passiert.
+      </h2>
+
+      <div class="arbeit">
+        {arbeit.map((a, i) => (
+          <article class="arbeit__stueck" data-auftritt style={`--verzug:${i * 90}ms`}>
+            <h3 class="arbeit__stueck-titel">{a.titel}</h3>
+            <p class="fliess">{a.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Mitmachen -->
+  <section class="abschnitt">
+    <div class="huelle mitmachen">
+      <div class="mitmachen__wort">
+        <p class="marke" data-auftritt>Mitmachen</p>
+        <h2 class="titel-2" data-auftritt style="--verzug:80ms">
+          Die Hürde ist niedriger,<br>als du denkst.
+        </h2>
+      </div>
+
+      <div class="mitmachen__text">
+        <p class="fliess" data-auftritt>
+          Du brauchst keine Erfahrung, kein Amt und keinen Notenschnitt. Du brauchst
+          eine Schule im Rheingau-Taunus-Kreis und die Bereitschaft, hinzugehen. Der
+          Rest ist Übungssache — und niemand hier hat mit Ahnung angefangen.
+        </p>
+        <p class="fliess" data-auftritt style="--verzug:80ms">
+          Wenn deine Schule noch keine Delegierten entsendet, sprich deine SV oder
+          Verbindungslehrkraft an. Wenn du nicht weiterkommst, schreib uns direkt —
+          wir melden uns bei deiner Schule.
+        </p>
+        <div class="mitmachen__knoepfe" data-auftritt style="--verzug:160ms">
+          <a href="/kontakt" class="knopf">
+            Kontakt aufnehmen
+            <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </a>
+          <a href="/termine" class="verweis">Nächste Sitzungen</a>
+        </div>
+
+        <div class="hinweis" data-auftritt>
+          <p>
+            <strong>Noch zu ergänzen:</strong> Die Namen und Ämter des aktuellen Vorstands
+            sowie die Liste der Mitgliedsschulen stehen hier noch nicht. Sobald der
+            Vorstand konstituiert ist, kommen sie an diese Stelle.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .stufen__titel { margin-top: var(--r-5); max-width: 20ch; }
+
+  .stufen {
+    margin-top: var(--r-8);
+    display: grid;
+    gap: 0;
+  }
+
+  .stufe {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--r-5);
+    padding-block: var(--r-6);
+    border-top: 1px solid var(--linie);
+  }
+  .stufe:last-child { border-bottom: 1px solid var(--linie); }
+
+  .stufe__balken {
+    display: flex;
+    gap: 5px;
+    align-self: stretch;
+  }
+  .stufe__balken i {
+    display: block;
+    width: 2px;
+    background: var(--ink-20);
+  }
+  .stufe:nth-child(2) .stufe__balken i { background: var(--rebe); }
+
+  .stufe__titel {
+    font-size: var(--t-h3);
+    font-variation-settings: 'wght' 680, 'wdth' 96;
+    letter-spacing: var(--sperr-titel);
+    line-height: 1.12;
+    margin-block: var(--r-2) var(--r-4);
+  }
+
+  .stufe__inhalt .fliess { max-width: 44rem; }
+
+  @media (min-width: 62rem) {
+    .stufe { grid-template-columns: auto 14rem 1fr; align-items: start; }
+    .stufe__inhalt { display: contents; }
+    .stufe__inhalt .marke { grid-column: 2; }
+    .stufe__titel { grid-column: 3; grid-row: 1; margin-top: 0; }
+    .stufe__inhalt .fliess { grid-column: 3; }
+  }
+
+  .arbeit__titel { margin-top: var(--r-5); max-width: 18ch; }
+
+  .arbeit {
+    display: grid;
+    gap: var(--r-6);
+    margin-top: var(--r-8);
+  }
+  @media (min-width: 48rem) {
+    .arbeit { grid-template-columns: 1fr 1fr; gap: var(--r-7); }
+  }
+
+  .arbeit__stueck { padding-top: var(--r-4); border-top: 1px solid var(--auf-dunkel-linie); }
+
+  .arbeit__stueck-titel {
+    font-size: var(--t-h3);
+    font-variation-settings: 'wght' 680, 'wdth' 96;
+    letter-spacing: var(--sperr-titel);
+    margin-bottom: var(--r-3);
+  }
+
+  .mitmachen { display: grid; gap: var(--r-7); }
+  @media (min-width: 62rem) {
+    .mitmachen { grid-template-columns: 1fr 1fr; gap: var(--r-8); }
+  }
+
+  .mitmachen__wort .titel-2 { margin-top: var(--r-5); }
+  .mitmachen__text .fliess { max-width: none; }
+
+  .mitmachen__knoepfe {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--r-5);
+    margin-top: var(--r-6);
+  }
+</style>

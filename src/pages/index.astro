@@ -1,0 +1,792 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Logo from '../components/brand/Logo.astro';
+import { wuensche } from '../data/wuensche';
+import { loeweBox, rankeBox, traubenBox } from '../lib/logo';
+
+const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} ${
+  traubenBox[1] + traubenBox[3] - rankeBox[1] + 20
+}`;
+---
+
+<BaseLayout
+  titel="Start"
+  beschreibung="Der Kreisschülerrat Rheingau-Taunus-Kreis ist die gewählte Vertretung aller Schülerinnen und Schüler im Kreis. Wir beraten, vernetzen und mischen uns ein."
+  aktiv="start"
+>
+  <!-- ===================================================================
+       AKT I — Die Einzeichnung und der Zoom in den Löwen
+       =================================================================== -->
+  <section class="buehne" data-buehne aria-label="Kreisschülerrat Rheingau-Taunus-Kreis">
+    <div class="buehne__halt">
+      <div class="buehne__feld" data-feld>
+        <Logo praefix="b" modus="kontur" titel="Kreisschülerrat Rheingau-Taunus-Kreis" />
+      </div>
+
+      <div class="buehne__wort" data-wort>
+        <p class="marke buehne__marke">Kreisschülerrat Rheingau-Taunus-Kreis</p>
+        <h1 class="buehne__titel">
+          <span class="zeilen-maske"><span class="buehne__zeile">Wir sind die</span></span>
+          <span class="zeilen-maske"><span class="buehne__zeile">Stimme, die</span></span>
+          <span class="zeilen-maske"><span class="buehne__zeile buehne__zeile--akzent">nicht fragt,</span></span>
+          <span class="zeilen-maske"><span class="buehne__zeile">ob sie darf.</span></span>
+        </h1>
+      </div>
+
+      <div class="buehne__hinweis" data-hinweis aria-hidden="true">
+        <span class="marke">Scrollen</span>
+        <span class="buehne__strich"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       AKT II — Der Löwe: Haltung
+       =================================================================== -->
+  <section class="haltung abschnitt--dunkel" id="haltung">
+    <div class="haltung__tier" aria-hidden="true">
+      <Logo
+        teile={['loewe']}
+        box={`${loeweBox[0]} ${loeweBox[1]} ${loeweBox[2]} ${loeweBox[3]}`}
+        praefix="h"
+      />
+    </div>
+
+    <div class="huelle haltung__inhalt">
+      <p class="marke" data-auftritt>Der Löwe — Hessen, aufrecht</p>
+
+      <h2 class="titel-2 haltung__satz" data-auftritt style="--verzug:80ms">
+        Schülervertretung ist kein Ehrenamt für Ruhige.
+      </h2>
+
+      <div class="haltung__spalten">
+        <p class="fliess" data-auftritt style="--verzug:160ms">
+          Der Kreisschülerrat ist die gewählte Vertretung aller Schülerinnen und Schüler
+          im Rheingau-Taunus-Kreis. Jede Schule entsendet ihre Schulsprecherinnen und
+          Schulsprecher — zusammen sind wir das Gremium, das für den ganzen Kreis
+          spricht. Nicht als Symbol. Als Adresse.
+        </p>
+        <p class="fliess" data-auftritt style="--verzug:240ms">
+          Wir sitzen mit dem Schulträger an einem Tisch, wir schicken Delegierte in die
+          Landesschülervertretung Hessen, und wir sind da, wenn an einer Schule etwas
+          schiefläuft und niemand mehr weiterweiß. Der Löwe im Wappen steht aufrecht.
+          Das ist kein Zufall, das ist die Arbeitsanweisung.
+        </p>
+      </div>
+
+      <ul class="haltung__saeulen">
+        <li class="saeule" data-auftritt style="--verzug:80ms">
+          <span class="saeule__nr">01</span>
+          <h3 class="saeule__titel">Beraten</h3>
+          <p class="saeule__text">
+            Wenn eine SV nicht weiterkommt — bei Konflikten, bei Rechten, bei der Frage
+            wo man überhaupt anfängt — sind wir die erste Nummer, die man wählt.
+          </p>
+        </li>
+        <li class="saeule" data-auftritt style="--verzug:160ms">
+          <span class="saeule__nr">02</span>
+          <h3 class="saeule__titel">Verbinden</h3>
+          <p class="saeule__text">
+            Dasselbe Problem an sieben Schulen ist kein Einzelfall mehr, sondern ein
+            Argument. Wir bringen die Schülervertretungen des Kreises zusammen.
+          </p>
+        </li>
+        <li class="saeule" data-auftritt style="--verzug:240ms">
+          <span class="saeule__nr">03</span>
+          <h3 class="saeule__titel">Einmischen</h3>
+          <p class="saeule__text">
+            Schulentwicklung wird über uns entschieden, wenn wir nicht dabei sind.
+            Also sind wir dabei — in den Gremien, in den Terminen, in den Protokollen.
+          </p>
+        </li>
+      </ul>
+
+      <a href="/der-rat" class="verweis haltung__verweis" data-auftritt>
+        Wie der Rat arbeitet
+        <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       AKT III — Der Doppelbalken wird zur Liste: acht Wünsche
+       =================================================================== -->
+  <section class="wuensche" id="wuensche" data-wuensche>
+    <div class="huelle">
+      <header class="wuensche__kopf">
+        <p class="marke" data-auftritt>Der Doppelbalken — acht Mal</p>
+        <h2 class="titel-2" data-auftritt style="--verzug:80ms">
+          Acht Wünsche.<br>Keiner davon unbezahlbar.
+        </h2>
+        <p class="lead wuensche__lead" data-auftritt style="--verzug:160ms">
+          Das ist die Liste, mit der wir in jedes Gespräch gehen. Sie ist nicht
+          verhandelbar zusammengestellt worden, sondern aus dem, was uns an den
+          Schulen im Kreis tatsächlich begegnet.
+        </p>
+      </header>
+
+      <ol class="wuensche__liste">
+        {wuensche.map((w, i) => (
+          <li class="wunsch" data-auftritt style={`--verzug:${i * 45}ms`}>
+            <a href={`/wuensche#wunsch-${w.nr}`} class="wunsch__flaeche">
+              <span class="wunsch__balken" aria-hidden="true"><i></i><i></i></span>
+              <span class="wunsch__nr">{w.nr}</span>
+              <span class="wunsch__text">
+                <span class="wunsch__titel">{w.titel}</span>
+                <span class="wunsch__kurz">{w.kurz}</span>
+              </span>
+              <span class="wunsch__wort" aria-hidden="true">{w.wort}</span>
+              <svg class="wunsch__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+          </li>
+        ))}
+      </ol>
+
+      <a href="/wuensche" class="knopf wuensche__knopf" data-auftritt>
+        Alle acht im Detail
+        <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6"/>
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       AKT IV — Die Ranke wächst durch den Kreis
+       =================================================================== -->
+  <section class="kreis" id="kreis" data-kreis>
+    <div class="huelle">
+      <div class="kreis__kopf">
+        <p class="marke" data-auftritt>Die Rebe — Rheingau-Taunus</p>
+        <h2 class="titel-2" data-auftritt style="--verzug:80ms">
+          Ein Kreis, viele Schulen,<br>eine Vertretung.
+        </h2>
+      </div>
+    </div>
+
+    <div class="kreis__buehne" data-ranke-buehne>
+      <div class="kreis__feld">
+        <Logo teile={['ranke', 'trauben']} box={rankeFeld} praefix="k" />
+      </div>
+    </div>
+
+    <div class="huelle kreis__unten">
+      <p class="fliess kreis__text" data-auftritt>
+        Von Rüdesheim bis Idstein, vom Gymnasium bis zur Berufsschule: Wir vertreten
+        alle Schulformen im Kreis. Was in Taunusstein beschlossen wird, wirkt sich in
+        Eltville aus — deshalb reden wir nicht schulweise, sondern für den Kreis.
+      </p>
+      <div class="kreis__karten">
+        <a href="/termine" class="karte" data-auftritt>
+          <p class="marke">Nächster Termin</p>
+          <h3 class="karte__titel">Sitzungen &amp; Treffen</h3>
+          <p class="karte__text">Wann wir tagen, wer kommen darf, was auf der Tagesordnung steht.</p>
+          <span class="karte__pfeil" aria-hidden="true">→</span>
+        </a>
+        <a href="/kontakt" class="karte" data-auftritt style="--verzug:90ms">
+          <p class="marke">Für Schülervertretungen</p>
+          <h3 class="karte__titel">Problem an deiner Schule?</h3>
+          <p class="karte__text">Schreib uns. Wir antworten, und wir behandeln es vertraulich.</p>
+          <span class="karte__pfeil" aria-hidden="true">→</span>
+        </a>
+        <a href="/links" class="karte" data-auftritt style="--verzug:180ms">
+          <p class="marke">Grundlagen</p>
+          <h3 class="karte__titel">Deine Rechte als SV</h3>
+          <p class="karte__text">Schulgesetz, Landesschülervertretung, Vorlagen — gesammelt an einem Ort.</p>
+          <span class="karte__pfeil" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       AKT V — Aufruf
+       =================================================================== -->
+  <section class="aufruf abschnitt--rebe">
+    <div class="huelle aufruf__inhalt">
+      <h2 class="titel-1 aufruf__satz" data-auftritt>
+        Wenn du das hier liest,<br>bist du wahrscheinlich<br>schon der Typ dafür.
+      </h2>
+      <p class="lead aufruf__lead" data-auftritt style="--verzug:120ms">
+        Der Kreisschülerrat lebt davon, dass Leute aus den Schulen kommen und
+        mitmachen. Man muss nichts können außer hinzugehen.
+      </p>
+      <div class="aufruf__knoepfe" data-auftritt style="--verzug:200ms">
+        <a href="/kontakt" class="knopf">
+          Mitmachen
+          <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
+        <a href="/der-rat" class="verweis">Erst mal umsehen</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ==================================================================
+     AKT I — Bühne
+     ================================================================== */
+  .buehne {
+    height: 320vh;
+    position: relative;
+  }
+
+  .buehne__halt {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    /* Muss gesetzt sein: die Bühne ist ein eigener Stapelkontext, und der
+       Difference-Blend der Schlagzeile braucht hier drin einen Untergrund. */
+    background: var(--paper);
+  }
+
+  .buehne__feld {
+    grid-area: 1 / 1;
+    /* Auch auf flachen Fenstern darf das Logo die Höhe nicht ausfüllen —
+       das Seitenverhältnis ist 1632:964, also begrenzt 88vh die Breite. */
+    width: min(70vw, 54rem, 88vh);
+    color: var(--ink);
+    /* Kein will-change: der Zoom vergrößert die Ebene um ein Vielfaches,
+       eine erzwungene Rasterebene sprengt dabei das Speicherlimit und die
+       Bühne wird schwarz bzw. leer gezeichnet. */
+    transform-origin: 30% 24%;
+  }
+
+  .buehne__wort {
+    grid-area: 1 / 1;
+    width: 100%;
+    max-width: var(--breite);
+    padding-inline: var(--rand);
+    margin-inline: auto;
+    z-index: 2;
+    color: var(--ink);
+  }
+  /* Nur verstecken, wenn das Skript auch läuft und sie wieder einblenden kann. */
+  :global(html.js) .buehne__wort { opacity: 0; will-change: opacity; }
+
+  .buehne__marke { margin-bottom: var(--r-5); }
+
+  .buehne__titel {
+    font-size: var(--t-h1);
+    font-variation-settings: 'wght' 760, 'wdth' 88;
+    line-height: 0.98;
+    letter-spacing: var(--sperr-eng);
+    text-transform: uppercase;
+  }
+
+  .buehne__zeile { display: block; }
+  .buehne__zeile--akzent { color: var(--rebe); font-variation-settings: 'wght' 800, 'wdth' 112; }
+
+  .buehne__hinweis {
+    grid-area: 1 / 1;
+    align-self: end;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--r-3);
+    padding-bottom: var(--r-6);
+    z-index: 3;
+  }
+
+  .buehne__strich {
+    width: 1px;
+    height: 3.5rem;
+    background: linear-gradient(to bottom, var(--linie-stark), transparent);
+    position: relative;
+    overflow: hidden;
+  }
+  .buehne__strich::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    height: 40%;
+    background: var(--ink);
+    animation: rinnen 2.4s var(--e-weich) infinite;
+  }
+
+  @keyframes rinnen {
+    0%   { transform: translateY(-100%); }
+    60%  { transform: translateY(250%); }
+    100% { transform: translateY(250%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .buehne { height: auto; }
+    .buehne__halt { position: static; height: auto; min-height: 100svh; padding-block: var(--r-9); }
+    .buehne__wort { opacity: 1; }
+    .buehne__strich::after { animation: none; }
+  }
+
+  /* ==================================================================
+     AKT II — Haltung
+     ================================================================== */
+  .haltung {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(var(--r-9), 16vh, var(--r-11));
+    background: var(--ink);
+    color: var(--auf-dunkel-text);
+  }
+
+  .haltung__tier {
+    position: absolute;
+    top: 50%;
+    right: -18%;
+    width: min(70vw, 46rem);
+    transform: translateY(-50%);
+    opacity: 0.07;
+    pointer-events: none;
+    color: var(--paper);
+  }
+
+  @media (min-width: 62rem) {
+    .haltung__tier { right: -6%; width: min(46vw, 40rem); opacity: 0.09; }
+  }
+
+  .haltung__inhalt { position: relative; z-index: 1; }
+
+  .haltung__satz {
+    margin-top: var(--r-5);
+    max-width: 20ch;
+  }
+
+  .haltung__spalten {
+    display: grid;
+    gap: var(--r-6);
+    margin-top: var(--r-7);
+  }
+  @media (min-width: 48rem) {
+    .haltung__spalten { grid-template-columns: 1fr 1fr; gap: var(--r-7); }
+  }
+
+  .haltung__saeulen {
+    display: grid;
+    gap: var(--r-6);
+    margin-top: var(--r-9);
+    border-top: 1px solid var(--auf-dunkel-linie);
+    padding-top: var(--r-6);
+  }
+  @media (min-width: 52rem) {
+    .haltung__saeulen { grid-template-columns: repeat(3, 1fr); gap: var(--r-7); }
+  }
+
+  .saeule { position: relative; padding-top: var(--r-4); }
+
+  .saeule::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2.5rem;
+    height: 2px;
+    background: var(--rebe-hell);
+  }
+
+  .saeule__nr {
+    font-size: var(--t-micro);
+    letter-spacing: var(--sperr-weiter);
+    color: rgba(244, 241, 234, 0.45);
+  }
+
+  .saeule__titel {
+    font-size: var(--t-h3);
+    font-variation-settings: 'wght' 700, 'wdth' 94;
+    letter-spacing: var(--sperr-titel);
+    margin-block: var(--r-2) var(--r-3);
+  }
+
+  .saeule__text {
+    font-size: var(--t-basis);
+    line-height: var(--zeile-weit);
+    color: rgba(244, 241, 234, 0.72);
+  }
+
+  .haltung__verweis { margin-top: var(--r-8); }
+
+  /* ==================================================================
+     AKT III — Wünsche
+     ================================================================== */
+  .wuensche { padding-block: clamp(var(--r-9), 15vh, var(--r-10)); }
+
+  .wuensche__kopf { max-width: 46rem; }
+  .wuensche__kopf .titel-2 { margin-top: var(--r-5); }
+  .wuensche__lead { margin-top: var(--r-5); color: var(--ink-80); }
+
+  .wuensche__liste {
+    margin-top: var(--r-8);
+    border-top: 1px solid var(--linie);
+  }
+
+  .wunsch { border-bottom: 1px solid var(--linie); }
+
+  .wunsch__flaeche {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: var(--r-4);
+    padding-block: var(--r-5);
+    position: relative;
+    isolation: isolate;
+    transition: color var(--d-normal) var(--e-weich);
+  }
+
+  /* Der Doppelbalken aus dem Logo — hier als Marker jeder Zeile. */
+  .wunsch__balken {
+    display: flex;
+    gap: 4px;
+    align-self: stretch;
+    margin-right: var(--r-2);
+  }
+  .wunsch__balken i {
+    display: block;
+    width: 2px;
+    background: var(--ink-20);
+    transform: scaleY(0.45);
+    transition: transform var(--d-normal) var(--e-aus), background-color var(--d-normal);
+  }
+  .wunsch__balken i:last-child { transition-delay: 60ms; }
+
+  .wunsch__flaeche:hover .wunsch__balken i,
+  .wunsch__flaeche:focus-visible .wunsch__balken i {
+    transform: scaleY(1);
+    background: var(--rebe);
+  }
+
+  .wunsch__nr {
+    font-size: var(--t-micro);
+    font-variation-settings: 'wght' 550, 'wdth' 100;
+    letter-spacing: var(--sperr-weit);
+    color: var(--ink-40);
+    align-self: start;
+    padding-top: 0.5em;
+  }
+
+  .wunsch__titel {
+    display: block;
+    font-size: var(--t-h3);
+    font-variation-settings: 'wght' 620, 'wdth' 96;
+    line-height: 1.1;
+    letter-spacing: var(--sperr-titel);
+    transition: font-variation-settings var(--d-normal) var(--e-aus);
+  }
+  .wunsch__flaeche:hover .wunsch__titel { font-variation-settings: 'wght' 700, 'wdth' 104; }
+
+  .wunsch__kurz {
+    display: block;
+    margin-top: var(--r-2);
+    font-size: var(--t-klein);
+    color: var(--ink-60);
+  }
+
+  /* Das große Wort im Hintergrund der Zeile. */
+  .wunsch__wort {
+    position: absolute;
+    right: 3.5rem;
+    top: 50%;
+    transform: translateY(-50%) translateX(1.5rem);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-variation-settings: 'wght' 800, 'wdth' 120;
+    text-transform: uppercase;
+    letter-spacing: var(--sperr-eng);
+    color: var(--rebe);
+    opacity: 0;
+    z-index: -1;
+    pointer-events: none;
+    transition: opacity var(--d-normal) var(--e-aus), transform var(--d-ruhig) var(--e-aus);
+  }
+  .wunsch__flaeche:hover .wunsch__wort {
+    opacity: 0.14;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  .wunsch__pfeil {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--ink-40);
+    transition: transform var(--d-normal) var(--e-aus), color var(--d-normal);
+  }
+  .wunsch__flaeche:hover .wunsch__pfeil { transform: translateX(0.4rem); color: var(--rebe); }
+
+  @media (max-width: 40rem) {
+    .wunsch__flaeche { grid-template-columns: auto 1fr auto; gap: var(--r-3); }
+    .wunsch__balken { display: none; }
+    .wunsch__wort { display: none; }
+  }
+
+  .wuensche__knopf { margin-top: var(--r-8); }
+
+  /* ==================================================================
+     AKT IV — Kreis / Ranke
+     ================================================================== */
+  .kreis {
+    padding-block: clamp(var(--r-9), 15vh, var(--r-10));
+    background: var(--paper-warm);
+    overflow: hidden;
+  }
+
+  .kreis__kopf { max-width: 46rem; }
+  .kreis__kopf .titel-2 { margin-top: var(--r-5); }
+
+  .kreis__buehne {
+    margin-block: clamp(var(--r-7), 8vw, var(--r-9));
+    padding-inline: var(--rand);
+  }
+
+  .kreis__feld {
+    width: min(100%, 68rem);
+    margin-inline: auto;
+    color: var(--ink);
+  }
+
+  :global(html.js) .kreis__feld :global(.logo__teil--trauben path) {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0.2);
+  }
+
+  .kreis__unten { margin-top: var(--r-7); }
+  .kreis__text { max-width: 42rem; font-size: var(--t-gross); }
+
+  .kreis__karten {
+    display: grid;
+    gap: var(--r-4);
+    margin-top: var(--r-8);
+  }
+  @media (min-width: 52rem) {
+    .kreis__karten { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .karte {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--r-3);
+    padding: var(--r-6);
+    background: var(--paper-pure);
+    border: 1px solid var(--linie);
+    overflow: hidden;
+    isolation: isolate;
+    transition: color var(--d-normal) var(--e-weich), border-color var(--d-normal);
+  }
+
+  .karte::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform: translateY(100%);
+    transition: transform var(--d-normal) var(--e-aus);
+    z-index: -1;
+  }
+  .karte:hover { color: var(--paper); border-color: var(--ink); }
+  .karte:hover::before { transform: translateY(0); }
+  .karte:hover .marke,
+  .karte:hover .karte__text { color: rgba(244, 241, 234, 0.75); }
+
+  .karte__titel {
+    font-size: var(--t-gross);
+    font-variation-settings: 'wght' 680, 'wdth' 98;
+    letter-spacing: var(--sperr-titel);
+    line-height: 1.15;
+  }
+
+  .karte__text {
+    font-size: var(--t-klein);
+    line-height: 1.6;
+    color: var(--ink-60);
+    transition: color var(--d-normal);
+  }
+
+  .karte__pfeil {
+    margin-top: auto;
+    padding-top: var(--r-5);
+    font-size: var(--t-gross);
+    transition: transform var(--d-normal) var(--e-aus);
+  }
+  .karte:hover .karte__pfeil { transform: translateX(0.4rem); }
+
+  /* ==================================================================
+     AKT V — Aufruf
+     ================================================================== */
+  .aufruf {
+    padding-block: clamp(var(--r-9), 18vh, var(--r-11));
+    background: var(--rebe);
+    color: var(--auf-dunkel-text);
+  }
+
+  .aufruf__satz { max-width: 18ch; }
+  .aufruf__lead { margin-top: var(--r-6); max-width: 36rem; color: rgba(244, 241, 234, 0.82); }
+
+  .aufruf__knoepfe {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--r-5);
+    margin-top: var(--r-7);
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { lenis, sanft } from '../lib/scroll';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Lenis und ScrollTrigger auf denselben Takt bringen.
+  if (lenis) {
+    lenis.on('scroll', ScrollTrigger.update);
+    ScrollTrigger.scrollerProxy(document.body, {
+      scrollTop: (wert?: number) =>
+        wert !== undefined ? lenis.scrollTo(wert, { immediate: true }) : window.scrollY,
+    });
+  }
+
+  const buehne = document.querySelector<HTMLElement>('[data-buehne]');
+  const feld = document.querySelector<HTMLElement>('[data-feld]');
+  const wort = document.querySelector<HTMLElement>('[data-wort]');
+  const hinweis = document.querySelector<HTMLElement>('[data-hinweis]');
+
+  /* ------------------------------------------------------------------
+     Akt I.a — Das Logo zeichnet sich selbst
+     ------------------------------------------------------------------ */
+  if (feld && !sanft) {
+    const reihenfolge = ['loewe', 'balken', 'wortmarke', 'rheingau', 'taunusKreis', 'ranke', 'trauben'];
+    const alle = Array.from(feld.querySelectorAll('path'));
+    const zeit = gsap.timeline({ delay: 0.1 });
+
+    for (const [i, name] of reihenfolge.entries()) {
+      const gruppe = feld.querySelector<SVGGElement>(`[data-teil="${name}"]`);
+      if (!gruppe) continue;
+      const pfade = Array.from(gruppe.querySelectorAll('path'));
+
+      pfade.forEach((p) => {
+        const laenge = p.getTotalLength();
+        gsap.set(p, {
+          strokeDasharray: laenge,
+          strokeDashoffset: laenge,
+          fillOpacity: 0,
+          strokeOpacity: 1,
+        });
+      });
+
+      zeit.to(pfade, {
+        strokeDashoffset: 0,
+        duration: name === 'trauben' ? 0.35 : 0.6,
+        stagger: pfade.length > 4 ? 0.02 : 0.08,
+        ease: 'power2.inOut',
+      }, i === 0 ? 0 : '-=0.34');
+      zeit.to(pfade, {
+        fillOpacity: 1,
+        duration: 0.34,
+        stagger: pfade.length > 4 ? 0.012 : 0.06,
+        ease: 'power1.out',
+      }, '-=0.4');
+    }
+
+    zeit.to(alle, { strokeOpacity: 0, duration: 0.3, ease: 'power1.out' }, '-=0.2');
+
+    // Wer sofort scrollt, soll nicht auf die Einzeichnung warten.
+    const ueberspringen = () => {
+      if (window.scrollY > 30) {
+        zeit.progress(1);
+        window.removeEventListener('scroll', ueberspringen);
+      }
+    };
+    window.addEventListener('scroll', ueberspringen, { passive: true });
+    zeit.eventCallback('onComplete', () => window.removeEventListener('scroll', ueberspringen));
+  } else if (feld) {
+    gsap.set(feld.querySelectorAll('path'), { fillOpacity: 1, strokeOpacity: 0 });
+  }
+
+  /* ------------------------------------------------------------------
+     Akt I.b — Der Bruch: die Teile fliegen weg, der Löwe wächst
+     ------------------------------------------------------------------ */
+  if (buehne && feld && wort && !sanft) {
+    const hol = (name: string) => feld.querySelector<SVGGElement>(`[data-teil="${name}"]`);
+
+    /* Ein einziger Zeitstrahl für den ganzen Bruch. Wichtig: Start und Ende
+       decken sich mit der Klebestrecke (Bühnenhöhe minus ein Viewport) —
+       alles, was danach käme, würde nie zu sehen sein. */
+    const bruch = gsap.timeline({
+      scrollTrigger: {
+        trigger: buehne,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.8,
+      },
+    });
+
+    gsap.set(wort, { opacity: 0 });
+
+    bruch
+      // Alles außer dem Löwen verlässt die Bühne — jedes Teil in seine Richtung.
+      .to(hol('wortmarke'), { yPercent: -95, opacity: 0, duration: 0.32, ease: 'power2.in' }, 0)
+      .to(hol('rheingau'), { yPercent: -70, opacity: 0, duration: 0.32, ease: 'power2.in' }, 0.02)
+      .to(hol('taunusKreis'), { yPercent: -60, opacity: 0, duration: 0.32, ease: 'power2.in' }, 0.04)
+      .to(hol('trauben'), { yPercent: 90, opacity: 0, duration: 0.32, ease: 'power2.in' }, 0.03)
+      .to(hol('ranke'), { xPercent: 60, opacity: 0, duration: 0.32, ease: 'power2.in' }, 0.05)
+      .to(hol('balken'), { scaleY: 3.2, opacity: 0, transformOrigin: 'center', duration: 0.32, ease: 'power2.in' }, 0.02)
+      // …und der Löwe wächst, bis nur noch er im Bild ist.
+      .to(feld, { scale: 4.6, duration: 0.62, ease: 'power2.in' }, 0)
+      // …dann tritt er zurück und wird zum Grund für die Schlagzeile.
+      .to(feld, { opacity: 0.09, duration: 0.22, ease: 'power2.out' }, 0.4)
+      .to(wort, { opacity: 1, duration: 0.16, ease: 'power1.out' }, 0.46)
+      .fromTo('.buehne__zeile',
+        { yPercent: 108 },
+        { yPercent: 0, duration: 0.28, stagger: 0.055, ease: 'power3.out' },
+        0.48);
+
+    gsap.timeline({
+      scrollTrigger: { trigger: buehne, start: 'top top', end: '15% top', scrub: true },
+    }).to(hinweis, { opacity: 0, y: 20, ease: 'none' });
+  } else if (wort) {
+    gsap.set(wort, { opacity: 1 });
+  }
+
+  /* ------------------------------------------------------------------
+     Akt IV — Die Ranke wächst, die Trauben setzen sich
+     ------------------------------------------------------------------ */
+  const rankeBuehne = document.querySelector<HTMLElement>('[data-ranke-buehne]');
+  if (rankeBuehne) {
+    const ranke = rankeBuehne.querySelector<SVGPathElement>('[data-teil="ranke"] path');
+    const trauben = Array.from(rankeBuehne.querySelectorAll<SVGPathElement>('[data-teil="trauben"] path'));
+
+    if (sanft) {
+      gsap.set(trauben, { opacity: 1, scale: 1 });
+    } else if (ranke) {
+      const laenge = ranke.getTotalLength();
+      gsap.set(ranke, { strokeDasharray: laenge, strokeDashoffset: laenge, fillOpacity: 0, stroke: 'currentColor', strokeWidth: 3 });
+
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: rankeBuehne,
+          start: 'top 78%',
+          end: 'bottom 55%',
+          scrub: 0.9,
+        },
+      })
+        .to(ranke, { strokeDashoffset: 0, ease: 'none' }, 0)
+        .to(ranke, { fillOpacity: 1, duration: 0.25 }, 0.7)
+        .to(trauben, {
+          opacity: 1,
+          scale: 1,
+          ease: 'back.out(2)',
+          stagger: { each: 0.02, from: 'start' },
+        }, 0.35);
+    }
+  }
+
+  ScrollTrigger.refresh();
+</script>

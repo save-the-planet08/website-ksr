@@ -1,0 +1,179 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+
+const gruppen = [
+  {
+    marke: 'Deine Rechte',
+    titel: 'Rechtsgrundlagen',
+    einleitung:
+      'Schülervertretung ist kein Zugeständnis der Schule, sondern gesetzlich geregelt. Wer das einmal gelesen hat, argumentiert in Konflikten deutlich ruhiger.',
+    glieder: [
+      {
+        name: 'Hessisches Schulgesetz',
+        url: 'https://www.rv.hessenrecht.hessen.de/',
+        text: 'Der Abschnitt zur Schülervertretung regelt Wahl, Aufgaben und Rechte von SV, Kreis- und Landesschülerrat.',
+      },
+      {
+        name: 'Hessisches Kultusministerium',
+        url: 'https://kultus.hessen.de/',
+        text: 'Erlasse, Verordnungen und offizielle Handreichungen zur Schülervertretung.',
+      },
+    ],
+  },
+  {
+    marke: 'Über uns hinaus',
+    titel: 'Schülervertretung im Land',
+    einleitung:
+      'Der Kreisschülerrat ist eine Ebene von dreien. Nach oben geht es weiter — und dort werden Dinge entschieden, die auch bei uns ankommen.',
+    glieder: [
+      {
+        name: 'Landesschülervertretung Hessen',
+        url: 'https://lsv-hessen.de/',
+        text: 'Die Vertretung aller hessischen Schülerinnen und Schüler gegenüber dem Land. Dorthin entsenden wir Delegierte.',
+      },
+    ],
+  },
+  {
+    marke: 'Vor Ort',
+    titel: 'Kreis und Schulträger',
+    einleitung:
+      'Der Rheingau-Taunus-Kreis ist Schulträger — zuständig für Gebäude, Ausstattung, Schülerbeförderung und Schulentwicklungsplanung.',
+    glieder: [
+      {
+        name: 'Rheingau-Taunus-Kreis',
+        url: 'https://www.rheingau-taunus.de/',
+        text: 'Kreisverwaltung, Schulverwaltungsamt und Schülerbeförderung.',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  titel="Links"
+  beschreibung="Rechtsgrundlagen, Landesschülervertretung und Kreisverwaltung — die Quellen, mit denen Schülervertretungen im Rheingau-Taunus-Kreis arbeiten."
+  aktiv="links"
+>
+  <Seitenkopf
+    marke="Links & Recht"
+    titel="Was du nachlesen kannst."
+    lead="Die Sammlung, die wir selbst benutzen. Kurz gehalten — lieber vier Quellen, die stimmen, als vierzig, die niemand prüft."
+    zeichen="balken"
+  />
+
+  <section class="abschnitt">
+    <div class="huelle">
+      {gruppen.map((g, gi) => (
+        <div class="gruppe">
+          <div class="gruppe__kopf">
+            <p class="marke" data-auftritt>{g.marke}</p>
+            <h2 class="titel-3 gruppe__titel" data-auftritt style="--verzug:60ms">{g.titel}</h2>
+            <p class="fliess" data-auftritt style="--verzug:120ms">{g.einleitung}</p>
+          </div>
+
+          <ul class="gruppe__liste">
+            {g.glieder.map((l, i) => (
+              <li data-auftritt style={`--verzug:${i * 80}ms`}>
+                <a href={l.url} class="quelle" target="_blank" rel="noopener noreferrer">
+                  <span class="quelle__balken" aria-hidden="true"><i></i><i></i></span>
+                  <span class="quelle__inhalt">
+                    <span class="quelle__name">
+                      {l.name}
+                      <svg class="quelle__extern" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                        <path d="M7 17L17 7M8 7h9v9"/>
+                      </svg>
+                      <span class="nur-sr">(öffnet in neuem Tab)</span>
+                    </span>
+                    <span class="quelle__text">{l.text}</span>
+                    <span class="quelle__url">{new URL(l.url).hostname.replace('www.', '')}</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <div class="hinweis" data-auftritt>
+        <p>
+          <strong>Vor dem Livegang prüfen:</strong> Die Zieladressen sind auf die
+          Startseiten der jeweiligen Stellen gesetzt. Direktlinks auf einzelne
+          Paragrafen oder Erlasse ändern sich häufig — sie werden erst ergänzt, wenn
+          sie einmal geprüft wurden. Für fremde Inhalte haftet jeweils deren Betreiber.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .gruppe { padding-block: var(--r-7); border-top: 1px solid var(--linie); }
+  .gruppe:first-child { border-top: 0; padding-top: 0; }
+
+  @media (min-width: 62rem) {
+    .gruppe {
+      display: grid;
+      grid-template-columns: 22rem 1fr;
+      gap: var(--r-8);
+      align-items: start;
+    }
+  }
+
+  .gruppe__titel { margin-block: var(--r-3) var(--r-4); }
+
+  .gruppe__liste { display: grid; gap: var(--r-3); margin-top: var(--r-6); }
+  @media (min-width: 62rem) { .gruppe__liste { margin-top: 0; } }
+
+  .quelle {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--r-4);
+    padding: var(--r-5);
+    border: 1px solid var(--linie);
+    background: var(--paper-pure);
+    transition: border-color var(--d-normal) var(--e-weich),
+                transform var(--d-normal) var(--e-aus);
+  }
+  .quelle:hover { border-color: var(--ink); transform: translateX(4px); }
+
+  .quelle__balken { display: flex; gap: 4px; align-self: stretch; }
+  .quelle__balken i {
+    display: block;
+    width: 2px;
+    background: var(--ink-20);
+    transition: background-color var(--d-normal);
+  }
+  .quelle:hover .quelle__balken i { background: var(--rebe); }
+
+  .quelle__name {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--r-2);
+    font-size: var(--t-gross);
+    font-variation-settings: 'wght' 650, 'wdth' 98;
+    letter-spacing: var(--sperr-titel);
+    line-height: 1.2;
+  }
+
+  .quelle__extern { color: var(--ink-40); transition: transform var(--d-normal) var(--e-aus); }
+  .quelle:hover .quelle__extern { transform: translate(2px, -2px); color: var(--rebe); }
+
+  .quelle__text {
+    display: block;
+    margin-top: var(--r-2);
+    font-size: var(--t-klein);
+    line-height: 1.6;
+    color: var(--ink-60);
+    max-width: 46rem;
+  }
+
+  .quelle__url {
+    display: block;
+    margin-top: var(--r-3);
+    font-size: var(--t-micro);
+    letter-spacing: var(--sperr-weit);
+    text-transform: uppercase;
+    color: var(--ink-40);
+  }
+</style>

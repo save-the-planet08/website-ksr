@@ -1,0 +1,381 @@
+---
+import Logo from './brand/Logo.astro';
+import { loewe as _l, loeweBox, balkenBox } from '../lib/logo';
+
+interface Props { aktiv?: string; }
+const { aktiv = 'start' } = Astro.props;
+
+const punkte = [
+  { href: '/',           label: 'Start',    schluessel: 'start',    nr: '01' },
+  { href: '/der-rat',    label: 'Der Rat',  schluessel: 'der-rat',  nr: '02' },
+  { href: '/wuensche',   label: 'Wünsche',  schluessel: 'wuensche', nr: '03' },
+  { href: '/termine',    label: 'Termine',  schluessel: 'termine',  nr: '04' },
+  { href: '/kontakt',    label: 'Kontakt',  schluessel: 'kontakt',  nr: '05' },
+  { href: '/links',      label: 'Links',    schluessel: 'links',    nr: '06' },
+];
+
+// Löwe + Doppelbalken als kompakte Marke für die Kopfzeile
+const markeBox = `${loeweBox[0] - 20} ${loeweBox[1] - 20} ${balkenBox[0] + balkenBox[2] - loeweBox[0] + 40} ${loeweBox[3] + 40}`;
+---
+
+<header class="kopf" data-kopf>
+  <a href="/" class="kopf__marke" aria-label="Kreisschülerrat Rheingau-Taunus-Kreis — Startseite">
+    <span class="kopf__zeichen"><Logo teile={['loewe', 'balken']} box={markeBox} praefix="kopf" /></span>
+    <span class="kopf__wort">
+      <span class="kopf__wort-haupt">Kreisschülerrat</span>
+      <span class="kopf__wort-neben">Rheingau-Taunus-Kreis</span>
+    </span>
+  </a>
+
+  <nav class="kopf__nav" aria-label="Hauptnavigation">
+    {punkte.map((p) => (
+      <a
+        href={p.href}
+        class:list={['kopf__glied', aktiv === p.schluessel && 'ist-aktiv']}
+        aria-current={aktiv === p.schluessel ? 'page' : undefined}
+      >{p.label}</a>
+    ))}
+  </nav>
+
+  <button class="kopf__schalter" data-menue-auf aria-expanded="false" aria-controls="hauptmenue">
+    <span class="kopf__schalter-wort">Menü</span>
+    <span class="kopf__schalter-zeichen" aria-hidden="true"><i></i><i></i></span>
+  </button>
+</header>
+
+<!-- Vollbild-Menü -->
+<div class="menue" id="hauptmenue" data-menue hidden>
+  <div class="menue__grund" aria-hidden="true">
+    <Logo teile={['loewe']} box={`${loeweBox[0]} ${loeweBox[1]} ${loeweBox[2]} ${loeweBox[3]}`} praefix="menue" />
+  </div>
+
+  <div class="menue__kopf">
+    <span class="marke">Navigation</span>
+    <button class="menue__zu" data-menue-zu aria-label="Menü schließen">
+      <span>Schließen</span>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M5 5l14 14M19 5L5 19"/>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="menue__nav" aria-label="Hauptnavigation">
+    {punkte.map((p, i) => (
+      <a href={p.href} class:list={['menue__glied', aktiv === p.schluessel && 'ist-aktiv']} style={`--i:${i}`}>
+        <span class="menue__nr">{p.nr}</span>
+        <span class="menue__label">{p.label}</span>
+      </a>
+    ))}
+  </nav>
+
+  <div class="menue__fuss">
+    <a href="mailto:kontakt@ksr-rtk.de" class="menue__fuss-glied">kontakt@ksr-rtk.de</a>
+    <a href="/impressum" class="menue__fuss-glied">Impressum</a>
+    <a href="/datenschutz" class="menue__fuss-glied">Datenschutz</a>
+  </div>
+</div>
+
+<style>
+  /* --- Kopfzeile ------------------------------------------------------- */
+  .kopf {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: var(--z-kopf);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--r-5);
+    padding: var(--r-4) var(--rand);
+    mix-blend-mode: difference;
+    color: var(--paper);
+    transition: transform var(--d-normal) var(--e-aus), opacity var(--d-normal);
+  }
+
+  /* Beim Runterscrollen weg, beim Hochscrollen zurück. */
+  .kopf[data-versteckt] {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+
+  .kopf__marke {
+    display: flex;
+    align-items: center;
+    gap: var(--r-3);
+    min-height: 44px;
+  }
+
+  /* Die Größe muss am Wrapper hängen — die SVG selbst trägt den Scope
+     der Logo-Komponente und ist von hier aus nicht adressierbar. */
+  .kopf__zeichen {
+    display: block;
+    height: 30px;
+    flex: none;
+  }
+  .kopf__zeichen :global(svg) {
+    height: 100%;
+    width: auto;
+  }
+
+  .kopf__wort { display: flex; flex-direction: column; line-height: 1.1; }
+
+  .kopf__wort-haupt {
+    font-size: var(--t-klein);
+    font-variation-settings: 'wght' 700, 'wdth' 92;
+    letter-spacing: var(--sperr-titel);
+  }
+
+  .kopf__wort-neben {
+    font-size: var(--t-micro);
+    font-variation-settings: 'wght' 450, 'wdth' 100;
+    letter-spacing: var(--sperr-weit);
+    text-transform: uppercase;
+    opacity: 0.62;
+  }
+
+  @media (max-width: 30rem) {
+    .kopf__wort-neben { display: none; }
+  }
+
+  .kopf__nav { display: none; gap: var(--r-5); }
+
+  @media (min-width: 62rem) {
+    .kopf__nav { display: flex; }
+    .kopf__schalter { display: none; }
+  }
+
+  .kopf__glied {
+    position: relative;
+    font-size: var(--t-klein);
+    font-variation-settings: 'wght' 500, 'wdth' 100;
+    letter-spacing: var(--sperr-weit);
+    text-transform: uppercase;
+    padding-block: var(--r-2);
+  }
+
+  .kopf__glied::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1.5px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--d-normal) var(--e-aus);
+  }
+  .kopf__glied:hover::after,
+  .kopf__glied.ist-aktiv::after { transform: scaleX(1); }
+
+  .kopf__schalter {
+    display: flex;
+    align-items: center;
+    gap: var(--r-3);
+    min-height: 44px;
+    padding-inline: var(--r-2);
+    font-size: var(--t-klein);
+    font-variation-settings: 'wght' 600, 'wdth' 100;
+    letter-spacing: var(--sperr-weit);
+    text-transform: uppercase;
+  }
+
+  .kopf__schalter-zeichen { display: grid; gap: 5px; width: 22px; }
+  .kopf__schalter-zeichen i {
+    display: block;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform var(--d-normal) var(--e-aus);
+  }
+  .kopf__schalter:hover .kopf__schalter-zeichen i:first-child { transform: translateX(4px); }
+
+  /* --- Vollbild-Menü --------------------------------------------------- */
+  .menue {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-schub);
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    flex-direction: column;
+    padding: var(--r-4) var(--rand) var(--r-6);
+    overflow: hidden;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path var(--d-ruhig) var(--e-aus);
+  }
+
+  .menue[hidden] { display: none; }
+  .menue.ist-offen { clip-path: inset(0 0 0 0); }
+
+  .menue__grund {
+    position: absolute;
+    right: -8vw;
+    bottom: -12vh;
+    width: min(62vw, 40rem);
+    opacity: 0.06;
+    pointer-events: none;
+    color: var(--paper);
+  }
+
+  .menue__kopf {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .menue__zu {
+    display: flex;
+    align-items: center;
+    gap: var(--r-3);
+    min-height: 44px;
+    font-size: var(--t-klein);
+    font-variation-settings: 'wght' 600, 'wdth' 100;
+    letter-spacing: var(--sperr-weit);
+    text-transform: uppercase;
+  }
+  .menue__zu svg { transition: transform var(--d-normal) var(--e-aus); }
+  .menue__zu:hover svg { transform: rotate(90deg); }
+
+  .menue__nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(0.15rem, 1vh, 0.6rem);
+    position: relative;
+    z-index: 1;
+  }
+
+  .menue__glied {
+    display: flex;
+    align-items: baseline;
+    gap: var(--r-4);
+    padding-block: clamp(0.25rem, 1vh, 0.75rem);
+    border-bottom: 1px solid var(--auf-dunkel-linie);
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition:
+      opacity var(--d-ruhig) var(--e-aus) calc(var(--i) * 55ms + 120ms),
+      transform var(--d-ruhig) var(--e-aus) calc(var(--i) * 55ms + 120ms),
+      color var(--d-schnell) var(--e-weich);
+  }
+  .menue.ist-offen .menue__glied { opacity: 1; transform: none; }
+
+  .menue__nr {
+    font-size: var(--t-micro);
+    font-variation-settings: 'wght' 500, 'wdth' 100;
+    letter-spacing: var(--sperr-weit);
+    opacity: 0.45;
+    flex: none;
+  }
+
+  .menue__label {
+    font-size: clamp(2rem, 8.5vw, 5.5rem);
+    font-variation-settings: 'wght' 700, 'wdth' 90;
+    line-height: 1.04;
+    letter-spacing: var(--sperr-eng);
+    transition: font-variation-settings var(--d-normal) var(--e-aus),
+                transform var(--d-normal) var(--e-aus);
+  }
+
+  .menue__glied:hover .menue__label,
+  .menue__glied.ist-aktiv .menue__label {
+    font-variation-settings: 'wght' 800, 'wdth' 108;
+  }
+  .menue__glied:hover { color: var(--paper); }
+  .menue__glied.ist-aktiv { color: var(--paper); }
+  .menue__glied.ist-aktiv .menue__nr { opacity: 1; color: var(--rebe-hell); }
+
+  .menue__fuss {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--r-5);
+    padding-top: var(--r-5);
+    position: relative;
+    z-index: 1;
+    font-size: var(--t-klein);
+    color: rgba(244, 241, 234, 0.6);
+  }
+  .menue__fuss-glied:hover { color: var(--paper); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menue { transition: none; }
+    .menue__glied { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+
+<script>
+  const schalter = document.querySelector<HTMLButtonElement>('[data-menue-auf]');
+  const menue = document.querySelector<HTMLElement>('[data-menue]');
+  const zu = document.querySelector<HTMLButtonElement>('[data-menue-zu]');
+  const kopf = document.querySelector<HTMLElement>('[data-kopf]');
+
+  if (schalter && menue && zu) {
+    let vorherFokus: HTMLElement | null = null;
+
+    const oeffnen = () => {
+      vorherFokus = document.activeElement as HTMLElement;
+      menue.hidden = false;
+      // Umbruch erzwingen statt auf ein Frame zu warten: in gedrosselten
+      // Tabs läuft requestAnimationFrame nicht, das Menü bliebe unsichtbar
+      // offen und würde das Scrollen sperren.
+      void menue.offsetHeight;
+      menue.classList.add('ist-offen');
+      schalter.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden';
+      zu.focus();
+    };
+
+    let zuTimer: number | undefined;
+    const schliessen = () => {
+      menue.classList.remove('ist-offen');
+      schalter.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+      vorherFokus?.focus();
+
+      // Erst nach dem Übergang aus dem Baum nehmen — mit Notbremse, falls
+      // kein transitionend kommt.
+      const fertig = (e?: TransitionEvent) => {
+        if (e && e.target !== menue) return;
+        window.clearTimeout(zuTimer);
+        menue.removeEventListener('transitionend', fertig);
+        menue.hidden = true;
+      };
+      menue.addEventListener('transitionend', fertig);
+      zuTimer = window.setTimeout(fertig, 900);
+    };
+
+    schalter.addEventListener('click', oeffnen);
+    zu.addEventListener('click', schliessen);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menue.hidden) schliessen();
+    });
+
+    // Fokus im offenen Menü halten
+    menue.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const ziele = menue.querySelectorAll<HTMLElement>('a[href], button');
+      if (!ziele.length) return;
+      const erst = ziele[0];
+      const letzt = ziele[ziele.length - 1];
+      if (e.shiftKey && document.activeElement === erst) { e.preventDefault(); letzt.focus(); }
+      else if (!e.shiftKey && document.activeElement === letzt) { e.preventDefault(); erst.focus(); }
+    });
+  }
+
+  // Kopfzeile beim Runterscrollen ausblenden
+  if (kopf) {
+    let letztes = 0;
+    let laeuft = false;
+    const pruefen = () => {
+      const y = window.scrollY;
+      if (y > 140 && y > letztes) kopf.setAttribute('data-versteckt', '');
+      else kopf.removeAttribute('data-versteckt');
+      letztes = y;
+      laeuft = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!laeuft) { laeuft = true; requestAnimationFrame(pruefen); }
+    }, { passive: true });
+  }
+</script>

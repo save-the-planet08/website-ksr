@@ -1,23 +1,25 @@
 ---
 name: web-animation
 description: >
-  Premium-Web-Animationsprinzipien für die KSR-Vanilla-Seite. Nutze diesen Skill
+  Premium-Web-Animationsprinzipien für die KSR-Astro-Seite. Nutze diesen Skill
   immer, wenn Bewegung, Übergänge, Scroll-Effekte, Hover-/Mikrointeraktionen oder
-  Entrance-Animationen gebaut oder verbessert werden. Framework-agnostisch,
-  GSAP-basiert. Triggert bei: "Animation", "Übergang", "scroll", "reveal",
+  Entrance-Animationen gebaut oder verbessert werden. Motion (motion/react) in
+  Inseln + GSAP. Triggert bei: "Animation", "Übergang", "scroll", "reveal",
   "hover", "soll teurer/wertiger wirken", "lebendiger".
 ---
 
-# Web-Animation (Vanilla + GSAP)
+# Web-Animation (Astro + React-Inseln)
 
 Ziel: „teuer und aufwendig" durch Zurückhaltung und perfektes Timing — nicht
 durch viele Effekte. Mehr Animation = meist billiger. Wenige Signaturbewegungen,
 sauber getimt, schlagen ein Effektgewitter.
 
-## Engine
-- GSAP für alles Komplexe (Scroll, Timelines, Stagger, SplitText, Pinning).
+## Engine (Astro + React-Inseln)
+- Motion (`motion/react`) IN React-Inseln: whileInView-Reveals, Stagger,
+  Spring, AnimatePresence-Exits, automatische Layout-Animationen.
+- GSAP für schwere cinematische Effekte (ScrollTrigger-Pinning, SplitText).
 - Lenis für Smooth-Scroll (größter Einzelhebel für „premium feel").
-- Reine CSS-Transitions nur für simple Hover-/State-Wechsel.
+- Reine CSS-Transitions für simple Hover-/State-Wechsel ohne Insel.
 
 ## Prinzipien (nach Emil Kowalski, „Animations on the Web")
 - Easing: Eintritte mit ease-out (schnell rein, sanft aus). Nie lineares Easing
@@ -44,4 +46,5 @@ Reduce-Regel setzen, in GSAP `gsap.matchMedia()` mit reduzierter Variante nutzen
 ## Verbote
 - Kein schweres WebGL/Three.js (Performance + Wartbarkeit auf Schul-Geräten).
 - Keine Auto-Play-Bewegung, die das Lesen stört; keine Parallax-Übertreibung.
-- Motion (React) NICHT verwenden, solange die Seite Vanilla ist.
+- React-Inseln nur dort, wo Interaktion/Animation es braucht — nie für rein
+  statische Inhalte (sonst leiden Performance und Barrierefreiheit).

@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+
+const wege = [
+  {
+    marke: 'Für Schülervertretungen',
+    titel: 'Ihr kommt nicht weiter',
+    text: 'Konflikt mit der Schulleitung, eine SV die nicht ins Laufen kommt, eine Regel die euch falsch vorkommt. Schreibt uns, was los ist — je konkreter, desto schneller können wir etwas sagen.',
+    betreff: 'SV-Anliegen',
+  },
+  {
+    marke: 'Für Einzelne',
+    titel: 'Du willst mitmachen',
+    text: 'Du bist Schülerin oder Schüler an einer Schule im Kreis und willst dabei sein. Schreib uns deine Schule und deine Jahrgangsstufe, wir sagen dir, wie der nächste Schritt aussieht.',
+    betreff: 'Mitmachen',
+  },
+  {
+    marke: 'Für Schulen und Presse',
+    titel: 'Anfragen von außen',
+    text: 'Einladungen, Anfragen von Schulleitungen, Kreisverwaltung oder Presse. Wir antworten, brauchen aber gelegentlich ein paar Tage — wir machen das alle nebenher.',
+    betreff: 'Anfrage',
+  },
+];
+
+const adresse = 'kontakt@ksr-rtk.de';
+---
+
+<BaseLayout
+  titel="Kontakt"
+  beschreibung="So erreichst du den Kreisschülerrat Rheingau-Taunus-Kreis — für Schülervertretungen, für Einzelne und für Anfragen von außen."
+  aktiv="kontakt"
+>
+  <Seitenkopf
+    marke="Kontakt"
+    titel="Schreib uns. Wirklich."
+    lead="Es gibt keine Sprechzeiten und keine Formulare, die man erst anfordern muss. Eine Mail reicht — auch wenn du nicht sicher bist, ob dein Anliegen groß genug ist."
+    zeichen="loewe"
+  />
+
+  <section class="abschnitt">
+    <div class="huelle kontakt">
+      <div class="kontakt__haupt">
+        <p class="marke" data-auftritt>Direkt</p>
+        <a href={`mailto:${adresse}`} class="kontakt__adresse" data-auftritt style="--verzug:60ms">
+          {adresse}
+        </a>
+        <p class="fliess kontakt__notiz" data-auftritt style="--verzug:120ms">
+          Wir lesen mit, auch in den Ferien. Anliegen, die eine einzelne Person
+          betreffen, behandeln wir vertraulich und geben sie nicht an Schulen weiter,
+          ohne vorher zu fragen.
+        </p>
+
+        <div class="hinweis" data-auftritt>
+          <p>
+            <strong>Noch einzurichten:</strong> Diese Adresse ist ein Platzhalter. Der KSR
+            braucht ein eigenes Postfach — die bisher genutzte Adresse gehört dem
+            Kreiselternbeirat und wird hier bewusst nicht mehr verwendet. Sobald das
+            Postfach steht, wird die Adresse in <code>src/pages/kontakt.astro</code> und
+            in <code>src/components/Kopf.astro</code> ersetzt.
+          </p>
+        </div>
+      </div>
+
+      <ul class="kontakt__wege">
+        {wege.map((w, i) => (
+          <li class="weg" data-auftritt style={`--verzug:${i * 90}ms`}>
+            <a href={`mailto:${adresse}?subject=${encodeURIComponent(w.betreff)}`} class="weg__flaeche">
+              <p class="marke">{w.marke}</p>
+              <h2 class="weg__titel">{w.titel}</h2>
+              <p class="weg__text">{w.text}</p>
+              <span class="weg__aktion">
+                Mail schreiben
+                <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6"/>
+                </svg>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--dunkel">
+    <div class="huelle wo">
+      <div>
+        <p class="marke" data-auftritt>Wo wir sind</p>
+        <h2 class="titel-2 wo__titel" data-auftritt style="--verzug:80ms">
+          Der ganze Kreis,<br>kein festes Büro.
+        </h2>
+      </div>
+      <div class="wo__text">
+        <p class="fliess" data-auftritt>
+          Der Kreisschülerrat hat keine eigenen Räume. Wir tagen dort, wo Platz ist —
+          in der Kreisverwaltung, in Schulen, gelegentlich digital. Der jeweilige Ort
+          steht immer beim Termin.
+        </p>
+        <a href="/termine" class="verweis wo__verweis" data-auftritt style="--verzug:80ms">
+          Zu den Terminen
+          <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .kontakt { display: grid; gap: var(--r-8); }
+  @media (min-width: 62rem) {
+    .kontakt { grid-template-columns: 1fr 1.15fr; gap: var(--r-9); align-items: start; }
+    .kontakt__haupt { position: sticky; top: 7rem; }
+  }
+
+  .kontakt__adresse {
+    display: block;
+    margin-top: var(--r-4);
+    font-size: clamp(1.5rem, 4.2vw, 2.75rem);
+    font-variation-settings: 'wght' 700, 'wdth' 90;
+    letter-spacing: var(--sperr-eng);
+    line-height: 1.1;
+    word-break: break-word;
+    position: relative;
+    padding-bottom: 0.12em;
+    background-image: linear-gradient(var(--rebe), var(--rebe));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 3px;
+    transition: background-size var(--d-normal) var(--e-aus), color var(--d-normal);
+  }
+  /* Der Unterstrich wächst zur Fläche, die Schrift kippt auf Papier. */
+  .kontakt__adresse:hover { color: var(--paper); background-size: 100% 100%; }
+
+  .kontakt__notiz { margin-top: var(--r-5); }
+
+  .kontakt__wege { display: grid; gap: var(--r-4); }
+
+  .weg { border: 1px solid var(--linie); background: var(--paper-pure); }
+
+  .weg__flaeche {
+    display: block;
+    padding: var(--r-6);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    transition: color var(--d-normal) var(--e-weich);
+  }
+
+  .weg__flaeche::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform: translateX(-101%);
+    transition: transform var(--d-normal) var(--e-aus);
+    z-index: -1;
+  }
+  .weg__flaeche:hover { color: var(--paper); }
+  .weg__flaeche:hover::before { transform: none; }
+  .weg__flaeche:hover .marke,
+  .weg__flaeche:hover .weg__text { color: rgba(244, 241, 234, 0.75); }
+
+  .weg__titel {
+    font-size: var(--t-h3);
+    font-variation-settings: 'wght' 680, 'wdth' 96;
+    letter-spacing: var(--sperr-titel);
+    line-height: 1.12;
+    margin-block: var(--r-3) var(--r-3);
+  }
+
+  .weg__text {
+    font-size: var(--t-klein);
+    line-height: 1.65;
+    color: var(--ink-60);
+    max-width: 40rem;
+    transition: color var(--d-normal);
+  }
+
+  .weg__aktion {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--r-3);
+    margin-top: var(--r-5);
+    font-size: var(--t-micro);
+    font-variation-settings: 'wght' 620, 'wdth' 100;
+    letter-spacing: var(--sperr-weit);
+    text-transform: uppercase;
+  }
+
+  .wo { display: grid; gap: var(--r-7); }
+  @media (min-width: 62rem) { .wo { grid-template-columns: 1fr 1fr; gap: var(--r-8); } }
+  .wo__titel { margin-top: var(--r-5); }
+  .wo__verweis { margin-top: var(--r-4); }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+    background: rgba(11, 11, 12, 0.06);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+</style>

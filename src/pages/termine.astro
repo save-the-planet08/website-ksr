@@ -1,0 +1,239 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { getCollection } from 'astro:content';
+
+const alle = (await getCollection('termine')).sort(
+  (a, b) => a.data.date.valueOf() - b.data.date.valueOf(),
+);
+
+const heute = new Date();
+heute.setHours(0, 0, 0, 0);
+
+const kommend = alle.filter((t) => t.data.date >= heute);
+const vergangen = alle.filter((t) => t.data.date < heute).reverse();
+
+const artLabel: Record<string, string> = {
+  sitzung: 'Sitzung',
+  event: 'Veranstaltung',
+  workshop: 'Werkstatt',
+  treffen: 'Treffen',
+};
+
+const tag = (d: Date) => d.toLocaleDateString('de-DE', { day: '2-digit' });
+const monat = (d: Date) => d.toLocaleDateString('de-DE', { month: 'short' }).replace('.', '');
+const jahr = (d: Date) => d.getFullYear();
+const wochentag = (d: Date) => d.toLocaleDateString('de-DE', { weekday: 'long' });
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<BaseLayout
+  titel="Termine"
+  beschreibung="Sitzungen, Werkstätten und Veranstaltungen des Kreisschülerrats Rheingau-Taunus-Kreis."
+  aktiv="termine"
+>
+  <Seitenkopf
+    marke="Termine"
+    titel="Wann wir tagen."
+    lead="Sitzungen des Kreisschülerrats sind für Delegierte aller Mitgliedsschulen offen. Wer zum ersten Mal kommt, meldet sich am besten kurz vorher — dann weiß jemand Bescheid und du sitzt nicht allein im Raum."
+    zeichen="trauben"
+  />
+
+  <section class="abschnitt">
+    <div class="huelle">
+      <p class="marke" data-auftritt>Kommende Termine</p>
+
+      {kommend.length > 0 ? (
+        <ol class="termine">
+          {kommend.map((t, i) => (
+            <li class="termin" data-auftritt style={`--verzug:${i * 80}ms`}>
+              <time class="termin__datum" datetime={iso(t.data.date)}>
+                <span class="termin__tag">{tag(t.data.date)}</span>
+                <span class="termin__monat">{monat(t.data.date)}</span>
+                <span class="termin__jahr">{jahr(t.data.date)}</span>
+              </time>
+
+              <div class="termin__inhalt">
+                <p class="marke termin__art">
+                  {artLabel[t.data.type] ?? 'Termin'} · {wochentag(t.data.date)}
+                  {t.data.time && <> · {t.data.time}</>}
+                </p>
+                <h2 class="termin__titel">{t.data.title}</h2>
+                <p class="fliess termin__text">{t.data.description}</p>
+                {t.data.location && (
+                  <p class="termin__ort">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                      <path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/>
+                    </svg>
+                    {t.data.location}
+                  </p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div class="leer" data-auftritt>
+          <p class="titel-3">Zurzeit ist kein Termin eingetragen.</p>
+          <p class="fliess leer__text">
+            Die Sitzungstermine für das laufende Schuljahr werden zu Beginn festgelegt
+            und stehen anschließend hier. Bis dahin: schreib uns, dann sagen wir dir
+            direkt Bescheid.
+          </p>
+          <a href="/kontakt" class="knopf leer__knopf">
+            Bescheid sagen lassen
+            <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </a>
+        </div>
+      )}
+
+      <div class="hinweis" data-auftritt>
+        <p>
+          <strong>Noch zu prüfen:</strong> Die hier hinterlegten Termine stammen aus dem
+          Altbestand und liegen in der Vergangenheit. Neue Termine werden als Datei in
+          <code>src/content/termine/</code> angelegt — eine Datei pro Termin, kein Code nötig.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  {vergangen.length > 0 && (
+    <section class="abschnitt abschnitt--dunkel">
+      <div class="huelle">
+        <p class="marke" data-auftritt>Was war</p>
+        <h2 class="titel-2 rueckblick__titel" data-auftritt style="--verzug:80ms">Rückblick</h2>
+
+        <ol class="rueckblick">
+          {vergangen.map((t, i) => (
+            <li class="rueckblick__glied" data-auftritt style={`--verzug:${i * 60}ms`}>
+              <time datetime={iso(t.data.date)} class="rueckblick__datum">
+                {t.data.date.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+              </time>
+              <span class="rueckblick__name">{t.data.title}</span>
+              <span class="rueckblick__art">{artLabel[t.data.type] ?? 'Termin'}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .termine {
+    margin-top: var(--r-7);
+    border-top: 1px solid var(--linie);
+  }
+
+  .termin {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--r-5);
+    padding-block: var(--r-6);
+    border-bottom: 1px solid var(--linie);
+  }
+
+  @media (min-width: 48rem) {
+    .termin { grid-template-columns: 7rem 1fr; gap: var(--r-8); }
+  }
+
+  .termin__datum {
+    display: flex;
+    flex-direction: column;
+    line-height: 0.95;
+  }
+
+  .termin__tag {
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    font-variation-settings: 'wght' 780, 'wdth' 80;
+    letter-spacing: var(--sperr-eng);
+  }
+
+  .termin__monat {
+    font-size: var(--t-klein);
+    font-variation-settings: 'wght' 620, 'wdth' 100;
+    text-transform: uppercase;
+    letter-spacing: var(--sperr-weit);
+    color: var(--rebe);
+    margin-top: var(--r-2);
+  }
+
+  .termin__jahr {
+    font-size: var(--t-micro);
+    letter-spacing: var(--sperr-weit);
+    color: var(--ink-40);
+    margin-top: 2px;
+  }
+
+  .termin__art { margin-bottom: var(--r-3); }
+
+  .termin__titel {
+    font-size: var(--t-h3);
+    font-variation-settings: 'wght' 680, 'wdth' 96;
+    letter-spacing: var(--sperr-titel);
+    line-height: 1.12;
+  }
+
+  .termin__text { margin-top: var(--r-3); max-width: 44rem; }
+
+  .termin__ort {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--r-2);
+    margin-top: var(--r-4);
+    font-size: var(--t-klein);
+    color: var(--ink-60);
+  }
+
+  .leer {
+    margin-top: var(--r-6);
+    padding: var(--r-7);
+    border: 1px solid var(--linie);
+    background: var(--paper-warm);
+  }
+  .leer__text { margin-top: var(--r-4); }
+  .leer__knopf { margin-top: var(--r-6); }
+
+  .rueckblick__titel { margin-top: var(--r-5); }
+
+  .rueckblick {
+    margin-top: var(--r-7);
+    border-top: 1px solid var(--auf-dunkel-linie);
+  }
+
+  .rueckblick__glied {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--r-1);
+    padding-block: var(--r-4);
+    border-bottom: 1px solid var(--auf-dunkel-linie);
+    color: rgba(244, 241, 234, 0.62);
+    font-size: var(--t-klein);
+  }
+
+  @media (min-width: 48rem) {
+    .rueckblick__glied {
+      grid-template-columns: 8rem 1fr auto;
+      gap: var(--r-5);
+      align-items: baseline;
+    }
+  }
+
+  .rueckblick__name {
+    font-size: var(--t-basis);
+    font-variation-settings: 'wght' 550, 'wdth' 100;
+    color: var(--auf-dunkel-text);
+  }
+
+  .rueckblick__art { letter-spacing: var(--sperr-weit); text-transform: uppercase; font-size: var(--t-micro); }
+
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+    background: rgba(11, 11, 12, 0.06);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+</style>

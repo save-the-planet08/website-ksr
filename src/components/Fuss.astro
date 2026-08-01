@@ -1,0 +1,150 @@
+---
+import Logo from './brand/Logo.astro';
+
+const jahr = new Date().getFullYear();
+
+const spalten = [
+  {
+    titel: 'Der Rat',
+    glieder: [
+      { href: '/der-rat', label: 'Wer wir sind' },
+      { href: '/wuensche', label: 'Unsere Wünsche' },
+      { href: '/termine', label: 'Termine' },
+    ],
+  },
+  {
+    titel: 'Mitmachen',
+    glieder: [
+      { href: '/kontakt', label: 'Kontakt' },
+      { href: '/links', label: 'Links & Recht' },
+    ],
+  },
+  {
+    titel: 'Rechtliches',
+    glieder: [
+      { href: '/impressum', label: 'Impressum' },
+      { href: '/datenschutz', label: 'Datenschutz' },
+    ],
+  },
+];
+---
+
+<footer class="fuss">
+  <!-- Ende der Reise: das Logo steht wieder zusammen. -->
+  <div class="fuss__schluss" data-schluss>
+    <Logo praefix="fuss" titel="Kreisschülerrat Rheingau-Taunus-Kreis" />
+  </div>
+
+  <div class="fuss__gitter">
+    <div class="fuss__wort">
+      <p class="titel-3">Deine Schule.<br>Deine Stimme.</p>
+      <a href="/kontakt" class="knopf">
+        Schreib uns
+        <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="fuss__spalten">
+      {spalten.map((s) => (
+        <div class="fuss__spalte">
+          <p class="marke">{s.titel}</p>
+          <ul class="fuss__liste">
+            {s.glieder.map((g) => (
+              <li><a href={g.href} class="fuss__glied">{g.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="fuss__leiste">
+    <p class="klein">© {jahr} Kreisschülerrat Rheingau-Taunus-Kreis</p>
+    <p class="klein">Ehrenamtlich gemacht. Ohne Tracker, ohne Cookies.</p>
+  </div>
+</footer>
+
+<style>
+  .fuss {
+    background: var(--ink);
+    color: var(--auf-dunkel-text);
+    padding: var(--r-9) var(--rand) var(--r-6);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fuss__schluss {
+    max-width: min(52rem, 100%);
+    margin-inline: auto;
+    margin-bottom: var(--r-9);
+    color: var(--paper);
+  }
+
+  /* Die Bauteile fahren aus ihren Richtungen zurück ins Logo. */
+  :global(html.js) .fuss__schluss :global(.logo__teil) {
+    opacity: 0;
+    transition:
+      opacity var(--d-lang) var(--e-aus),
+      transform var(--d-lang) var(--e-aus);
+  }
+  :global(html.js) .fuss__schluss :global(.logo__teil--loewe)       { transform: translate(-30%, 12%) rotate(-6deg); }
+  :global(html.js) .fuss__schluss :global(.logo__teil--balken)      { transform: scaleY(0.2); transform-origin: center; }
+  :global(html.js) .fuss__schluss :global(.logo__teil--wortmarke)   { transform: translateY(-45%); }
+  :global(html.js) .fuss__schluss :global(.logo__teil--rheingau)    { transform: translateY(-25%); transition-delay: 90ms; }
+  :global(html.js) .fuss__schluss :global(.logo__teil--taunusKreis) { transform: translateY(-25%); transition-delay: 140ms; }
+  :global(html.js) .fuss__schluss :global(.logo__teil--ranke)       { transform: translateX(22%); transition-delay: 200ms; }
+  :global(html.js) .fuss__schluss :global(.logo__teil--trauben)     { transform: translateY(35%); transition-delay: 260ms; }
+
+  /* Muss dieselbe `html.js`-Stufe tragen wie der Startzustand darüber,
+     sonst gewinnt der Startzustand und der Fuß bleibt leer. */
+  :global(html.js) .fuss__schluss.ist-da :global(.logo__teil) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .fuss__gitter {
+    display: grid;
+    gap: var(--r-8);
+    padding-block: var(--r-7);
+    border-top: 1px solid var(--auf-dunkel-linie);
+  }
+
+  @media (min-width: 48rem) {
+    .fuss__gitter { grid-template-columns: 1fr 1.2fr; gap: var(--r-7); }
+  }
+
+  .fuss__wort { display: flex; flex-direction: column; align-items: flex-start; gap: var(--r-5); }
+
+  .fuss__spalten {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    gap: var(--r-6);
+  }
+
+  .fuss__liste { margin-top: var(--r-4); display: grid; gap: var(--r-3); }
+
+  .fuss__glied {
+    font-size: var(--t-klein);
+    color: rgba(244, 241, 234, 0.7);
+    transition: color var(--d-schnell) var(--e-weich);
+    display: inline-block;
+    padding-block: 2px;
+  }
+  .fuss__glied:hover { color: var(--paper); }
+
+  .fuss__leiste {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--r-4);
+    padding-top: var(--r-5);
+    border-top: 1px solid var(--auf-dunkel-linie);
+  }
+  .fuss__leiste .klein { color: rgba(244, 241, 234, 0.45); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fuss__schluss :global(.logo__teil) { opacity: 1; transform: none; transition: none; }
+  }
+</style>

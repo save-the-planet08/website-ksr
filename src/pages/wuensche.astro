@@ -1,0 +1,189 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { wuensche } from '../data/wuensche';
+---
+
+<BaseLayout
+  titel="Wünsche"
+  beschreibung="Die acht Wünsche des Kreisschülerrats Rheingau-Taunus-Kreis für bessere Schulen — von Ganztag über Schulsozialarbeit bis zu kleineren Klassen."
+  aktiv="wuensche"
+>
+  <Seitenkopf
+    marke="Unsere Wünsche"
+    titel="Acht Sätze. Überall dieselben."
+    lead="Sie stehen in dieser Reihenfolge, weil sie so zusammengehören — nicht weil der letzte weniger wichtig wäre. Wer mit uns spricht, bekommt diese Liste."
+    zeichen="balken"
+  />
+
+  <!-- Übersicht als Sprungmarken -->
+  <nav class="uebersicht" aria-label="Übersicht der Wünsche">
+    <div class="huelle">
+      <ol class="uebersicht__liste">
+        {wuensche.map((w) => (
+          <li>
+            <a href={`#wunsch-${w.nr}`} class="uebersicht__glied">
+              <span class="uebersicht__nr">{w.nr}</span>
+              <span class="uebersicht__wort">{w.wort}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </nav>
+
+  {wuensche.map((w, i) => (
+    <section id={`wunsch-${w.nr}`} class:list={['wunsch-voll', i % 2 === 1 && 'wunsch-voll--kehr']}>
+      <div class="huelle wunsch-voll__gitter">
+        <div class="wunsch-voll__marke">
+          <span class="wunsch-voll__zahl" aria-hidden="true">{w.nr}</span>
+          <span class="wunsch-voll__wort" aria-hidden="true">{w.wort}</span>
+        </div>
+
+        <div class="wunsch-voll__inhalt">
+          <h2 class="titel-2 wunsch-voll__titel" data-auftritt>{w.titel}</h2>
+          <p class="lead wunsch-voll__kurz" data-auftritt style="--verzug:80ms">{w.kurz}</p>
+          <p class="fliess wunsch-voll__text" data-auftritt style="--verzug:160ms">{w.text}</p>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="abschnitt abschnitt--rebe">
+    <div class="huelle schluss">
+      <h2 class="titel-2" data-auftritt>Und jetzt?</h2>
+      <p class="lead schluss__lead" data-auftritt style="--verzug:100ms">
+        Diese Wünsche sind kein Wunschzettel. Sie sind die Tagesordnung. Wenn du
+        an deiner Schule einen davon voranbringen willst, melde dich — wir haben
+        die Argumente und die Kontakte schon einmal gesammelt.
+      </p>
+      <div class="schluss__knoepfe" data-auftritt style="--verzug:180ms">
+        <a href="/kontakt" class="knopf">
+          Schreib uns
+          <svg class="verweis__pfeil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </a>
+        <a href="/links" class="verweis">Rechtsgrundlagen ansehen</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* --- Sprungmarken ---------------------------------------------------- */
+  .uebersicht {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--paper);
+    border-bottom: 1px solid var(--linie);
+    padding-block: var(--r-3);
+  }
+
+  .uebersicht__liste {
+    display: flex;
+    gap: var(--r-2);
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-block: var(--r-1);
+  }
+  .uebersicht__liste::-webkit-scrollbar { display: none; }
+
+  .uebersicht__glied {
+    display: flex;
+    align-items: baseline;
+    gap: var(--r-2);
+    padding: var(--r-2) var(--r-4);
+    border: 1px solid var(--linie);
+    border-radius: 999px;
+    white-space: nowrap;
+    min-height: 40px;
+    transition: background-color var(--d-schnell) var(--e-weich),
+                color var(--d-schnell) var(--e-weich),
+                border-color var(--d-schnell) var(--e-weich);
+  }
+  .uebersicht__glied:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .uebersicht__nr {
+    font-size: var(--t-micro);
+    letter-spacing: var(--sperr-weit);
+    opacity: 0.5;
+  }
+
+  .uebersicht__wort {
+    font-size: var(--t-klein);
+    font-variation-settings: 'wght' 620, 'wdth' 100;
+    text-transform: uppercase;
+    letter-spacing: var(--sperr-weit);
+  }
+
+  /* --- Ein Wunsch ------------------------------------------------------ */
+  .wunsch-voll {
+    padding-block: clamp(var(--r-8), 12vh, var(--r-10));
+    border-bottom: 1px solid var(--linie);
+  }
+  .wunsch-voll--kehr { background: var(--paper-warm); }
+
+  .wunsch-voll__gitter {
+    display: grid;
+    gap: var(--r-6);
+  }
+
+  @media (min-width: 62rem) {
+    .wunsch-voll__gitter {
+      grid-template-columns: 22rem 1fr;
+      gap: var(--r-8);
+      align-items: start;
+    }
+  }
+
+  .wunsch-voll__marke {
+    display: flex;
+    align-items: baseline;
+    gap: var(--r-4);
+  }
+
+  @media (min-width: 62rem) {
+    .wunsch-voll__marke {
+      position: sticky;
+      top: 7rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--r-2);
+    }
+  }
+
+  .wunsch-voll__zahl {
+    font-size: clamp(3rem, 9vw, 7rem);
+    font-variation-settings: 'wght' 800, 'wdth' 76;
+    line-height: 0.82;
+    letter-spacing: var(--sperr-eng);
+    color: var(--ink);
+  }
+
+  .wunsch-voll__wort {
+    font-size: var(--t-klein);
+    font-variation-settings: 'wght' 620, 'wdth' 100;
+    letter-spacing: var(--sperr-weiter);
+    text-transform: uppercase;
+    color: var(--rebe);
+  }
+
+  .wunsch-voll__titel { max-width: 18ch; }
+  .wunsch-voll__kurz { margin-top: var(--r-5); max-width: 34ch; color: var(--ink-80); }
+  .wunsch-voll__text { margin-top: var(--r-5); max-width: 42rem; font-size: var(--t-gross); }
+
+  /* --- Schluss --------------------------------------------------------- */
+  .schluss__lead { margin-top: var(--r-5); max-width: 40rem; color: rgba(244, 241, 234, 0.85); }
+  .schluss__knoepfe {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--r-5);
+    margin-top: var(--r-7);
+  }
+
+  /* Sprungziele nicht unter die Leiste rutschen lassen. */
+  .wunsch-voll { scroll-margin-top: 5rem; }
+</style>

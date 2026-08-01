@@ -1,0 +1,390 @@
+@import '@fontsource-variable/archivo';
+@import './tokens.css';
+
+/* ===========================================================================
+   Basis
+   =========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: auto; /* Lenis übernimmt */
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--schrift);
+  font-size: var(--t-basis);
+  line-height: var(--zeile-normal);
+  font-variation-settings: 'wght' 400, 'wdth' 100;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection { background: var(--rebe); color: var(--paper); }
+
+:focus-visible {
+  outline: 2px solid var(--rebe);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* ===========================================================================
+   Layout
+   =========================================================================== */
+
+.huelle {
+  width: 100%;
+  max-width: var(--breite);
+  margin-inline: auto;
+  padding-inline: var(--rand);
+}
+
+.huelle--eng { max-width: var(--breite-eng); }
+
+.abschnitt {
+  padding-block: clamp(var(--r-8), 12vh, var(--r-10));
+}
+
+.abschnitt--dunkel {
+  background: var(--ink);
+  color: var(--auf-dunkel-text);
+}
+
+.abschnitt--rebe {
+  background: var(--rebe);
+  color: var(--auf-dunkel-text);
+}
+
+.strich {
+  height: 1px;
+  background: var(--linie);
+  border: 0;
+  margin: 0;
+}
+
+/* Der Doppelbalken aus dem Logo — das Konstruktionsmotiv der Seite. */
+.doppelbalken {
+  display: flex;
+  gap: 5px;
+  align-items: stretch;
+}
+.doppelbalken::before,
+.doppelbalken::after {
+  content: '';
+  width: 3px;
+  background: currentColor;
+}
+
+/* ===========================================================================
+   Typografie
+   =========================================================================== */
+
+.marke {
+  font-size: var(--t-micro);
+  font-variation-settings: 'wght' 600, 'wdth' 100;
+  letter-spacing: var(--sperr-weiter);
+  text-transform: uppercase;
+  color: var(--ink-60);
+}
+.abschnitt--dunkel .marke,
+.abschnitt--rebe .marke { color: rgba(244, 241, 234, 0.6); }
+
+.marke--zaehler {
+  display: flex;
+  align-items: baseline;
+  gap: var(--r-3);
+}
+
+.titel-riese {
+  font-size: var(--t-riese);
+  font-variation-settings: 'wght' 800, 'wdth' 88;
+  line-height: var(--zeile-eng);
+  letter-spacing: var(--sperr-eng);
+  text-transform: uppercase;
+}
+
+.titel-1 {
+  font-size: var(--t-h1);
+  font-variation-settings: 'wght' 700, 'wdth' 92;
+  line-height: var(--zeile-titel);
+  letter-spacing: var(--sperr-eng);
+}
+
+.titel-2 {
+  font-size: var(--t-h2);
+  font-variation-settings: 'wght' 700, 'wdth' 94;
+  line-height: 1.05;
+  letter-spacing: var(--sperr-titel);
+  text-wrap: balance;
+}
+
+.titel-3 {
+  font-size: var(--t-h3);
+  font-variation-settings: 'wght' 650, 'wdth' 100;
+  line-height: 1.15;
+  letter-spacing: var(--sperr-titel);
+  text-wrap: balance;
+}
+
+.lead {
+  font-size: var(--t-lead);
+  font-variation-settings: 'wght' 350, 'wdth' 100;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
+}
+
+.fliess {
+  font-size: var(--t-basis);
+  line-height: var(--zeile-weit);
+  color: var(--ink-80);
+  max-width: var(--lesebreite);
+  text-wrap: pretty;
+}
+.abschnitt--dunkel .fliess,
+.abschnitt--rebe .fliess { color: rgba(244, 241, 234, 0.78); }
+
+.fliess + .fliess { margin-top: var(--r-4); }
+
+.klein {
+  font-size: var(--t-klein);
+  line-height: 1.55;
+  color: var(--ink-60);
+}
+
+/* ===========================================================================
+   Verweise
+   =========================================================================== */
+
+.verweis {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--r-3);
+  font-size: var(--t-klein);
+  font-variation-settings: 'wght' 600, 'wdth' 100;
+  letter-spacing: var(--sperr-weit);
+  text-transform: uppercase;
+  padding-block: var(--r-3);
+  position: relative;
+}
+
+.verweis::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(1);
+  transform-origin: right;
+  transition: transform var(--d-normal) var(--e-aus);
+}
+
+.verweis:hover::after { transform: scaleX(0); }
+
+.verweis__pfeil {
+  width: 1em;
+  height: 1em;
+  transition: transform var(--d-normal) var(--e-aus);
+}
+.verweis:hover .verweis__pfeil { transform: translateX(0.35em); }
+
+.knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--r-3);
+  padding: var(--r-4) var(--r-6);
+  min-height: 48px;
+  font-size: var(--t-klein);
+  font-variation-settings: 'wght' 650, 'wdth' 100;
+  letter-spacing: var(--sperr-weit);
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  isolation: isolate;
+  transition: color var(--d-normal) var(--e-weich);
+}
+
+.knopf::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--rebe);
+  transform: translateY(101%);
+  transition: transform var(--d-normal) var(--e-aus);
+  z-index: -1;
+}
+.knopf:hover::before { transform: translateY(0); }
+
+.knopf--offen {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1.5px var(--linie-stark);
+}
+.knopf--offen:hover { color: var(--paper); }
+
+.abschnitt--dunkel .knopf,
+.abschnitt--rebe .knopf { background: var(--paper); color: var(--ink); }
+.abschnitt--dunkel .knopf:hover,
+.abschnitt--rebe .knopf:hover { color: var(--paper); }
+
+/* ===========================================================================
+   Auftritt beim Scrollen — Standardbewegung der Seite
+   =========================================================================== */
+
+/* Alle Startzustände hängen an `.js` — fällt das Skript aus, ist der
+   Inhalt einfach da. Eine unsichtbare Seite ist schlimmer als eine
+   unbewegte. */
+.js [data-auftritt] {
+  opacity: 0;
+  transform: translate3d(0, 1.75rem, 0);
+  transition:
+    opacity var(--d-ruhig) var(--e-aus),
+    transform var(--d-ruhig) var(--e-aus);
+  transition-delay: var(--verzug, 0ms);
+}
+
+.js [data-auftritt].ist-da {
+  opacity: 1;
+  transform: none;
+}
+
+.zeilen-maske { overflow: hidden; display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-auftritt] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ===========================================================================
+   Nur für Screenreader
+   =========================================================================== */
+
+.nur-sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sprung {
+  position: absolute;
+  top: var(--r-4);
+  left: var(--r-4);
+  z-index: 999;
+  padding: var(--r-3) var(--r-5);
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 999px;
+  font-size: var(--t-klein);
+  transform: translateY(-200%);
+  transition: transform var(--d-normal) var(--e-aus);
+}
+.sprung:focus-visible { transform: none; }
+
+/* ===========================================================================
+   Fließtext-Seiten (Recht, Erklärungen)
+   =========================================================================== */
+
+.prosa {
+  max-width: 40rem;
+}
+
+.prosa h2 {
+  font-size: var(--t-h3);
+  font-variation-settings: 'wght' 680, 'wdth' 96;
+  letter-spacing: var(--sperr-titel);
+  line-height: 1.15;
+  margin-top: var(--r-8);
+  margin-bottom: var(--r-4);
+  padding-top: var(--r-4);
+  border-top: 1px solid var(--linie);
+}
+
+.prosa h2:first-child { margin-top: 0; border-top: 0; padding-top: 0; }
+
+.prosa h3 {
+  font-size: var(--t-gross);
+  font-variation-settings: 'wght' 640, 'wdth' 100;
+  letter-spacing: var(--sperr-titel);
+  margin-top: var(--r-6);
+  margin-bottom: var(--r-3);
+}
+
+.prosa p,
+.prosa li {
+  font-size: var(--t-basis);
+  line-height: var(--zeile-weit);
+  color: var(--ink-80);
+  text-wrap: pretty;
+}
+
+.prosa p + p { margin-top: var(--r-4); }
+
+.prosa ul {
+  margin-top: var(--r-4);
+  display: grid;
+  gap: var(--r-3);
+}
+
+.prosa ul li {
+  position: relative;
+  padding-left: var(--r-5);
+}
+
+.prosa ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 0.65rem;
+  height: 1.5px;
+  background: var(--rebe);
+}
+
+.prosa a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--rebe);
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: 1.5px;
+  transition: color var(--d-schnell) var(--e-weich);
+}
+.prosa a:hover { color: var(--rebe); }
+
+.prosa strong { font-variation-settings: 'wght' 650, 'wdth' 100; color: var(--ink); }
+
+/* Hinweiskasten für alles, was der Vorstand noch prüfen oder ergänzen muss. */
+.hinweis {
+  margin-top: var(--r-6);
+  padding: var(--r-5);
+  border-left: 3px solid var(--rebe);
+  background: var(--paper-warm);
+}
+.hinweis p { font-size: var(--t-klein); color: var(--ink-80); line-height: 1.6; }

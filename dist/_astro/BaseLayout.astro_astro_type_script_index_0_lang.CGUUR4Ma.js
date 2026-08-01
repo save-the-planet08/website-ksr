@@ -1,0 +1,1 @@
+import{a as o}from"./scroll.BoYrDKS6.js";o();const r=new IntersectionObserver(e=>{for(const t of e)t.isIntersecting&&(t.target.classList.add("ist-da"),r.unobserve(t.target))},{rootMargin:"0px 0px -12% 0px",threshold:.12});document.querySelectorAll("[data-auftritt], [data-schluss]").forEach(e=>r.observe(e));

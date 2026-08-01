@@ -1,0 +1,82 @@
+---
+import Logo from './brand/Logo.astro';
+import { loeweBox, traubenBox, balkenBox } from '../lib/logo';
+
+interface Props {
+  marke: string;
+  titel: string;
+  lead?: string;
+  /** Welches Bauteil des Logos die Seite begleitet. */
+  zeichen?: 'loewe' | 'trauben' | 'balken' | 'keines';
+}
+
+const { marke, titel, lead, zeichen = 'loewe' } = Astro.props;
+
+const felder = {
+  loewe: `${loeweBox[0]} ${loeweBox[1]} ${loeweBox[2]} ${loeweBox[3]}`,
+  trauben: `${traubenBox[0]} ${traubenBox[1]} ${traubenBox[2]} ${traubenBox[3]}`,
+  balken: `${balkenBox[0]} ${balkenBox[1]} ${balkenBox[2]} ${balkenBox[3]}`,
+};
+---
+
+<header class="seitenkopf">
+  {zeichen !== 'keines' && (
+    <div class="seitenkopf__zeichen" aria-hidden="true">
+      <Logo teile={[zeichen]} box={felder[zeichen]} praefix="sk" />
+    </div>
+  )}
+
+  <div class="huelle seitenkopf__inhalt">
+    <p class="marke" data-auftritt>{marke}</p>
+    <h1 class="titel-1 seitenkopf__titel" data-auftritt style="--verzug:70ms">{titel}</h1>
+    {lead && <p class="lead seitenkopf__lead" data-auftritt style="--verzug:150ms">{lead}</p>}
+  </div>
+</header>
+
+<style>
+  .seitenkopf {
+    position: relative;
+    padding-top: clamp(7rem, 18vh, 12rem);
+    padding-bottom: clamp(var(--r-7), 8vh, var(--r-9));
+    background: var(--ink);
+    color: var(--auf-dunkel-text);
+    overflow: hidden;
+  }
+
+  /* Über die Höhe skalieren, nicht über die Breite: Löwe, Traube und
+     Balken haben sehr unterschiedliche Seitenverhältnisse. */
+  .seitenkopf__zeichen {
+    position: absolute;
+    top: 14%;
+    bottom: 10%;
+    right: -8%;
+    opacity: 0.07;
+    pointer-events: none;
+    color: var(--paper);
+  }
+  .seitenkopf__zeichen :global(svg) {
+    height: 100%;
+    width: auto;
+  }
+  @media (min-width: 62rem) {
+    .seitenkopf__zeichen { right: 3%; opacity: 0.09; }
+  }
+
+  .seitenkopf__inhalt { position: relative; z-index: 1; }
+
+  .seitenkopf__titel {
+    margin-top: var(--r-5);
+    max-width: 16ch;
+    text-transform: uppercase;
+    font-variation-settings: 'wght' 760, 'wdth' 88;
+    /* Deutsche Komposita in Versalien sprengen sonst schmale Displays. */
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .seitenkopf__lead {
+    margin-top: var(--r-6);
+    max-width: 40rem;
+    color: rgba(244, 241, 234, 0.78);
+  }
+</style>
