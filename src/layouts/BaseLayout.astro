@@ -53,9 +53,13 @@ const voll = `${titel} — KSR Rheingau-Taunus-Kreis`;
   <script>
     import { ankerVerbinden } from '../lib/scroll';
     import { auftritteStarten } from '../lib/auftritt';
+    import { szenenStarten } from '../lib/szene';
+    import '../lib/szenen';
 
     ankerVerbinden();
-    auftritteStarten();
+    // Erst die Auftritte: sie zerlegen Überschriften in Zeilen und verändern
+    // damit die Maße, mit denen die Szenen rechnen.
+    auftritteStarten().then(szenenStarten);
 
     // Das Zusammensetzen des Logos im Fuß läuft über eine CSS-Klasse.
     const schluss = new IntersectionObserver((eintraege) => {
