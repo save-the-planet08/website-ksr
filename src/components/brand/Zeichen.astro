@@ -17,10 +17,12 @@ interface Props {
   klasse?: string;
   /** Seitenverhältnis erhalten (Standard) oder das Feld füllen. */
   fuellend?: boolean;
+  /** Was das Zeichen zum Bauen braucht — etwa die Nummer eines Wunsches. */
+  daten?: unknown;
 }
 
-const { art, praefix = art, klasse = '', fuellend = false } = Astro.props;
-const { box, gruppen, maske, vorlagen = [] } = zeichnen(art);
+const { art, praefix = art, klasse = '', fuellend = false, daten } = Astro.props;
+const { box, gruppen, maske, vorlagen = [] } = zeichnen(art, daten);
 
 const maskenId = maske ? `${praefix}-maske` : undefined;
 const sichtbar = maske ? gruppen.filter((g) => g.name !== maske) : gruppen;
@@ -56,7 +58,7 @@ const maskenGruppe = maske ? gruppen.find((g) => g.name === maske) : undefined;
   <g clip-path={maskenId ? `url(#${maskenId})` : undefined}>
     {sichtbar.map((g) => (
       <g
-        class={`zeichen__teil ${g.strich ? 'zeichen__teil--strich' : ''}`}
+        class:list={['zeichen__teil', g.strich && 'zeichen__teil--strich', g.akzent && 'zeichen__teil--akzent']}
         data-teil={g.name}
         transform={g.transform}
         stroke-width={g.breite}
@@ -90,4 +92,8 @@ const maskenGruppe = maske ? gruppen.find((g) => g.name === maske) : undefined;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+
+  /* Der eine Akzent. `color` wirkt, weil alles darunter auf currentColor
+     zeigt — Füllung wie Kontur. */
+  .zeichen__teil--akzent { color: var(--rebe); }
 </style>

@@ -44,6 +44,8 @@ export const zeichenArten = [
   'konstellation',  // die Streuung der Trauben, über die Fläche gezogen
   'achsengitter',   // die Achsen der Wortmarke als Linienmaß
   'kanten',         // der Doppelbalken flach gelegt, in wechselnder Länge
+  // gebaut — die zweite Bildwelt, nicht mehr aus dem Logo
+  'wappen',         // acht Embleme, eines je Wunsch
 ] as const;
 
 export type ZeichenArt = (typeof zeichenArten)[number];
@@ -57,7 +59,7 @@ export const szeneArten = [
   'ebenen-schichten',
   'alltag-wellen',
   'mitmachen-kontur',
-  'wuensche-zahlen',
+  'wuensche-blatt',
   'termine-takt',
   'rueckblick-netz',
   'kontakt-achsen',

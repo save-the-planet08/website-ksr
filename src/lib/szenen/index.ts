@@ -16,7 +16,7 @@ import './alltag-wellen';
 import './mitmachen-kontur';
 
 // Die acht Wünsche
-import './wuensche-zahlen';
+import './wuensche-blatt';
 
 // Termine
 import './termine-takt';

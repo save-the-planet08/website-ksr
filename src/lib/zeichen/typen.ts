@@ -21,6 +21,11 @@ export interface Gruppe {
   breite?: number;
   /** Grunddeckkraft, falls die Gruppe leiser sein soll als der Rest. */
   deckung?: number;
+  /**
+   * Trägt den Akzent der Seite. Genau eine Gruppe je Zeichen darf das — zwei
+   * Akzente sind keiner.
+   */
+  akzent?: boolean;
   /** Eigene Transformation, etwa für geschichtete Kopien. */
   transform?: string;
 }

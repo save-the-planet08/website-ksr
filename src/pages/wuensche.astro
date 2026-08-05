@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
+import Zeichen from '../components/brand/Zeichen.astro';
 import { wuensche } from '../data/wuensche';
 import { ort } from '../lib/register';
 
@@ -48,6 +49,9 @@ const schluss = ort('wuensche/schluss');
           <div class="wunsch-voll__marke">
             <span class="wunsch-voll__zahl" aria-hidden="true" data-zahl>{w.nr}</span>
             <span class="wunsch-voll__wort" aria-hidden="true" data-auftritt="maske" style="--verzug:260ms">{w.wort}</span>
+            <div class="wunsch-voll__wappen" data-wappen>
+              <Zeichen art={liste.zeichen} praefix={`wp${w.nr}`} daten={i + 1} />
+            </div>
           </div>
 
           <div class="wunsch-voll__inhalt">
@@ -181,6 +185,17 @@ const schluss = ort('wuensche/schluss');
   :global(html.js) .wunsch-voll__zahl { opacity: 0; }
 
   .wunsch-voll__zahl :global(.zahl-ziffer) { display: inline-block; }
+
+  /* Das Wappen des Wunsches. Es steht in der klebenden Spalte, bleibt also
+     neben dem Text stehen, solange man ihn liest. */
+  .wunsch-voll__wappen {
+    width: min(58%, 11rem);
+    margin-top: var(--r-6);
+    color: var(--ink);
+  }
+  @media (max-width: 62rem) {
+    .wunsch-voll__wappen { width: 7rem; margin-top: 0; margin-left: auto; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     :global(html.js) .wunsch-voll__zahl { opacity: 1; }

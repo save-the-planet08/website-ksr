@@ -36,10 +36,11 @@ export const register = {
   'rat/mitmachen':      { zeichen: 'wortmarke-kontur', szene: 'mitmachen-kontur',     auftritt: 'kippen'  },
 
   // --- Die acht Wünsche -----------------------------------------------------
-  // Kein eigenes Zeichen: hier trägt die Riesenzahl das Bild, achtmal anders
-  // gebaut. Siehe `szenen/wuensche-zahlen.ts`.
+  // Ein Zeichen mit acht Fassungen: jeder Wunsch bekommt sein eigenes Wappen
+  // (`zeichen/wappen.ts`), dazu die Riesenzahl, achtmal anders behandelt.
+  // Beides gehört der Szene `szenen/wuensche-blatt.ts`.
   'wuensche/kopf':      {                                                             auftritt: 'versatz' },
-  'wuensche/liste':     {                              szene: 'wuensche-zahlen',      auftritt: 'blende'  },
+  'wuensche/liste':     { zeichen: 'wappen',          szene: 'wuensche-blatt',      auftritt: 'blende'  },
   'wuensche/schluss':   {                                                             auftritt: 'zahl'    },
 
   // --- Termine --------------------------------------------------------------

@@ -1,14 +1,13 @@
 /**
- * Die acht Wünsche — acht Behandlungen derselben Zahl.
+ * Das Blatt eines Wunsches — das Wappen und die Zahl.
  *
- * Acht Abschnitte hintereinander sind der Härtefall dieser Seite: gäbe man
- * jedem ein eigenes Zeichen, zerfiele die Liste in acht Plakate. Also trägt
- * hier überall dasselbe Bild — die Riesenzahl — und wird achtmal anders
- * gebaut. Ein Thema, acht Variationen: das ist Ordnung und trotzdem keine
- * Wiederholung.
+ * Jeder Wunsch hat sein eigenes Wappen (`zeichen/wappen.ts`). Es baut sich beim
+ * Scrollen Teil für Teil auf, in der Reihenfolge, in der es konstruiert wurde:
+ * erst der Rahmen, dann die Teilung, zuletzt das, worauf es ankommt.
  *
- * Die Reihenfolge ist gesetzt und ändert sich nie. Wunsch 03 wird immer
- * geflutet, Wunsch 06 immer gespiegelt.
+ * Die Zahl daneben wird achtmal verschieden behandelt. Die Reihenfolge ist
+ * gesetzt und ändert sich nie: Wunsch 03 wird immer geflutet, Wunsch 06 immer
+ * gespiegelt.
  */
 import { gsap } from 'gsap';
 import { szeneAnmelden } from '../szene';
@@ -98,7 +97,26 @@ const griffe: Griff[] = [
   },
 ];
 
-szeneAnmelden('wuensche-zahlen', (wurzel) => {
+szeneAnmelden('wuensche-blatt', (wurzel) => {
+  /* ---- Die Wappen ------------------------------------------------------- */
+  for (const feld of Array.from(wurzel.querySelectorAll<HTMLElement>('[data-wappen]'))) {
+    const teile = Array.from(feld.querySelectorAll<SVGGElement>('[data-teil^="teil-"]'));
+    if (!teile.length) continue;
+
+    gsap.set(teile, { transformOrigin: '50% 50%', transformBox: 'fill-box' });
+    gsap.fromTo(teile,
+      { opacity: 0, scale: 0.78 },
+      {
+        opacity: (i: number) => Number(teile[i].getAttribute('opacity') ?? 1),
+        scale: 1,
+        duration: 0.75,
+        ease: 'power3.out',
+        stagger: 0.13,
+        scrollTrigger: { trigger: feld.closest('section') ?? feld, start: 'top 74%', once: true },
+      });
+  }
+
+  /* ---- Die Zahlen ------------------------------------------------------- */
   const zahlen = Array.from(wurzel.querySelectorAll<HTMLElement>('[data-zahl]'));
 
   // Zuerst alle sichtbar machen, dann erst bauen: scheitert eine Behandlung,

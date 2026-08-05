@@ -12,9 +12,10 @@ import {
 import {
   achsengitter, hoehenlinien, kanten, konstellation, taktraster, wellenfeld,
 } from './abgeleitet';
+import { wappen } from './wappen';
 import type { Zeichnung } from './typen';
 
-const bauplan: Record<ZeichenArt, () => Zeichnung> = {
+const bauplan: Record<ZeichenArt, (daten?: any) => Zeichnung> = {
   'loewe-maske': loeweMaske,
   'balken-partitur': balkenPartitur,
   'ranke-wachstum': rankeWachstum,
@@ -26,10 +27,15 @@ const bauplan: Record<ZeichenArt, () => Zeichnung> = {
   'konstellation': konstellation,
   'achsengitter': achsengitter,
   'kanten': kanten,
+  'wappen': wappen,
 };
 
-export function zeichnen(art: ZeichenArt): Zeichnung {
-  return bauplan[art]();
+/**
+ * `daten` reicht durch, was ein Zeichen zum Bauen braucht — die Nummer eines
+ * Wunsches, die Termine eines Schuljahres. Die meisten Zeichen brauchen nichts.
+ */
+export function zeichnen(art: ZeichenArt, daten?: unknown): Zeichnung {
+  return bauplan[art](daten);
 }
 
 export type { Gruppe, Zeichnung } from './typen';

@@ -10,6 +10,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Zeichen from '../components/brand/Zeichen.astro';
 import { auftrittArten, zeichenArten } from '../lib/arten';
 import { register } from '../lib/register';
+import { wuensche } from '../data/wuensche';
 
 const wohin = new Map<string, string>();
 for (const [ort, vergabe] of Object.entries(register)) {
@@ -32,6 +33,17 @@ const probe = 'Schülervertretung ist kein Ehrenamt für Ruhige';
             <div class="feld__bild"><Zeichen art={art} praefix={`m-${art}`} /></div>
             <p class="marke">{art}</p>
             <p class="klein">{wohin.get(art) ?? '— nicht vergeben —'}</p>
+          </li>
+        ))}
+      </ul>
+
+      <h2 class="titel-3 kapitel">Die acht Wappen</h2>
+      <ul class="bogen">
+        {[1, 2, 3, 4, 5, 6, 7, 8].map((nr) => (
+          <li class="feld">
+            <div class="feld__bild"><Zeichen art="wappen" praefix={`m-w${nr}`} daten={nr} /></div>
+            <p class="marke">{String(nr).padStart(2, '0')} — {wuensche[nr - 1].wort}</p>
+            <p class="klein">{wuensche[nr - 1].kurz}</p>
           </li>
         ))}
       </ul>
