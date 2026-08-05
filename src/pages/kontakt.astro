@@ -1,6 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
+import Zeichen from '../components/brand/Zeichen.astro';
+import { ort } from '../lib/register';
+
+const kopf = ort('kontakt/kopf');
+const direkt = ort('kontakt/direkt');
+const wo = ort('kontakt/wo');
 
 const wege = [
   {
@@ -36,13 +42,18 @@ const adresse = 'kontakt@ksr-rtk.de';
     titel="Schreib uns. Wirklich."
     lead="Es gibt keine Sprechzeiten und keine Formulare, die man erst anfordern muss. Eine Mail reicht — auch wenn du nicht sicher bist, ob dein Anliegen groß genug ist."
     zeichen="loewe"
+    auftritt={kopf.auftritt}
   />
 
-  <section class="abschnitt" id="direkt">
+  <section class="abschnitt direkt" id="direkt" data-szene={direkt.szene}>
+    <div class="direkt__blatt" aria-hidden="true">
+      <Zeichen art={direkt.zeichen} praefix="kd" fuellend />
+    </div>
+
     <div class="huelle kontakt">
       <div class="kontakt__haupt">
         <p class="marke" data-auftritt="maske">Direkt</p>
-        <a href={`mailto:${adresse}`} class="kontakt__adresse" data-auftritt="zeile" style="--verzug:120ms">
+        <a href={`mailto:${adresse}`} class="kontakt__adresse" data-auftritt={direkt.auftritt} style="--verzug:120ms">
           {adresse}
         </a>
         <p class="fliess kontakt__notiz" data-auftritt="wort" style="--verzug:300ms">
@@ -82,11 +93,11 @@ const adresse = 'kontakt@ksr-rtk.de';
     </div>
   </section>
 
-  <section class="abschnitt abschnitt--dunkel" id="wo">
+  <section class="abschnitt abschnitt--dunkel" id="wo" data-szene={wo.szene}>
     <div class="huelle wo">
       <div>
         <p class="marke" data-auftritt="maske">Wo wir sind</p>
-        <h2 class="titel-2 wo__titel" data-auftritt="zeile">
+        <h2 class="titel-2 wo__titel" data-auftritt={wo.auftritt}>
           Der ganze Kreis, kein festes Büro.
         </h2>
       </div>
@@ -108,6 +119,25 @@ const adresse = 'kontakt@ksr-rtk.de';
 </BaseLayout>
 
 <style>
+  /* --- Das Schreibheft hinter der Adresse ------------------------------ */
+  .direkt { position: relative; isolation: isolate; overflow: hidden; }
+
+  .direkt__blatt {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    inset-block: 10%;
+    width: 100%;
+    max-width: var(--breite);
+    padding-inline: var(--rand);
+    z-index: -1;
+    opacity: 0.5;
+    color: var(--ink);
+    pointer-events: none;
+  }
+  .direkt__blatt :global(svg) { width: 100%; height: 100%; }
+  @media (max-width: 52rem) { .direkt__blatt { display: none; } }
+
   .kontakt { display: grid; gap: var(--r-8); }
   @media (min-width: 62rem) {
     .kontakt { grid-template-columns: 1fr 1.15fr; gap: var(--r-9); align-items: start; }

@@ -2,6 +2,11 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
 import { wuensche } from '../data/wuensche';
+import { ort } from '../lib/register';
+
+const kopf = ort('wuensche/kopf');
+const liste = ort('wuensche/liste');
+const schluss = ort('wuensche/schluss');
 ---
 
 <BaseLayout
@@ -14,6 +19,7 @@ import { wuensche } from '../data/wuensche';
     titel="Acht Sätze. Überall dieselben."
     lead="Sie stehen in dieser Reihenfolge, weil sie so zusammengehören — nicht weil der letzte weniger wichtig wäre. Wer mit uns spricht, bekommt diese Liste."
     zeichen="balken"
+    auftritt={kopf.auftritt}
   />
 
   <!-- Übersicht als Sprungmarken -->
@@ -32,26 +38,31 @@ import { wuensche } from '../data/wuensche';
     </div>
   </nav>
 
-  {wuensche.map((w, i) => (
-    <section id={`wunsch-${w.nr}`} class:list={['wunsch-voll', i % 2 === 1 && 'wunsch-voll--kehr']}>
-      <div class="huelle wunsch-voll__gitter">
-        <div class="wunsch-voll__marke">
-          <span class="wunsch-voll__zahl" aria-hidden="true" data-auftritt="zahl">{w.nr}</span>
-          <span class="wunsch-voll__wort" aria-hidden="true" data-auftritt="maske" style="--verzug:260ms">{w.wort}</span>
-        </div>
+  <!-- Acht Abschnitte hintereinander sind der Härtefall dieser Seite. Statt
+       acht Zeichen trägt hier überall die Riesenzahl das Bild — achtmal anders
+       gebaut. Welche Behandlung wohin gehört, steht in `wuensche-zahlen.ts`. -->
+  <div data-szene={liste.szene}>
+    {wuensche.map((w, i) => (
+      <section id={`wunsch-${w.nr}`} class:list={['wunsch-voll', i % 2 === 1 && 'wunsch-voll--kehr']}>
+        <div class="huelle wunsch-voll__gitter">
+          <div class="wunsch-voll__marke">
+            <span class="wunsch-voll__zahl" aria-hidden="true" data-zahl>{w.nr}</span>
+            <span class="wunsch-voll__wort" aria-hidden="true" data-auftritt="maske" style="--verzug:260ms">{w.wort}</span>
+          </div>
 
-        <div class="wunsch-voll__inhalt">
-          <h2 class="titel-2 wunsch-voll__titel" data-auftritt="zeile">{w.titel}</h2>
-          <p class="lead wunsch-voll__kurz" data-auftritt="wort" style="--verzug:220ms">{w.kurz}</p>
-          <p class="fliess wunsch-voll__text" data-auftritt={i % 2 ? 'seit' : 'hoch'} data-auftritt-seite="rechts" style="--verzug:340ms">{w.text}</p>
+          <div class="wunsch-voll__inhalt">
+            <h2 class="titel-2 wunsch-voll__titel" data-auftritt={liste.auftritt} data-auftritt-kante="unten">{w.titel}</h2>
+            <p class="lead wunsch-voll__kurz" data-auftritt="wort" style="--verzug:220ms">{w.kurz}</p>
+            <p class="fliess wunsch-voll__text" data-auftritt="hoch" style="--verzug:340ms">{w.text}</p>
+          </div>
         </div>
-      </div>
-    </section>
-  ))}
+      </section>
+    ))}
+  </div>
 
   <section class="abschnitt abschnitt--rebe" id="und-jetzt">
     <div class="huelle schluss">
-      <h2 class="titel-2" data-auftritt="zeile">Und jetzt?</h2>
+      <h2 class="titel-2" data-auftritt={schluss.auftritt}>Und jetzt?</h2>
       <p class="lead schluss__lead" data-auftritt="wort" style="--verzug:180ms">
         Diese Wünsche sind kein Wunschzettel. Sie sind die Tagesordnung. Wenn du
         an deiner Schule einen davon voranbringen willst, melde dich — wir haben
@@ -154,12 +165,25 @@ import { wuensche } from '../data/wuensche';
     }
   }
 
+  /* Die Riesenzahl. Sie gehört der Szene `wuensche-zahlen` — die achtmal
+     verschieden mit ihr umgeht. Ohne Skript steht sie schlicht da. */
   .wunsch-voll__zahl {
+    display: block;
     font-size: clamp(3rem, 9vw, 7rem);
     font-variation-settings: 'wght' 800, 'wdth' 76;
     line-height: 0.82;
     letter-spacing: var(--sperr-eng);
     color: var(--ink);
+    /* Damit die geflutete und die gekippte Fassung nicht an der Textkante
+       abgeschnitten werden. */
+    padding-bottom: 0.08em;
+  }
+  :global(html.js) .wunsch-voll__zahl { opacity: 0; }
+
+  .wunsch-voll__zahl :global(.zahl-ziffer) { display: inline-block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.js) .wunsch-voll__zahl { opacity: 1; }
   }
 
   .wunsch-voll__wort {

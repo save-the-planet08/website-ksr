@@ -1,6 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
+import Zeichen from '../components/brand/Zeichen.astro';
+import { ort } from '../lib/register';
+
+const kopf = ort('links/kopf');
+const gruppenOrt = ort('links/gruppen');
 
 const gruppen = [
   {
@@ -60,15 +65,20 @@ const gruppen = [
     titel="Was du nachlesen kannst."
     lead="Die Sammlung, die wir selbst benutzen. Kurz gehalten — lieber vier Quellen, die stimmen, als vierzig, die niemand prüft."
     zeichen="balken"
+    auftritt={kopf.auftritt}
   />
 
-  <section class="abschnitt">
+  <section class="abschnitt quellen" data-szene={gruppenOrt.szene}>
+    <div class="quellen__mass" aria-hidden="true">
+      <Zeichen art={gruppenOrt.zeichen} praefix="lk" />
+    </div>
+
     <div class="huelle">
       {gruppen.map((g, gi) => (
         <div class="gruppe" id={`gruppe-${gi + 1}`}>
           <div class="gruppe__kopf">
             <p class="marke" data-auftritt="maske">{g.marke}</p>
-            <h2 class="titel-3 gruppe__titel" data-auftritt="zeile">{g.titel}</h2>
+            <h2 class="titel-3 gruppe__titel" data-auftritt={gruppenOrt.auftritt}>{g.titel}</h2>
             <p class="fliess" data-auftritt="wort" style="--verzug:200ms">{g.einleitung}</p>
           </div>
 
@@ -108,6 +118,23 @@ const gruppen = [
 </BaseLayout>
 
 <style>
+  /* --- Die Kanten neben der Sammlung ----------------------------------- */
+  .quellen { position: relative; isolation: isolate; overflow: hidden; }
+
+  /* Unten links, wo die Kopfspalte ausläuft — dort ist Platz, und die
+     wechselnden Längen bekommen Raum, überhaupt zu wirken. */
+  .quellen__mass {
+    position: absolute;
+    left: var(--rand);
+    bottom: 19%;
+    width: min(38vw, 24rem);
+    z-index: -1;
+    opacity: 0.18;
+    color: var(--ink);
+    pointer-events: none;
+  }
+  @media (max-width: 62rem) { .quellen__mass { display: none; } }
+
   .gruppe { padding-block: var(--r-7); border-top: 1px solid var(--linie); }
   .gruppe:first-child { border-top: 0; padding-top: 0; }
 

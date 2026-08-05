@@ -1,6 +1,7 @@
 ---
 import Logo from './brand/Logo.astro';
 import { loeweBox, traubenBox, balkenBox } from '../lib/logo';
+import type { AuftrittArt } from '../lib/arten';
 
 interface Props {
   marke: string;
@@ -8,9 +9,14 @@ interface Props {
   lead?: string;
   /** Welches Bauteil des Logos die Seite begleitet. */
   zeichen?: 'loewe' | 'trauben' | 'balken' | 'keines';
+  /**
+   * Wie die Überschrift auftritt. Kommt aus `register.ts` und ist auf jeder
+   * Seite eine andere — sonst begrüßt einen fünfmal dieselbe Bewegung.
+   */
+  auftritt?: AuftrittArt;
 }
 
-const { marke, titel, lead, zeichen = 'loewe' } = Astro.props;
+const { marke, titel, lead, zeichen = 'loewe', auftritt = 'zeile' } = Astro.props;
 
 const felder = {
   loewe: `${loeweBox[0]} ${loeweBox[1]} ${loeweBox[2]} ${loeweBox[3]}`,
@@ -28,7 +34,7 @@ const felder = {
 
   <div class="huelle seitenkopf__inhalt">
     <p class="marke" data-auftritt="maske">{marke}</p>
-    <h1 class="titel-1 seitenkopf__titel" data-auftritt="zeile" style="--verzug:120ms">{titel}</h1>
+    <h1 class="titel-1 seitenkopf__titel" data-auftritt={auftritt} style="--verzug:120ms">{titel}</h1>
     {lead && <p class="lead seitenkopf__lead" data-auftritt="wort" style="--verzug:420ms">{lead}</p>}
   </div>
 </header>

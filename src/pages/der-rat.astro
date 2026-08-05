@@ -1,6 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
+import Zeichen from '../components/brand/Zeichen.astro';
+import { ort } from '../lib/register';
+
+const ebenen = ort('rat/ebenen');
+const alltag = ort('rat/alltag');
+const mitmachen = ort('rat/mitmachen');
 
 const stufen = [
   {
@@ -56,16 +62,20 @@ const arbeit = [
   />
 
   <!-- Drei Ebenen -->
-  <section class="abschnitt" id="ebenen">
+  <section class="abschnitt ebenen" id="ebenen" data-szene={ebenen.szene}>
+    <div class="ebenen__hang" aria-hidden="true">
+      <Zeichen art={ebenen.zeichen} praefix="e" />
+    </div>
+
     <div class="huelle">
       <p class="marke" data-auftritt="maske">Von der Klasse bis ins Ministerium</p>
-      <h2 class="titel-2 stufen__titel" data-auftritt="zeile">
+      <h2 class="titel-2 stufen__titel" data-auftritt={ebenen.auftritt}>
         Drei Ebenen. Wir sind die mittlere.
       </h2>
 
       <ol class="stufen">
         {stufen.map((s, i) => (
-          <li class="stufe" data-auftritt="seit" data-auftritt-seite={i % 2 ? 'rechts' : 'links'} style={`--verzug:${i * 90}ms`}>
+          <li class="stufe" data-auftritt="blende" data-auftritt-kante="links" style={`--verzug:${i * 90}ms`}>
             <span class="stufe__balken" aria-hidden="true"><i></i><i></i></span>
             <div class="stufe__inhalt">
               <p class="marke">{s.nr} — {s.ebene}</p>
@@ -79,10 +89,14 @@ const arbeit = [
   </section>
 
   <!-- Was wir konkret machen -->
-  <section class="abschnitt abschnitt--dunkel" id="alltag">
+  <section class="abschnitt abschnitt--dunkel alltag" id="alltag" data-szene={alltag.szene}>
+    <div class="alltag__feld" aria-hidden="true">
+      <Zeichen art={alltag.zeichen} praefix="al" />
+    </div>
+
     <div class="huelle">
       <p class="marke" data-auftritt="maske">Der Alltag</p>
-      <h2 class="titel-2 arbeit__titel" data-auftritt="zeile">
+      <h2 class="titel-2 arbeit__titel" data-auftritt={alltag.auftritt}>
         Was hier tatsächlich passiert.
       </h2>
 
@@ -98,13 +112,16 @@ const arbeit = [
   </section>
 
   <!-- Mitmachen -->
-  <section class="abschnitt" id="mitmachen">
+  <section class="abschnitt" id="mitmachen" data-szene={mitmachen.szene}>
     <div class="huelle mitmachen">
       <div class="mitmachen__wort">
         <p class="marke" data-auftritt="maske">Mitmachen</p>
-        <h2 class="titel-2" data-auftritt="zeile">
+        <h2 class="titel-2" data-auftritt={mitmachen.auftritt}>
           Die Hürde ist niedriger, als du denkst.
         </h2>
+        <div class="mitmachen__marke" aria-hidden="true">
+          <Zeichen art={mitmachen.zeichen} praefix="mm" />
+        </div>
       </div>
 
       <div class="mitmachen__text">
@@ -141,6 +158,22 @@ const arbeit = [
 </BaseLayout>
 
 <style>
+  /* --- Ebenen: der Hang hinter den drei Stufen ------------------------- */
+  .ebenen { position: relative; isolation: isolate; overflow: hidden; }
+
+  .ebenen__hang {
+    position: absolute;
+    top: 50%;
+    right: -6%;
+    width: min(58vw, 40rem);
+    transform: translateY(-50%);
+    z-index: -1;
+    opacity: 0.3;
+    color: var(--ink);
+    pointer-events: none;
+  }
+  @media (max-width: 62rem) { .ebenen__hang { right: -22%; opacity: 0.2; } }
+
   .stufen__titel { margin-top: var(--r-5); max-width: 20ch; }
 
   .stufen {
@@ -188,6 +221,23 @@ const arbeit = [
     .stufe__inhalt .fliess { grid-column: 3; }
   }
 
+  /* --- Alltag: das Wellenfeld über die ganze Fläche -------------------- */
+  .alltag { position: relative; isolation: isolate; overflow: hidden; }
+
+  .alltag__feld {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: -1;
+    opacity: 0.22;
+    color: var(--paper);
+    pointer-events: none;
+  }
+  /* Breiter als der Abschnitt: die Wellen laufen quer heraus, statt an einer
+     Kante zu enden. */
+  .alltag__feld :global(svg) { width: 160%; max-width: none; }
+
   .arbeit__titel { margin-top: var(--r-5); max-width: 18ch; }
 
   .arbeit {
@@ -215,6 +265,14 @@ const arbeit = [
 
   .mitmachen__wort .titel-2 { margin-top: var(--r-5); }
   .mitmachen__text .fliess { max-width: none; }
+
+  /* Die Wortmarke schreibt sich unter die Überschrift. */
+  .mitmachen__marke {
+    margin-top: var(--r-8);
+    width: min(100%, 22rem);
+    color: var(--rebe);
+  }
+  @media (max-width: 62rem) { .mitmachen__marke { width: min(70%, 16rem); } }
 
   .mitmachen__knoepfe {
     display: flex;

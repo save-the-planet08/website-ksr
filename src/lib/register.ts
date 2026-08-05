@@ -30,6 +30,7 @@ export const register = {
   'start/aufruf':       { zeichen: 'konstellation',    szene: 'aufruf-konstellation', auftritt: 'zerfall' },
 
   // --- Der Rat --------------------------------------------------------------
+  'rat/kopf':           {                                                             auftritt: 'zerfall' },
   'rat/ebenen':         { zeichen: 'hoehenlinien',     szene: 'ebenen-schichten',     auftritt: 'strich'  },
   'rat/alltag':         { zeichen: 'wellenfeld',       szene: 'alltag-wellen',        auftritt: 'schere'  },
   'rat/mitmachen':      { zeichen: 'wortmarke-kontur', szene: 'mitmachen-kontur',     auftritt: 'kippen'  },
@@ -37,19 +38,23 @@ export const register = {
   // --- Die acht Wünsche -----------------------------------------------------
   // Kein eigenes Zeichen: hier trägt die Riesenzahl das Bild, achtmal anders
   // gebaut. Siehe `szenen/wuensche-zahlen.ts`.
-  'wuensche/liste':     {                              szene: 'wuensche-zahlen',      auftritt: 'zahl'    },
-  'wuensche/schluss':   {                                                             auftritt: 'hoch'    },
+  'wuensche/kopf':      {                                                             auftritt: 'versatz' },
+  'wuensche/liste':     {                              szene: 'wuensche-zahlen',      auftritt: 'blende'  },
+  'wuensche/schluss':   {                                                             auftritt: 'zahl'    },
 
   // --- Termine --------------------------------------------------------------
-  'termine/kommend':    { zeichen: 'taktraster',       szene: 'termine-takt',         auftritt: 'spur'    },
+  'termine/kopf':       {                                                             auftritt: 'zeile'   },
+  'termine/kommend':    { zeichen: 'taktraster',       szene: 'termine-takt',         auftritt: 'gewicht' },
   'termine/rueckblick': { zeichen: 'trauben-netz',     szene: 'rueckblick-netz',      auftritt: 'blende'  },
 
   // --- Kontakt --------------------------------------------------------------
-  'kontakt/direkt':     { zeichen: 'achsengitter',     szene: 'kontakt-achsen',       auftritt: 'zaehler' },
-  // Ohne eigenes Zeichen: hier wandert der Löwe aus dem Seitenkopf durchs Bild.
+  'kontakt/kopf':       {                                                             auftritt: 'kippen'  },
+  'kontakt/direkt':     { zeichen: 'achsengitter',     szene: 'kontakt-achsen',       auftritt: 'spur'    },
+  // Ohne eigenes Zeichen: hier schieben sich die beiden Spalten gegeneinander.
   'kontakt/wo':         {                              szene: 'kontakt-parallaxe',    auftritt: 'maske'   },
 
   // --- Links ----------------------------------------------------------------
+  'links/kopf':         {                                                             auftritt: 'schere'  },
   'links/gruppen':      { zeichen: 'kanten',           szene: 'links-kanten',         auftritt: 'seit'    },
 } as const satisfies Record<string, Vergabe>;
 

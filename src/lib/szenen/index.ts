@@ -10,4 +10,23 @@ import './wuensche-partitur';
 import './kreis-wachstum';
 import './aufruf-konstellation';
 
+// Der Rat
+import './ebenen-schichten';
+import './alltag-wellen';
+import './mitmachen-kontur';
+
+// Die acht Wünsche
+import './wuensche-zahlen';
+
+// Termine
+import './termine-takt';
+import './rueckblick-netz';
+
+// Kontakt
+import './kontakt-achsen';
+import './kontakt-parallaxe';
+
+// Links
+import './links-kanten';
+
 export {};

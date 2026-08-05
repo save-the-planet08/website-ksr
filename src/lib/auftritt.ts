@@ -149,12 +149,19 @@ const richtungen = [
   [-14, -46, 4],
 ];
 
+/**
+ * Alle vier Werte tragen ein Prozentzeichen, auch die Nullen. Ohne Einheit
+ * findet GSAP keinen Weg von `100%` nach `0` und lässt das Element verdeckt
+ * stehen — der Inhalt wäre schlicht weg.
+ */
 const kanten: Record<string, string> = {
-  oben:   'inset(0 0 100% 0)',
-  unten:  'inset(100% 0 0 0)',
-  rechts: 'inset(0 0 0 100%)',
-  links:  'inset(0 100% 0 0)',
+  oben:   'inset(0% 0% 100% 0%)',
+  unten:  'inset(100% 0% 0% 0%)',
+  rechts: 'inset(0% 0% 0% 100%)',
+  links:  'inset(0% 100% 0% 0%)',
 };
+
+const offen = 'inset(0% 0% 0% 0%)';
 
 function baue(el: HTMLElement) {
   const art = (el.dataset.auftritt || 'hoch') as Art;
@@ -197,8 +204,8 @@ function baue(el: HTMLElement) {
 
   if (art === 'maske') {
     gsap.fromTo(el,
-      { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
-      { clipPath: 'inset(0 0% 0 0)', duration: 1.15, ease: 'power4.inOut', delay, scrollTrigger });
+      { clipPath: kanten.links, opacity: 1 },
+      { clipPath: offen, duration: 1.15, ease: 'power4.inOut', delay, scrollTrigger });
     return;
   }
 
@@ -263,7 +270,7 @@ function baue(el: HTMLElement) {
     const kante = kanten[el.dataset.auftrittKante ?? 'unten'] ?? kanten.unten;
     gsap.fromTo(el,
       { clipPath: kante, opacity: 1 },
-      { clipPath: 'inset(0 0 0 0)', duration: 1.2, ease: 'power4.inOut', delay, scrollTrigger });
+      { clipPath: offen, duration: 1.2, ease: 'power4.inOut', delay, scrollTrigger });
     return;
   }
 

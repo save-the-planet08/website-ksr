@@ -2,6 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
 import { getCollection } from 'astro:content';
+import Zeichen from '../components/brand/Zeichen.astro';
+import { ort } from '../lib/register';
+
+const kopf = ort('termine/kopf');
+const kommendOrt = ort('termine/kommend');
+const rueckblickOrt = ort('termine/rueckblick');
 
 const alle = (await getCollection('termine')).sort(
   (a, b) => a.data.date.valueOf() - b.data.date.valueOf(),
@@ -37,16 +43,22 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
     titel="Wann wir tagen."
     lead="Sitzungen des Kreisschülerrats sind für Delegierte aller Mitgliedsschulen offen. Wer zum ersten Mal kommt, meldet sich am besten kurz vorher — dann weiß jemand Bescheid und du sitzt nicht allein im Raum."
     zeichen="trauben"
+    auftritt={kopf.auftritt}
   />
 
-  <section class="abschnitt" id="kommend">
+  <section class="abschnitt kommend" id="kommend" data-szene={kommendOrt.szene}>
+    <div class="kommend__blatt" aria-hidden="true">
+      <Zeichen art={kommendOrt.zeichen} praefix="tk" fuellend />
+    </div>
+
     <div class="huelle">
       <p class="marke" data-auftritt="maske">Kommende Termine</p>
+      <h2 class="titel-2 kommend__titel" data-auftritt={kommendOrt.auftritt}>Was als Nächstes ansteht.</h2>
 
       {kommend.length > 0 ? (
         <ol class="termine">
           {kommend.map((t, i) => (
-            <li class="termin" data-auftritt={i % 2 ? 'seit' : 'hoch'} style={`--verzug:${i * 90}ms`}>
+            <li class="termin" data-auftritt="hoch" style={`--verzug:${i * 90}ms`}>
               <time class="termin__datum" datetime={iso(t.data.date)}>
                 <span class="termin__tag">{tag(t.data.date)}</span>
                 <span class="termin__monat">{monat(t.data.date)}</span>
@@ -122,6 +134,28 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 </BaseLayout>
 
 <style>
+  /* --- Kommende Termine: das Kalenderblatt dahinter -------------------- */
+  .kommend { position: relative; isolation: isolate; overflow: hidden; }
+
+  .kommend__titel { margin-top: var(--r-5); max-width: 18ch; }
+
+  .kommend__blatt {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 32%;
+    bottom: 8%;
+    width: 100%;
+    max-width: var(--breite);
+    padding-inline: var(--rand);
+    z-index: -1;
+    opacity: 0.28;
+    color: var(--ink);
+    pointer-events: none;
+  }
+  .kommend__blatt :global(svg) { width: 100%; height: 100%; }
+  @media (max-width: 52rem) { .kommend__blatt { display: none; } }
+
   .termine {
     margin-top: var(--r-7);
     border-top: 1px solid var(--linie);
