@@ -13,8 +13,10 @@ import { anker, rechteck, strecke, type Zeichnung } from './typen';
    -------------------------------------------------------------------------- */
 export function loeweMaske(): Zeichnung {
   const [x, y, b, h] = L.loeweBox;
-  const anzahl = 26;
-  const dicke = h / (anzahl * 1.9);
+  // Fein genug, dass die Silhouette lesbar bleibt: bei groben Balken zerfällt
+  // der Löwe in Klötze, sobald sie sich beim Scrollen verschieben.
+  const anzahl = 44;
+  const dicke = h / (anzahl * 2.35);
 
   const streifen: string[] = [];
   for (let i = 0; i < anzahl; i++) {
@@ -47,7 +49,9 @@ export function balkenPartitur(): Zeichnung {
   const steg = balkenBreite - strichBreite * 2;
 
   const paarBreite = strichBreite * 2 + steg;
-  const abstand = paarBreite * 1.85;
+  // Weit auseinander: das Feld wird über die volle Listenbreite gezogen, und
+  // eng gesetzte Balken werden dabei zu Klötzen.
+  const abstand = paarBreite * 4.6;
   const hoehe = 640;
   const feldBreite = abstand * (partiturHoehen.length - 1) + paarBreite;
 

@@ -1,12 +1,14 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Logo from '../components/brand/Logo.astro';
+import Zeichen from '../components/brand/Zeichen.astro';
 import { wuensche } from '../data/wuensche';
-import { loeweBox, rankeBox, traubenBox } from '../lib/logo';
+import { ort } from '../lib/register';
 
-const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} ${
-  traubenBox[1] + traubenBox[3] - rankeBox[1] + 20
-}`;
+const haltung = ort('start/haltung');
+const wunschliste = ort('start/wuensche');
+const kreis = ort('start/kreis');
+const aufruf = ort('start/aufruf');
 ---
 
 <BaseLayout
@@ -43,19 +45,15 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   <!-- ===================================================================
        AKT II — Der Löwe: Haltung
        =================================================================== -->
-  <section class="haltung abschnitt--dunkel" id="haltung">
-    <div class="haltung__tier" aria-hidden="true">
-      <Logo
-        teile={['loewe']}
-        box={`${loeweBox[0]} ${loeweBox[1]} ${loeweBox[2]} ${loeweBox[3]}`}
-        praefix="h"
-      />
+  <section class="haltung abschnitt--dunkel" id="haltung" data-szene={haltung.szene}>
+    <div class="haltung__tier" data-tier aria-hidden="true">
+      <Zeichen art={haltung.zeichen} praefix="h" />
     </div>
 
     <div class="huelle haltung__inhalt">
       <p class="marke" data-auftritt="maske">Der Löwe — Hessen, aufrecht</p>
 
-      <h2 class="titel-2 haltung__satz" data-auftritt="zeile">
+      <h2 class="titel-2 haltung__satz" data-auftritt={haltung.auftritt}>
         Schülervertretung ist kein Ehrenamt für Ruhige.
       </h2>
 
@@ -113,11 +111,15 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   <!-- ===================================================================
        AKT III — Der Doppelbalken wird zur Liste: acht Wünsche
        =================================================================== -->
-  <section class="wuensche" id="wuensche" data-wuensche>
+  <section class="wuensche" id="wuensche" data-szene={wunschliste.szene}>
+    <div class="wuensche__partitur" aria-hidden="true">
+      <Zeichen art={wunschliste.zeichen} praefix="w" fuellend />
+    </div>
+
     <div class="huelle">
       <header class="wuensche__kopf">
         <p class="marke" data-auftritt="maske">Der Doppelbalken — acht Mal</p>
-        <h2 class="titel-2" data-auftritt="zeile">
+        <h2 class="titel-2" data-auftritt={wunschliste.auftritt}>
           Acht Wünsche. Keiner davon unbezahlbar.
         </h2>
         <p class="lead wuensche__lead" data-auftritt="wort" style="--verzug:120ms">
@@ -127,9 +129,11 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
         </p>
       </header>
 
+      <!-- Acht Geschwister treten gleich auf — sie sind eine Liste, keine acht
+           Abschnitte. Das Besondere hier ist die Partitur dahinter. -->
       <ol class="wuensche__liste">
         {wuensche.map((w, i) => (
-          <li class="wunsch" data-auftritt={i % 3 === 1 ? 'seit' : 'hoch'} style={`--verzug:${i * 55}ms`}>
+          <li class="wunsch" data-auftritt="seit" style={`--verzug:${i * 55}ms`}>
             <a href={`/wuensche#wunsch-${w.nr}`} class="wunsch__flaeche">
               <span class="wunsch__balken" aria-hidden="true"><i></i><i></i></span>
               <span class="wunsch__nr">{w.nr}</span>
@@ -158,24 +162,24 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   <!-- ===================================================================
        AKT IV — Die Ranke wächst durch den Kreis
        =================================================================== -->
-  <section class="kreis" id="kreis" data-kreis>
+  <section class="kreis" id="kreis" data-szene={kreis.szene}>
     <div class="huelle">
       <div class="kreis__kopf">
         <p class="marke" data-auftritt="maske">Die Rebe — Rheingau-Taunus</p>
-        <h2 class="titel-2" data-auftritt="zeile">
+        <h2 class="titel-2" data-auftritt={kreis.auftritt}>
           Ein Kreis, viele Schulen, eine Vertretung.
         </h2>
       </div>
     </div>
 
-    <div class="kreis__buehne" data-ranke-buehne>
+    <div class="kreis__buehne">
       <div class="kreis__feld">
-        <Logo teile={['ranke', 'trauben']} box={rankeFeld} praefix="k" />
+        <Zeichen art={kreis.zeichen} praefix="k" />
       </div>
     </div>
 
     <div class="huelle kreis__unten">
-      <p class="fliess kreis__text" data-auftritt="wort">
+      <p class="fliess kreis__text" data-auftritt="hoch">
         Von Rüdesheim bis Idstein, vom Gymnasium bis zur Berufsschule: Wir vertreten
         alle Schulformen im Kreis. Was in Taunusstein beschlossen wird, wirkt sich in
         Eltville aus — deshalb reden wir nicht schulweise, sondern für den Kreis.
@@ -206,9 +210,13 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   <!-- ===================================================================
        AKT V — Aufruf
        =================================================================== -->
-  <section class="aufruf abschnitt--rebe" id="mitmachen">
+  <section class="aufruf abschnitt--rebe" id="mitmachen" data-szene={aufruf.szene}>
+    <div class="aufruf__karte" data-karte aria-hidden="true">
+      <Zeichen art={aufruf.zeichen} praefix="a" />
+    </div>
+
     <div class="huelle aufruf__inhalt">
-      <h2 class="titel-1 aufruf__satz" data-auftritt="zeile">
+      <h2 class="titel-1 aufruf__satz" data-auftritt={aufruf.auftritt}>
         Wenn du das hier liest, bist du wahrscheinlich schon der Typ dafür.
       </h2>
       <p class="lead aufruf__lead" data-auftritt="wort" style="--verzug:200ms">
@@ -339,19 +347,22 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
     color: var(--auf-dunkel-text);
   }
 
+  /* Der Löwe schneidet, die Streifen laufen dahinter durch. Auf dunklem Grund
+     trägt Linienwerk weniger als eine Fläche — deshalb liegt die Deckkraft
+     höher als beim vorherigen, massiven Tier. */
   .haltung__tier {
     position: absolute;
     top: 50%;
     right: -18%;
     width: min(70vw, 46rem);
     transform: translateY(-50%);
-    opacity: 0.07;
+    opacity: 0.13;
     pointer-events: none;
     color: var(--paper);
   }
 
   @media (min-width: 62rem) {
-    .haltung__tier { right: -6%; width: min(46vw, 40rem); opacity: 0.09; }
+    .haltung__tier { right: -6%; width: min(46vw, 40rem); opacity: 0.17; }
   }
 
   .haltung__inhalt { position: relative; z-index: 1; }
@@ -416,7 +427,43 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
   /* ==================================================================
      AKT III — Wünsche
      ================================================================== */
-  .wuensche { padding-block: clamp(var(--r-9), 15vh, var(--r-10)); }
+  .wuensche {
+    padding-block: clamp(var(--r-9), 15vh, var(--r-10));
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  /* Ein Balkenpaar je Wunsch, über die volle Breite der Liste gezogen: acht
+     Balken unter acht Zeilen. Wer eine Zeile anfasst, sieht welcher dazugehört.
+     Die Balken stehen quer zu den Zeilen — daraus wird ein Raster, kein
+     Gedränge. */
+  .wuensche__partitur {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 38%;
+    bottom: 14%;
+    width: 100%;
+    max-width: var(--breite);
+    padding-inline: var(--rand);
+    z-index: -1;
+    opacity: 0.16;
+    color: var(--ink);
+    pointer-events: none;
+  }
+  .wuensche__partitur :global(svg) { width: 100%; height: 100%; }
+
+  @media (max-width: 52rem) { .wuensche__partitur { display: none; } }
+
+  /* Der Balken zur Zeile, die gerade angefasst wird. */
+  .wuensche__partitur :global(.ist-an) {
+    color: var(--rebe);
+    opacity: 1;
+  }
+  .wuensche__partitur :global([data-teil]) {
+    transition: color var(--d-normal) var(--e-aus);
+  }
 
   .wuensche__kopf { max-width: 46rem; }
   .wuensche__kopf .titel-2 { margin-top: var(--r-5); }
@@ -548,13 +595,6 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
     color: var(--ink);
   }
 
-  :global(html.js) .kreis__feld :global(.logo__teil--trauben path) {
-    opacity: 0;
-    transform-box: fill-box;
-    transform-origin: center;
-    transform: scale(0.2);
-  }
-
   .kreis__unten { margin-top: var(--r-7); }
   .kreis__text { max-width: 42rem; font-size: var(--t-gross); }
 
@@ -623,7 +663,23 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
     padding-block: clamp(var(--r-9), 18vh, var(--r-11));
     background: var(--rebe);
     color: var(--auf-dunkel-text);
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
   }
+
+  /* Die Karte ist breiter als das Fenster — sie darf wandern. */
+  .aufruf__karte {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    z-index: -1;
+    opacity: 0.22;
+    color: var(--paper);
+    pointer-events: none;
+  }
+  .aufruf__karte :global(svg) { width: 130%; max-width: none; }
 
   .aufruf__satz { max-width: 18ch; }
   .aufruf__lead { margin-top: var(--r-6); max-width: 36rem; color: rgba(244, 241, 234, 0.82); }
@@ -755,38 +811,8 @@ const rankeFeld = `${rankeBox[0] - 10} ${rankeBox[1] - 10} ${rankeBox[2] + 20} $
     gsap.set(wort, { opacity: 1 });
   }
 
-  /* ------------------------------------------------------------------
-     Akt IV — Die Ranke wächst, die Trauben setzen sich
-     ------------------------------------------------------------------ */
-  const rankeBuehne = document.querySelector<HTMLElement>('[data-ranke-buehne]');
-  if (rankeBuehne) {
-    const ranke = rankeBuehne.querySelector<SVGPathElement>('[data-teil="ranke"] path');
-    const trauben = Array.from(rankeBuehne.querySelectorAll<SVGPathElement>('[data-teil="trauben"] path'));
-
-    if (sanft) {
-      gsap.set(trauben, { opacity: 1, scale: 1 });
-    } else if (ranke) {
-      const laenge = ranke.getTotalLength();
-      gsap.set(ranke, { strokeDasharray: laenge, strokeDashoffset: laenge, fillOpacity: 0, stroke: 'currentColor', strokeWidth: 3 });
-
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: rankeBuehne,
-          start: 'top 78%',
-          end: 'bottom 55%',
-          scrub: 0.9,
-        },
-      })
-        .to(ranke, { strokeDashoffset: 0, ease: 'none' }, 0)
-        .to(ranke, { fillOpacity: 1, duration: 0.25 }, 0.7)
-        .to(trauben, {
-          opacity: 1,
-          scale: 1,
-          ease: 'back.out(2)',
-          stagger: { each: 0.02, from: 'start' },
-        }, 0.35);
-    }
-  }
+  // Akt IV (die Ranke) steht jetzt als Szene in `lib/szenen/kreis-wachstum.ts`
+  // — wie jeder andere Abschnitt der Seite auch.
 
   ScrollTrigger.refresh();
 </script>

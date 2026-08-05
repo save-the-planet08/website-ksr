@@ -43,6 +43,23 @@ export function strecke(wurzel: HTMLElement, von = 'top bottom', bis = 'bottom t
   });
 }
 
+/**
+ * Bereitet Pfade darauf vor, sich selbst zu zeichnen: die Kontur wird zu einer
+ * Strichlinie, die genau so lang ist wie der Pfad, und ganz herausgeschoben.
+ * Der Rest ist ein Tween auf `strokeDashoffset: 0`.
+ */
+export function zugVorbereiten(pfade: SVGPathElement[]) {
+  for (const p of pfade) {
+    const laenge = p.getTotalLength();
+    gsap.set(p, { strokeDasharray: laenge, strokeDashoffset: laenge });
+  }
+}
+
+/** Kurzform für die Pfade einer Zeichen-Gruppe. */
+export function teil(wurzel: Element, name: string) {
+  return Array.from(wurzel.querySelectorAll<SVGPathElement>(`[data-teil="${name}"] path`));
+}
+
 /** Alle Szenen der Seite bauen. Nach den Auftritten aufrufen, nie davor. */
 export function szenenStarten() {
   const orte = Array.from(document.querySelectorAll<HTMLElement>('[data-szene]'));
