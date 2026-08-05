@@ -4,6 +4,7 @@ import Seitenkopf from '../components/Seitenkopf.astro';
 import { getCollection } from 'astro:content';
 import Zeichen from '../components/brand/Zeichen.astro';
 import { ort } from '../lib/register';
+import { monatsnamen } from '../lib/zeichen/jahresband';
 
 const kopf = ort('termine/kopf');
 const kommendOrt = ort('termine/kommend');
@@ -31,6 +32,13 @@ const monat = (d: Date) => d.toLocaleDateString('de-DE', { month: 'short' }).rep
 const jahr = (d: Date) => d.getFullYear();
 const wochentag = (d: Date) => d.toLocaleDateString('de-DE', { weekday: 'long' });
 const iso = (d: Date) => d.toISOString().slice(0, 10);
+
+// Das Band bekommt alle Termine des Schuljahres, in zeitlicher Reihenfolge.
+const banddaten = {
+  heute,
+  termine: alle.map((t) => ({ iso: iso(t.data.date), datum: t.data.date })),
+};
+const monate = monatsnamen(heute);
 ---
 
 <BaseLayout
@@ -47,18 +55,23 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
   />
 
   <section class="abschnitt kommend" id="kommend" data-szene={kommendOrt.szene}>
-    <div class="kommend__blatt" aria-hidden="true">
-      <Zeichen art={kommendOrt.zeichen} praefix="tk" fuellend />
-    </div>
-
     <div class="huelle">
       <p class="marke" data-auftritt="maske">Kommende Termine</p>
       <h2 class="titel-2 kommend__titel" data-auftritt={kommendOrt.auftritt}>Was als Nächstes ansteht.</h2>
 
+      <!-- Das Schuljahr als Band. Was hier steht, steht auch in der Liste
+           darunter — deshalb ist es für Vorlesesoftware ausgeblendet. -->
+      <figure class="band" data-band aria-hidden="true">
+        <Zeichen art={kommendOrt.zeichen} praefix="jb" daten={banddaten} fuellend />
+        <figcaption class="band__monate">
+          {monate.map((m) => <span>{m}</span>)}
+        </figcaption>
+      </figure>
+
       {kommend.length > 0 ? (
         <ol class="termine">
           {kommend.map((t, i) => (
-            <li class="termin" data-auftritt="hoch" style={`--verzug:${i * 90}ms`}>
+            <li class="termin" data-termin={iso(t.data.date)} data-auftritt="hoch" style={`--verzug:${i * 90}ms`}>
               <time class="termin__datum" datetime={iso(t.data.date)}>
                 <span class="termin__tag">{tag(t.data.date)}</span>
                 <span class="termin__monat">{monat(t.data.date)}</span>
@@ -139,24 +152,34 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
 
   .kommend__titel { margin-top: var(--r-5); max-width: 18ch; }
 
-  .kommend__blatt {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 32%;
-    bottom: 8%;
-    width: 100%;
-    max-width: var(--breite);
-    /* Rechts vom Text: kleine Auszeichnungen stehen in `--ink-60` und
-       vertragen kein Ornament hinter sich. */
-    padding-inline: 46% var(--rand);
-    z-index: -1;
-    opacity: 0.28;
+  /* Das Jahresband. Es steht über der Liste, nicht dahinter — es ist Inhalt,
+     kein Untergrund. */
+  .band {
+    margin: var(--r-8) 0 var(--r-7);
     color: var(--ink);
-    pointer-events: none;
   }
-  .kommend__blatt :global(svg) { width: 100%; height: 100%; }
-  @media (max-width: 52rem) { .kommend__blatt { display: none; } }
+  .band :global(svg) { width: 100%; height: auto; }
+
+  /* Der Balken leuchtet auf, wenn man die zugehörige Zeile anfasst. */
+  .band :global([data-teil^='marke-']) {
+    transition: color var(--d-normal) var(--e-aus), opacity var(--d-normal);
+  }
+  .band :global(.ist-an) { color: var(--rebe); opacity: 1; }
+
+  .band__monate {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    margin-top: var(--r-2);
+    font-size: var(--t-micro);
+    letter-spacing: var(--sperr-weit);
+    text-transform: uppercase;
+    color: var(--ink-60);
+  }
+  .band__monate span { text-align: center; }
+
+  @media (max-width: 40rem) {
+    .band__monate { font-size: 0.5rem; letter-spacing: 0; }
+  }
 
   .termine {
     margin-top: var(--r-7);

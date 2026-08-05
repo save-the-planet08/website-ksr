@@ -39,13 +39,13 @@ export const zeichenArten = [
   'wortmarke-kontur',
   // abgeleitet
   'hoehenlinien',   // Löwensilhouette, geschichtet
-  'taktraster',     // der Rhythmus des Doppelbalkens als Feld
   'wellenfeld',     // die Kurve der Ranke, gestapelt
   'konstellation',  // die Streuung der Trauben, über die Fläche gezogen
   'achsengitter',   // die Achsen der Wortmarke als Linienmaß
   'kanten',         // der Doppelbalken flach gelegt, in wechselnder Länge
   // gebaut — die zweite Bildwelt, nicht mehr aus dem Logo
   'wappen',         // acht Embleme, eines je Wunsch
+  'jahresband',     // das Schuljahr mit den echten Terminen darauf
 ] as const;
 
 export type ZeichenArt = (typeof zeichenArten)[number];
@@ -60,7 +60,7 @@ export const szeneArten = [
   'alltag-wellen',
   'mitmachen-kontur',
   'wuensche-blatt',
-  'termine-takt',
+  'termine-band',
   'rueckblick-netz',
   'kontakt-achsen',
   'kontakt-parallaxe',

@@ -10,9 +10,10 @@ import {
   balkenPartitur, loeweMaske, rankeWachstum, traubenNetz, wortmarkeKontur,
 } from './ausDemZeichen';
 import {
-  achsengitter, hoehenlinien, kanten, konstellation, taktraster, wellenfeld,
+  achsengitter, hoehenlinien, kanten, konstellation, wellenfeld,
 } from './abgeleitet';
 import { wappen } from './wappen';
+import { jahresband } from './jahresband';
 import type { Zeichnung } from './typen';
 
 const bauplan: Record<ZeichenArt, (daten?: any) => Zeichnung> = {
@@ -22,12 +23,12 @@ const bauplan: Record<ZeichenArt, (daten?: any) => Zeichnung> = {
   'trauben-netz': traubenNetz,
   'wortmarke-kontur': wortmarkeKontur,
   'hoehenlinien': hoehenlinien,
-  'taktraster': taktraster,
   'wellenfeld': wellenfeld,
   'konstellation': konstellation,
   'achsengitter': achsengitter,
   'kanten': kanten,
   'wappen': wappen,
+  'jahresband': jahresband,
 };
 
 /**

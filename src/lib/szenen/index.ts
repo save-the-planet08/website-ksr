@@ -19,7 +19,7 @@ import './mitmachen-kontur';
 import './wuensche-blatt';
 
 // Termine
-import './termine-takt';
+import './termine-band';
 import './rueckblick-netz';
 
 // Kontakt

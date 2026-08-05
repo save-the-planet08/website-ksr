@@ -45,7 +45,7 @@ export const register = {
 
   // --- Termine --------------------------------------------------------------
   'termine/kopf':       {                                                             auftritt: 'zeile'   },
-  'termine/kommend':    { zeichen: 'taktraster',       szene: 'termine-takt',         auftritt: 'gewicht' },
+  'termine/kommend':    { zeichen: 'jahresband',       szene: 'termine-band',         auftritt: 'gewicht' },
   'termine/rueckblick': { zeichen: 'trauben-netz',     szene: 'rueckblick-netz',      auftritt: 'blende'  },
 
   // --- Kontakt --------------------------------------------------------------

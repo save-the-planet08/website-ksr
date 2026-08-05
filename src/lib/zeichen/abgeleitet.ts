@@ -56,48 +56,6 @@ export function hoehenlinien(): Zeichnung {
 }
 
 /* --------------------------------------------------------------------------
-   Taktraster — der Rhythmus des Doppelbalkens als Feld
-   Zwei Striche, ein Steg, immer derselbe Abstand. Vierzehnmal nebeneinander
-   und siebenmal gequert ergibt das ein Kalenderblatt.
-   -------------------------------------------------------------------------- */
-export function taktraster(): Zeichnung {
-  // Das Verhältnis aus dem Logo: Strich zu Steg wie 9 zu 29.
-  const strich = 2;
-  const steg = (29 / 9) * strich;
-  const paar = strich * 2 + steg;
-  const abstand = paar * 8.4;
-
-  const spalten = 14;
-  const zeilen = 7;
-  const breite = abstand * spalten;
-  const hoehe = 700;
-
-  const senkrecht = [];
-  for (let i = 0; i < spalten; i++) {
-    const x = i * abstand + abstand / 2;
-    senkrecht.push({
-      name: `takt-${i}`,
-      pfade: [rechteck(x, 0, strich, hoehe), rechteck(x + strich + steg, 0, strich, hoehe)],
-      deckung: 0.55,
-    });
-  }
-
-  const quer = [];
-  for (let j = 1; j < zeilen; j++) {
-    const y = (hoehe / zeilen) * j;
-    quer.push({
-      name: `quer-${j}`,
-      pfade: [strecke(0, y, breite, y)],
-      strich: true,
-      breite: 1,
-      deckung: 0.28,
-    });
-  }
-
-  return { box: `0 0 ${breite} ${hoehe}`, gruppen: [...quer, ...senkrecht] };
-}
-
-/* --------------------------------------------------------------------------
    Wellenfeld — die Kurve der Ranke, gestapelt
    Das Höhen-zu-Längen-Verhältnis der Ranke gibt die Welle vor. Zwölfmal
    übereinander und jedes Mal ein Stück versetzt: Weinbergzeilen am Hang.
