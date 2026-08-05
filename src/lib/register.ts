@@ -50,12 +50,13 @@ export const register = {
 
   // --- Kontakt --------------------------------------------------------------
   'kontakt/kopf':       {                                                             auftritt: 'kippen'  },
-  'kontakt/direkt':     { zeichen: 'achsengitter',     szene: 'kontakt-achsen',       auftritt: 'spur'    },
+  'kontakt/direkt':     { zeichen: 'leitungsplan',     szene: 'kontakt-leitung',      auftritt: 'spur'    },
   // Ohne eigenes Zeichen: hier schieben sich die beiden Spalten gegeneinander.
   'kontakt/wo':         {                              szene: 'kontakt-parallaxe',    auftritt: 'maske'   },
 
   // --- Links ----------------------------------------------------------------
-  'links/kopf':         {                                                             auftritt: 'schere'  },
+  // Das Schreibheft steht im Seitenkopf: eine Sammlung, die auf Einträge wartet.
+  'links/kopf':         { zeichen: 'achsengitter',                                    auftritt: 'schere'  },
   'links/gruppen':      { zeichen: 'kanten',           szene: 'links-kanten',         auftritt: 'seit'    },
 } as const satisfies Record<string, Vergabe>;
 

@@ -14,6 +14,7 @@ import {
 } from './abgeleitet';
 import { wappen } from './wappen';
 import { jahresband } from './jahresband';
+import { leitungsplan } from './leitungsplan';
 import type { Zeichnung } from './typen';
 
 const bauplan: Record<ZeichenArt, (daten?: any) => Zeichnung> = {
@@ -29,6 +30,7 @@ const bauplan: Record<ZeichenArt, (daten?: any) => Zeichnung> = {
   'kanten': kanten,
   'wappen': wappen,
   'jahresband': jahresband,
+  'leitungsplan': leitungsplan,
 };
 
 /**

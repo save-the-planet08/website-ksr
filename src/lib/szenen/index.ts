@@ -23,7 +23,7 @@ import './termine-band';
 import './rueckblick-netz';
 
 // Kontakt
-import './kontakt-achsen';
+import './kontakt-leitung';
 import './kontakt-parallaxe';
 
 // Links

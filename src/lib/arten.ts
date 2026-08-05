@@ -46,6 +46,7 @@ export const zeichenArten = [
   // gebaut — die zweite Bildwelt, nicht mehr aus dem Logo
   'wappen',         // acht Embleme, eines je Wunsch
   'jahresband',     // das Schuljahr mit den echten Terminen darauf
+  'leitungsplan',   // der Weg einer Nachricht zu den drei Wegen
 ] as const;
 
 export type ZeichenArt = (typeof zeichenArten)[number];
@@ -62,7 +63,7 @@ export const szeneArten = [
   'wuensche-blatt',
   'termine-band',
   'rueckblick-netz',
-  'kontakt-achsen',
+  'kontakt-leitung',
   'kontakt-parallaxe',
   'links-kanten',
 ] as const;

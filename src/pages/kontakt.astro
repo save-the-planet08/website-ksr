@@ -46,7 +46,7 @@ const adresse = 'kontakt@ksr-rtk.de';
   />
 
   <section class="abschnitt direkt" id="direkt" data-szene={direkt.szene}>
-    <div class="direkt__blatt" aria-hidden="true">
+    <div class="direkt__plan" data-plan aria-hidden="true">
       <Zeichen art={direkt.zeichen} praefix="kd" fuellend />
     </div>
 
@@ -122,23 +122,31 @@ const adresse = 'kontakt@ksr-rtk.de';
   /* --- Das Schreibheft hinter der Adresse ------------------------------ */
   .direkt { position: relative; isolation: isolate; overflow: hidden; }
 
-  .direkt__blatt {
+  /* Der Leitungsplan läuft unter dem Text durch zu den drei Karten. Er setzt
+     erst unterhalb der Auszeichnung „Direkt" an — die steht in `--ink-60` und
+     hat keinen Kontrastspielraum. */
+  .direkt__plan {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    /* Erst unterhalb der Auszeichnung „Direkt" — die steht in `--ink-60`
-       und hat keinen Kontrastspielraum. */
-    inset-block: 24% 10%;
+    inset-block: 22% 6%;
     width: 100%;
     max-width: var(--breite);
     padding-inline: var(--rand);
     z-index: -1;
-    opacity: 0.5;
+    opacity: 0.55;
     color: var(--ink);
     pointer-events: none;
   }
-  .direkt__blatt :global(svg) { width: 100%; height: 100%; }
-  @media (max-width: 52rem) { .direkt__blatt { display: none; } }
+  .direkt__plan :global(svg) { width: 100%; height: 100%; }
+
+  /* Der Anschluss zu der Karte, die gerade angefasst wird. */
+  .direkt__plan :global([data-teil^='anschluss-']) {
+    transition: color var(--d-normal) var(--e-aus);
+  }
+  .direkt__plan :global(.ist-an) { color: var(--rebe); }
+
+  @media (max-width: 52rem) { .direkt__plan { display: none; } }
 
   .kontakt { display: grid; gap: var(--r-8); }
   @media (min-width: 62rem) {
