@@ -27,6 +27,6 @@ import './kontakt-leitung';
 import './kontakt-parallaxe';
 
 // Links
-import './links-kanten';
+import './links-aussen';
 
 export {};

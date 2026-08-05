@@ -184,31 +184,3 @@ export function achsengitter(): Zeichnung {
   return { box: `0 0 ${breite} ${hoehe}`, gruppen };
 }
 
-/* --------------------------------------------------------------------------
-   Kanten — der Doppelbalken flach gelegt
-   Dasselbe Paar, um neunzig Grad gedreht und in wechselnder Länge gestapelt.
-   Neben einer Liste von Verweisen liest sich das wie ihre Maße.
-   -------------------------------------------------------------------------- */
-const kantenLaengen = [1, 0.62, 0.84, 0.41, 0.73, 0.95, 0.55, 0.68, 0.36];
-
-export function kanten(): Zeichnung {
-  const strich = 4;
-  const steg = (29 / 9) * strich;
-  const paar = strich * 2 + steg;
-  const abstand = paar * 2.4;
-
-  const breite = 900;
-  const hoehe = abstand * kantenLaengen.length;
-
-  return {
-    box: `0 0 ${breite} ${hoehe}`,
-    gruppen: kantenLaengen.map((anteil, i) => {
-      const y = i * abstand;
-      const l = breite * anteil;
-      return {
-        name: `kante-${i}`,
-        pfade: [rechteck(0, y, l, strich), rechteck(0, y + strich + steg, l, strich)],
-      };
-    }),
-  };
-}

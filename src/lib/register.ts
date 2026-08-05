@@ -57,7 +57,7 @@ export const register = {
   // --- Links ----------------------------------------------------------------
   // Das Schreibheft steht im Seitenkopf: eine Sammlung, die auf Einträge wartet.
   'links/kopf':         { zeichen: 'achsengitter',                                    auftritt: 'schere'  },
-  'links/gruppen':      { zeichen: 'kanten',           szene: 'links-kanten',         auftritt: 'seit'    },
+  'links/gruppen':      { zeichen: 'aussenkanten',     szene: 'links-aussen',         auftritt: 'seit'    },
 } as const satisfies Record<string, Vergabe>;
 
 export type Ort = keyof typeof register;

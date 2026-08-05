@@ -42,11 +42,11 @@ export const zeichenArten = [
   'wellenfeld',     // die Kurve der Ranke, gestapelt
   'konstellation',  // die Streuung der Trauben, über die Fläche gezogen
   'achsengitter',   // die Achsen der Wortmarke als Linienmaß
-  'kanten',         // der Doppelbalken flach gelegt, in wechselnder Länge
   // gebaut — die zweite Bildwelt, nicht mehr aus dem Logo
   'wappen',         // acht Embleme, eines je Wunsch
   'jahresband',     // das Schuljahr mit den echten Terminen darauf
   'leitungsplan',   // der Weg einer Nachricht zu den drei Wegen
+  'aussenkanten',   // eine Kante je Quelle, über den Rand hinaus
 ] as const;
 
 export type ZeichenArt = (typeof zeichenArten)[number];
@@ -65,7 +65,7 @@ export const szeneArten = [
   'rueckblick-netz',
   'kontakt-leitung',
   'kontakt-parallaxe',
-  'links-kanten',
+  'links-aussen',
 ] as const;
 
 export type SzeneArt = (typeof szeneArten)[number];

@@ -1,7 +1,8 @@
 ---
 import Logo from './brand/Logo.astro';
 import { loeweBox, traubenBox, balkenBox } from '../lib/logo';
-import type { AuftrittArt } from '../lib/arten';
+import Zeichen from './brand/Zeichen.astro';
+import type { AuftrittArt, ZeichenArt } from '../lib/arten';
 
 interface Props {
   marke: string;
@@ -14,9 +15,11 @@ interface Props {
    * Seite eine andere — sonst begrüßt einen fünfmal dieselbe Bewegung.
    */
   auftritt?: AuftrittArt;
+  /** Ein Zeichen der zweiten Bildwelt hinter dem Kopf, statt eines Bauteils. */
+  feld?: ZeichenArt;
 }
 
-const { marke, titel, lead, zeichen = 'loewe', auftritt = 'zeile' } = Astro.props;
+const { marke, titel, lead, zeichen = 'loewe', auftritt = 'zeile', feld } = Astro.props;
 
 const felder = {
   loewe: `${loeweBox[0]} ${loeweBox[1]} ${loeweBox[2]} ${loeweBox[3]}`,
@@ -26,6 +29,12 @@ const felder = {
 ---
 
 <header class="seitenkopf">
+  {feld && (
+    <div class="seitenkopf__feld" aria-hidden="true">
+      <Zeichen art={feld} praefix="skf" fuellend />
+    </div>
+  )}
+
   {zeichen !== 'keines' && (
     <div class="seitenkopf__zeichen" aria-hidden="true">
       <Logo teile={[zeichen]} box={felder[zeichen]} praefix="sk" />
@@ -67,6 +76,16 @@ const felder = {
   @media (min-width: 62rem) {
     .seitenkopf__zeichen { right: 3%; opacity: 0.09; }
   }
+
+  /* Das Feld liegt hinter allem und füllt den ganzen Kopf. */
+  .seitenkopf__feld {
+    position: absolute;
+    inset: 0;
+    opacity: 0.14;
+    pointer-events: none;
+    color: var(--paper);
+  }
+  .seitenkopf__feld :global(svg) { width: 100%; height: 100%; }
 
   .seitenkopf__inhalt { position: relative; z-index: 1; }
 

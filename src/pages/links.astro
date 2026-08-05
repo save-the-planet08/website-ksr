@@ -53,6 +53,9 @@ const gruppen = [
     ],
   },
 ];
+
+// Eine Kante je Quelle — kommt eine dazu, kommt eine Kante dazu.
+const quellenZahl = gruppen.reduce((n, g) => n + g.glieder.length, 0);
 ---
 
 <BaseLayout
@@ -66,13 +69,10 @@ const gruppen = [
     lead="Die Sammlung, die wir selbst benutzen. Kurz gehalten — lieber vier Quellen, die stimmen, als vierzig, die niemand prüft."
     zeichen="balken"
     auftritt={kopf.auftritt}
+    feld={kopf.zeichen}
   />
 
   <section class="abschnitt quellen" data-szene={gruppenOrt.szene}>
-    <div class="quellen__mass" aria-hidden="true">
-      <Zeichen art={gruppenOrt.zeichen} praefix="lk" />
-    </div>
-
     <div class="huelle">
       {gruppen.map((g, gi) => (
         <div class="gruppe" id={`gruppe-${gi + 1}`}>
@@ -105,6 +105,12 @@ const gruppen = [
         </div>
       ))}
 
+      <!-- Vier Quellen, vier Kanten. Sie laufen aus dem Bild heraus, weil
+           genau das der Zweck dieser Seite ist. -->
+      <figure class="quellen__mass" data-aussen aria-hidden="true">
+        <Zeichen art={gruppenOrt.zeichen} praefix="lk" daten={quellenZahl} />
+      </figure>
+
       <div class="hinweis" data-auftritt="maske">
         <p>
           <strong>Vor dem Livegang prüfen:</strong> Die Zieladressen sind auf die
@@ -121,19 +127,17 @@ const gruppen = [
   /* --- Die Kanten neben der Sammlung ----------------------------------- */
   .quellen { position: relative; isolation: isolate; overflow: hidden; }
 
-  /* Unten links, wo die Kopfspalte ausläuft — dort ist Platz, und die
-     wechselnden Längen bekommen Raum, überhaupt zu wirken. */
+  /* Die Kanten laufen über den rechten Rand hinaus — der Abschnitt schneidet
+     sie ab, und genau das ist gemeint. Deshalb reicht der Kasten weiter nach
+     rechts als der Inhalt. */
+  /* Vier Quellen, vier Kanten, vier Spitzen nach rechts. Sie enden am rechten
+     Rand der Spalte — weiter hinaus zu laufen hieße, die Spitzen abzuschneiden,
+     und die sind das, was die Richtung zeigt. */
   .quellen__mass {
-    position: absolute;
-    left: var(--rand);
-    bottom: 19%;
-    width: min(38vw, 24rem);
-    z-index: -1;
-    opacity: 0.18;
+    margin-block: var(--r-9) var(--r-8);
     color: var(--ink);
-    pointer-events: none;
   }
-  @media (max-width: 62rem) { .quellen__mass { display: none; } }
+  @media (max-width: 40rem) { .quellen__mass { display: none; } }
 
   .gruppe { padding-block: var(--r-7); border-top: 1px solid var(--linie); }
   .gruppe:first-child { border-top: 0; padding-top: 0; }
