@@ -1,0 +1,93 @@
+---
+/**
+ * Rendert ein Zeichen aus `lib/zeichen`. Geschwister von `Logo.astro`, gleiche
+ * Regel: Größe und Farbe gehören an den Wrapper, nie an die SVG — Astros
+ * Scoping erreicht sie hier nicht, sie trägt den Scope dieser Komponente.
+ *
+ * Jede Gruppe trägt ihren Namen als `data-teil`. Das ist der Griff, an dem die
+ * Szenen sie packen.
+ */
+import { zeichnen } from '../../lib/zeichen';
+import type { ZeichenArt } from '../../lib/arten';
+
+interface Props {
+  art: ZeichenArt;
+  /** Eindeutig je Seite — sonst greifen zwei Masken auf dieselbe ID. */
+  praefix?: string;
+  klasse?: string;
+  /** Seitenverhältnis erhalten (Standard) oder das Feld füllen. */
+  fuellend?: boolean;
+}
+
+const { art, praefix = art, klasse = '', fuellend = false } = Astro.props;
+const { box, gruppen, maske, vorlagen = [] } = zeichnen(art);
+
+const maskenId = maske ? `${praefix}-maske` : undefined;
+const sichtbar = maske ? gruppen.filter((g) => g.name !== maske) : gruppen;
+const maskenGruppe = maske ? gruppen.find((g) => g.name === maske) : undefined;
+---
+
+<svg
+  class={`zeichen zeichen--${art} ${klasse}`}
+  viewBox={box}
+  fill="none"
+  preserveAspectRatio={fuellend ? 'none' : 'xMidYMid meet'}
+  role="presentation"
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  {vorlagen.length > 0 && (
+    <defs>
+      {vorlagen.map((v) => (
+        <g id={`${praefix}-${v.id}`}>
+          {/* Das Merkmal vererbt sich nicht in den Klon — es muss hier stehen. */}
+          {v.pfade.map((d) => <path d={d} vector-effect="non-scaling-stroke" />)}
+        </g>
+      ))}
+    </defs>
+  )}
+
+  {maskenGruppe && (
+    <clipPath id={maskenId}>
+      {(maskenGruppe.pfade ?? []).map((d) => <path d={d} />)}
+    </clipPath>
+  )}
+
+  <g clip-path={maskenId ? `url(#${maskenId})` : undefined}>
+    {sichtbar.map((g) => (
+      <g
+        class={`zeichen__teil ${g.strich ? 'zeichen__teil--strich' : ''}`}
+        data-teil={g.name}
+        transform={g.transform}
+        stroke-width={g.breite}
+        opacity={g.deckung}
+        {...(g.nutzt
+          /* Verweise erben Farbe nur über Attribute — die Regeln im
+             Stylesheet greifen nicht in den geklonten Teilbaum hinein. */
+          ? { fill: g.strich ? 'none' : 'currentColor', stroke: g.strich ? 'currentColor' : 'none' }
+          : {})}
+      >
+        {g.nutzt
+          ? <use href={`#${praefix}-${g.nutzt}`} />
+          : (g.pfade ?? []).map((d) => <path d={d} />)}
+      </g>
+    ))}
+  </g>
+</svg>
+
+<style>
+  .zeichen { width: 100%; height: auto; overflow: visible; }
+
+  .zeichen__teil path {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  .zeichen__teil--strich path {
+    fill: none;
+    stroke: currentColor;
+    vector-effect: non-scaling-stroke;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>

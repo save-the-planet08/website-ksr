@@ -1,0 +1,76 @@
+---
+/**
+ * Musterbogen — nur für die Arbeit an der Seite, nicht verlinkt und nicht
+ * indexiert. Hier stehen alle Zeichen und alle Auftritte nebeneinander: fällt
+ * hier eine Wiederholung auf, fällt sie überall auf.
+ *
+ * Vor dem Livegang löschen.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Zeichen from '../components/brand/Zeichen.astro';
+import { auftrittArten, zeichenArten } from '../lib/arten';
+import { register } from '../lib/register';
+
+const wohin = new Map<string, string>();
+for (const [ort, vergabe] of Object.entries(register)) {
+  if (vergabe.zeichen) wohin.set(vergabe.zeichen, ort);
+}
+
+const probe = 'Schülervertretung ist kein Ehrenamt für Ruhige';
+---
+
+<BaseLayout titel="Musterbogen" aktiv="">
+  <section class="abschnitt">
+    <div class="huelle">
+      <p class="marke">Musterbogen</p>
+      <h1 class="titel-2">Elf Zeichen, sechzehn Auftritte</h1>
+
+      <h2 class="titel-3 kapitel">Zeichen</h2>
+      <ul class="bogen">
+        {zeichenArten.map((art) => (
+          <li class="feld">
+            <div class="feld__bild"><Zeichen art={art} praefix={`m-${art}`} /></div>
+            <p class="marke">{art}</p>
+            <p class="klein">{wohin.get(art) ?? '— nicht vergeben —'}</p>
+          </li>
+        ))}
+      </ul>
+
+      <h2 class="titel-3 kapitel">Auftritte</h2>
+      <ul class="bogen bogen--text">
+        {auftrittArten.map((art) => (
+          <li class="feld">
+            <p class="marke">{art}</p>
+            <p class="titel-3 muster__satz" data-auftritt={art}>
+              {art === 'zaehler' ? '08' : probe}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .kapitel { margin-top: var(--r-9); margin-bottom: var(--r-6); }
+
+  .bogen {
+    display: grid;
+    gap: var(--r-7);
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  }
+  .bogen--text { grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr)); }
+
+  .feld { border-top: 1px solid var(--linie); padding-top: var(--r-4); }
+
+  .feld__bild {
+    display: grid;
+    place-items: center;
+    height: 12rem;
+    margin-bottom: var(--r-4);
+    color: var(--ink);
+  }
+  .feld__bild :global(svg) { max-height: 12rem; width: auto; max-width: 100%; }
+
+  .muster__satz { margin-top: var(--r-3); }
+</style>
