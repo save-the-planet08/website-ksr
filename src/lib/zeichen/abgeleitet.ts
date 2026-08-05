@@ -10,6 +10,12 @@ import * as L from '../logo';
 import {
   anker, konturPfad, kreis, rechteck, strecke, wellenPfad, type Zeichnung,
 } from './typen';
+import { geplottet } from './baukasten';
+
+/* Derselbe Strich wie in der zweiten Bildwelt: eine feste, winzige
+   Unregelmäßigkeit, damit erzeugte Geometrie gezeichnet aussieht. Die fünf
+   Zeichen, die unmittelbar aus dem Logo kommen, bleiben davon unberührt — an
+   der Marke wird nicht gewackelt. */
 
 /* --------------------------------------------------------------------------
    Höhenlinien — aus der Figur wird eine Landschaft
@@ -39,14 +45,14 @@ export function hoehenlinien(): Zeichnung {
       const faktor = 1 - t * 0.88;
       return {
         name: `schicht-${i}`,
-        pfade: [konturPfad(
+        pfade: [geplottet(konturPfad(
           // Jede höhere Linie rückt ein Stück auf den Gipfel zu.
           breite / 2 + (gipfelX - breite / 2) * t,
           hoehe / 2 + (gipfelY - hoehe / 2) * t,
           breite * 0.46 * faktor,
           hoehe * 0.44 * faktor,
           kuppenProfil,
-        )],
+        ), 2.2)],
         strich: true,
         breite: 1.4,
         deckung: 0.35 + t * 0.55,
@@ -76,7 +82,7 @@ export function wellenfeld(): Zeichnung {
       name: `zeile-${i}`,
       // Der Versatz je Zeile ist fest: die Wellen laufen schräg durchs Bild,
       // statt übereinander zu stehen.
-      pfade: [wellenPfad(-laenge, breite + laenge, y, hoehe, laenge, i * 0.11)],
+      pfade: [geplottet(wellenPfad(-laenge, breite + laenge, y, hoehe, laenge, i * 0.11), 1.8)],
       strich: true,
       breite: 1.6,
       deckung: 0.25 + (i / zeilen) * 0.55,
@@ -134,7 +140,7 @@ export function konstellation(): Zeichnung {
   return {
     box: `0 0 ${breite} ${hoehe}`,
     gruppen: [
-      { name: 'wege', pfade: kanten, strich: true, breite: 1, deckung: 0.35 },
+      { name: 'wege', pfade: kanten.map((d) => geplottet(d, 2)), strich: true, breite: 1, deckung: 0.35 },
       { name: 'orte', pfade: punkte.map(([x, y, r]) => kreis(x, y, r)) },
     ],
   };
@@ -170,6 +176,7 @@ export function achsengitter(): Zeichnung {
       deckung: 0.4,
     });
   }
+  for (const g of gruppen) g.pfade = (g.pfade ?? []).map((d) => geplottet(d, 2.4));
 
   // Die senkrechten Achsen sitzen dort, wo im Logo die drei Buchstaben stehen.
   const stiele = L.wortmarke.map(anker).map(([x]) => (x - wx) * masstab);

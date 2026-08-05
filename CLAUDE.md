@@ -6,9 +6,10 @@ Einstiegspunkt: wer hier arbeitet, hält sich daran.
 ## Die Idee in einem Satz
 
 Das Logo zerfällt beim Scrollen in seine Bauteile — jedes Bauteil trägt eine
-Sektion — im Fuß setzt es sich wieder zusammen. Alles Sichtbare kommt aus
-diesem einen Zeichen oder ist nachweisbar daraus abgeleitet. **Es gibt keine
-Fotos auf dieser Seite.** Das ist eine Entscheidung, kein Zwischenstand.
+Sektion — im Fuß setzt es sich wieder zusammen. **Das Logo ist der Kern der
+Seite, nicht ihre Grenze.** Was darüber hinausgeht, ist trotzdem gezeichnet:
+**es gibt keine Fotos auf dieser Seite.** Das ist eine Entscheidung, kein
+Zwischenstand.
 
 Dazu die zweite Regel: **kein Abschnitt bewegt sich wie ein anderer, und kein
 Zeichen kommt zweimal vor.** Die Seite ist bei jedem Öffnen dieselbe — das ist
@@ -20,17 +21,50 @@ Die vier Bauteile und wofür sie stehen:
 
 | Bauteil | Steht für | Trägt |
 |---|---|---|
-| Löwe (Hessen) | Haltung, Stimme | Startseite „Haltung", `/der-rat` |
+| Löwe (Hessen) | Haltung, Stimme | Startseite „Haltung", Seitenköpfe |
 | Doppelbalken | Gliederung, Raster | Die acht Wünsche, Listen, Aufzählungen |
 | Rebe + Trauben | Herkunft, der Kreis | Startseite „Der Kreis", `/termine` |
-| Wortmarke | die Marke selbst | Kopf, Fuß |
+| Wortmarke | die Marke selbst | Kopf, Fuß, `/der-rat` |
 
-Aus diesen vier Bauteilen sind elf **Zeichen** gebaut (`src/lib/zeichen/`):
-fünf unmittelbar aus dem Logo, sechs nach seinen Maßen abgeleitet — die
-Proportionen des Löwen werden zu Höhenlinien, der Rhythmus des Doppelbalkens zu
-einem Raster, die Kurve der Ranke zu einem Wellenfeld, die Streuung der Trauben
-zu einer Konstellation, die Achsen der Wortmarke zu einem Linienmaß. Neue
-Formen, dieselbe Handschrift.
+## Die Bildwelt
+
+Dreizehn **Zeichen** in `src/lib/zeichen/`, in drei Schichten:
+
+**Aus dem Zeichen** (5) — die Logo-Pfade selbst, anders verarbeitet: der Löwe
+als Schnittmaske, der Doppelbalken als Partitur, die Rebe im Wachstum, die
+Trauben als Netz, die Wortmarke als Kontur.
+
+**Abgeleitet** (4) — neue Formen nach den Maßen des Logos: die Proportionen des
+Löwen werden zu Höhenlinien, die Kurve der Ranke zu einem Wellenfeld, die
+Streuung der Trauben zu einer Konstellation, die Achsen der Wortmarke zu einem
+Linienmaß.
+
+**Gebaut** (4) — aus einem eigenen Baukasten (`zeichen/baukasten.ts`: Ring,
+Bogen, Kerbe, Knoten, Achse, geführte Leitung, Pfeilspitze), und sie zeigen
+etwas, statt zu schmücken:
+
+| Zeichen | Wo | Was es zeigt |
+|---|---|---|
+| `wappen` | `/wuensche` | Acht Embleme, eines je Wunsch — acht Kompositionen aus demselben Baukasten |
+| `jahresband` | `/termine` | Das Schuljahr mit den **echten** Terminen aus `src/content/termine/` |
+| `leitungsplan` | `/kontakt` | Drei Leitungen zu den drei Wegen, mit Signal darauf |
+| `aussenkanten` | `/links` | Eine Kante je Quelle, nach draußen zeigend |
+
+**Die Regel für neue Zeichen:** gebaut statt gemalt, ein Strich (1,4 px,
+`non-scaling-stroke`), genau ein `--rebe`-Akzent je Bild, nichts Gewürfeltes.
+Alles folgt aus Daten oder aus einer festen Tabelle — zweimal Bauen ergibt
+zweimal dasselbe.
+
+**Der Strich:** `geplottet()` legt eine feste, winzige Unregelmäßigkeit auf
+jeden Stützpunkt. Erzeugte Geometrie ist zu genau; ein perfekter Kreis sieht
+nach Maschine aus. Angewandt auf alle abgeleiteten und gebauten Zeichen — nie
+auf die fünf aus dem Logo. An der Marke wird nicht gewackelt.
+
+**Am wichtigsten:** ein Zeichen, das nichts zeigt, ist Tapete. Das Jahresband
+ändert sich, wenn ein Termin dazukommt; die Außenkanten zählen die Quellen.
+Wer ein neues Zeichen baut, ohne dass es an etwas hängt, baut ein Muster —
+und Muster sind hier schon zweimal wieder rausgeflogen (`taktraster`,
+`kanten`).
 
 ## Stack
 
@@ -52,9 +86,13 @@ src/lib/register.ts    Wer bekommt was — plus der Wächter gegen Doppelvergabe
 src/lib/auftritt.ts    Sechzehn Arten, wie ein Element ins Bild kommt
 src/lib/szene.ts       Registry für alles, was am Scrollrad hängt
 src/lib/szenen/        Eine Datei je Szene, eine Szene je Abschnitt
-src/lib/zeichen/       Elf Generatoren, laufen beim Bauen (kein Laufzeit-JS)
+src/lib/zeichen/       Dreizehn Generatoren, laufen beim Bauen (kein Laufzeit-JS)
+  ausDemZeichen.ts       die fünf aus den Logo-Pfaden
+  abgeleitet.ts          die vier nach den Maßen des Logos
+  baukasten.ts           Grundformen der zweiten Bildwelt + geplottet()
+  wappen.ts, jahresband.ts, leitungsplan.ts, aussenkanten.ts
 src/lib/scroll.ts      Der eine Scroll-Motor
-src/components/brand/  Logo.astro (Bauteile) + Zeichen.astro (die elf Zeichen)
+src/components/brand/  Logo.astro (Bauteile) + Zeichen.astro (alle Zeichen)
 src/data/wuensche.ts   Die acht Wünsche, einzige Quelle
 src/content/termine/   Eine Datei pro Termin
 src/styles/            tokens.css (Variablen) + global.css (Basis)
@@ -103,8 +141,8 @@ Ein Abschnitt sieht damit so aus: er holt sich seine Vergabe im Frontmatter
   `prefers-reduced-motion` schaltet auf statische Endzustände.
 - **Performance:** muss auf Schul-WLAN laufen. Die Zeichen werden beim Bauen
   erzeugt und stehen als SVG im HTML — kein zusätzliches Skript, kein
-  Nachladen, kein Springen. Kein Zeichen über 12 kB Markup; die ganze Bildwelt
-  wiegt gepackt unter 9 kB je Seite.
+  Nachladen, kein Springen. Kein Zeichen über 12 kB Markup; gepackt kostet
+  die Bildwelt zwischen 0,4 und 8,7 kB je Seite.
 - **Recht:** Impressum und Datenschutz sind Pflicht. Beide enthalten aktuell
   markierte Lücken (`.hinweis`), die vor dem Livegang gefüllt werden müssen.
 - **Pflegbarkeit:** Termine und Wünsche ändert man in Textdateien, nicht im
