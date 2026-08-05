@@ -126,7 +126,9 @@ const adresse = 'kontakt@ksr-rtk.de';
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    inset-block: 10%;
+    /* Erst unterhalb der Auszeichnung „Direkt" — die steht in `--ink-60`
+       und hat keinen Kontrastspielraum. */
+    inset-block: 24% 10%;
     width: 100%;
     max-width: var(--breite);
     padding-inline: var(--rand);

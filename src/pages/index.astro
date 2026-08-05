@@ -406,7 +406,7 @@ const aufruf = ort('start/aufruf');
   .saeule__nr {
     font-size: var(--t-micro);
     letter-spacing: var(--sperr-weiter);
-    color: rgba(244, 241, 234, 0.45);
+    color: rgba(244, 241, 234, 0.62);
   }
 
   .saeule__titel {
@@ -446,7 +446,10 @@ const aufruf = ort('start/aufruf');
     bottom: 14%;
     width: 100%;
     max-width: var(--breite);
-    padding-inline: var(--rand);
+    /* Rechts der Kurzzeile: `--ink-60` steht auf Papier bei 4,7:1 und hat
+       damit keinen Spielraum — jedes Ornament dahinter drückt ihn unter AA.
+       Große Titel und die Pfeile vertragen es, die Kurzzeile nicht. */
+    padding-inline: 50% var(--rand);
     z-index: -1;
     opacity: 0.16;
     color: var(--ink);

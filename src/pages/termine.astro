@@ -147,7 +147,9 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
     bottom: 8%;
     width: 100%;
     max-width: var(--breite);
-    padding-inline: var(--rand);
+    /* Rechts vom Text: kleine Auszeichnungen stehen in `--ink-60` und
+       vertragen kein Ornament hinter sich. */
+    padding-inline: 46% var(--rand);
     z-index: -1;
     opacity: 0.28;
     color: var(--ink);
