@@ -17,13 +17,22 @@ szeneAnmelden('kreis-wachstum', (wurzel) => {
   zugVorbereiten(ranke);
   gsap.set(trauben, { opacity: 0, scale: 0.2, transformOrigin: 'center', transformBox: 'fill-box' });
 
-  strecke(wurzel, 'top 78%', 'bottom 55%')
-    .to(ranke, { strokeDashoffset: 0, ease: 'none' }, 0)
-    .to(ranke, { fillOpacity: 1, duration: 0.25 }, 0.7)
+  /* Getaktet wird an der Bühne, nicht am Abschnitt. Der Abschnitt reicht bis
+     unter die drei Karten — wer ihn als Strecke nimmt, lässt die Beeren erst
+     dann ankommen, wenn die Rebe längst oben aus dem Bild gescrollt ist. */
+  const buehne = wurzel.querySelector<HTMLElement>('.kreis__buehne') ?? wurzel;
+
+  strecke(buehne, 'top 88%', 'bottom 62%')
+    // Die Rebe zieht sich über die erste Hälfte der Strecke …
+    .to(ranke, { strokeDashoffset: 0, duration: 0.5, ease: 'none' }, 0)
+    .to(ranke, { fillOpacity: 1, duration: 0.16 }, 0.44)
+    // … und die Beeren sitzen bei knapp vier Fünfteln. Der Rest der Strecke
+    // ist Luft, damit das fertige Bild einen Moment lang steht.
     .to(trauben, {
       opacity: 1,
       scale: 1,
+      duration: 0.28,
       ease: 'back.out(2)',
-      stagger: { each: 0.02, from: 'start' },
-    }, 0.35);
+      stagger: { each: 0.011, from: 'start' },
+    }, 0.3);
 });
