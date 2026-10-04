@@ -143,8 +143,8 @@ Ein Abschnitt sieht damit so aus: er holt sich seine Vergabe im Frontmatter
   erzeugt und stehen als SVG im HTML — kein zusätzliches Skript, kein
   Nachladen, kein Springen. Kein Zeichen über 12 kB Markup; gepackt kostet
   die Bildwelt zwischen 0,4 und 8,7 kB je Seite.
-- **Recht:** Impressum und Datenschutz sind Pflicht. Beide enthalten aktuell
-  markierte Lücken (`.hinweis`), die vor dem Livegang gefüllt werden müssen.
+- **Recht:** Impressum und Datenschutz sind Pflicht. Der Datenschutz enthält aktuell
+  eine markierte Lücke (`.hinweis`), die vor dem Livegang gefüllt werden muss.
 - **Pflegbarkeit:** Termine und Wünsche ändert man in Textdateien, nicht im
   Code.
 
@@ -155,8 +155,6 @@ Alles davon steht als `.hinweis`-Kasten auf der jeweiligen Seite:
 - Eigene E-Mail-Adresse des KSR (die alte gehört dem Kreiselternbeirat und
   wurde bewusst entfernt). Platzhalter in `src/pages/kontakt.astro` und
   `src/components/Kopf.astro`.
-- Impressum: ladungsfähige Anschrift und die nach § 18 Abs. 2 MStV
-  verantwortliche Person.
 - Datenschutz: Hosting-Anbieter und Speicherdauer der Logfiles.
 - Aktuelle Termine (die vorhandenen stammen aus dem Altbestand).
 - Vorstand und Mitgliedsschulen, sobald der Vorstand konstituiert ist.
