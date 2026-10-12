@@ -46,7 +46,7 @@ etwas, statt zu schmücken:
 | Zeichen | Wo | Was es zeigt |
 |---|---|---|
 | `wappen` | `/wuensche` | Acht Embleme, eines je Wunsch — acht Kompositionen aus demselben Baukasten |
-| `jahresband` | `/termine` | Das Schuljahr mit den **echten** Terminen aus `src/content/termine/` |
+| `jahresband` | `/termine` | Das Schuljahr mit den **echten** Terminen aus Supabase |
 | `leitungsplan` | `/kontakt` | Drei Leitungen zu den drei Wegen, mit Signal darauf |
 | `aussenkanten` | `/links` | Eine Kante je Quelle, nach draußen zeigend |
 
@@ -73,6 +73,10 @@ und Muster sind hier schon zweimal wieder rausgeflogen (`taktraster`,
   und das braucht beides. Die alte Regel „nur auf der Startseite" stimmte schon
   vor dieser Arbeit nicht mehr.
 - **Lenis** für weiches Scrollen, einmalig in `src/lib/scroll.ts`.
+- **Supabase** (Frankfurt) für News und Termine. Die öffentlichen Seiten holen
+  die Daten **beim Bauen** über Content-Loader — Besucher sprechen nie mit
+  Supabase. Nur `/admin` lädt den Client. Neue Einträge erscheinen erst nach
+  einem Neubau (lokal: Dev-Server neu starten).
 - **Archivo Variable** als einzige Schrift, selbst gehostet über
   `@fontsource-variable/archivo`. Hierarchie über `wght` und `wdth`, nie über
   eine zweite Familie.
@@ -94,7 +98,11 @@ src/lib/zeichen/       Dreizehn Generatoren, laufen beim Bauen (kein Laufzeit-JS
 src/lib/scroll.ts      Der eine Scroll-Motor
 src/components/brand/  Logo.astro (Bauteile) + Zeichen.astro (alle Zeichen)
 src/data/wuensche.ts   Die acht Wünsche, einzige Quelle
-src/content/termine/   Eine Datei pro Termin
+src/content/config.ts  Termine und News aus Supabase (veröffentlichte Einträge)
+src/lib/supabase.ts    Der Client; URL und Schlüssel aus `.env`
+src/pages/admin.astro  Redaktion: Login, News und Termine pflegen
+supabase/schema.sql    Tabellen und Zugriffsregeln — Lesen nur Veröffentlichtes,
+                       Schreiben nur, wer in `admins` steht
 src/styles/            tokens.css (Variablen) + global.css (Basis)
 brand/                 Quellmaterial des Logos, nicht ausgeliefert
 ```
@@ -145,8 +153,8 @@ Ein Abschnitt sieht damit so aus: er holt sich seine Vergabe im Frontmatter
   die Bildwelt zwischen 0,4 und 8,7 kB je Seite.
 - **Recht:** Impressum und Datenschutz sind Pflicht. Der Datenschutz enthält aktuell
   eine markierte Lücke (`.hinweis`), die vor dem Livegang gefüllt werden muss.
-- **Pflegbarkeit:** Termine und Wünsche ändert man in Textdateien, nicht im
-  Code.
+- **Pflegbarkeit:** News und Termine pflegt die Redaktion unter `/admin`.
+  Die Wünsche stehen in `src/data/wuensche.ts`.
 
 ## Offen vor dem Livegang
 
@@ -156,7 +164,8 @@ Alles davon steht als `.hinweis`-Kasten auf der jeweiligen Seite:
   wurde bewusst entfernt). Platzhalter in `src/pages/kontakt.astro` und
   `src/components/Kopf.astro`.
 - Datenschutz: Hosting-Anbieter und Speicherdauer der Logfiles.
-- Aktuelle Termine (die vorhandenen stammen aus dem Altbestand).
+- Hoster festlegen und einen Supabase-Webhook anlegen, der nach dem
+  Speichern in `/admin` einen Neubau auslöst.
 - Vorstand und Mitgliedsschulen, sobald der Vorstand konstituiert ist.
 - `src/pages/muster.astro` löschen. Der Musterbogen zeigt alle elf Zeichen und
   alle sechzehn Auftritte nebeneinander — nützlich beim Bauen, hat auf der
