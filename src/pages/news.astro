@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import { getCollection } from 'astro:content';
+
+const beitraege = (await getCollection('news')).sort(
+  (a, b) => b.data.datum.valueOf() - a.data.datum.valueOf(),
+);
+
+const datum = (d: Date) =>
+  d.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
+
+// Reiner Text aus dem Admin-Bereich; Leerzeilen trennen Absätze.
+const absaetze = (text: string) => text.split(/\n\s*\n/).map((a) => a.trim()).filter(Boolean);
+---
+
+<BaseLayout
+  titel="News"
+  beschreibung="Neuigkeiten aus dem Kreisschülerrat Rheingau-Taunus-Kreis."
+  aktiv="news"
+>
+  <Seitenkopf marke="News" titel="Was gerade passiert." zeichen="keines" />
+
+  <section class="abschnitt">
+    <div class="huelle">
+      {beitraege.length === 0 ? (
+        <p class="fliess">Noch keine Beiträge. Schau bald wieder rein.</p>
+      ) : (
+        <ol class="beitraege">
+          {beitraege.map((b) => (
+            <li class="beitrag prosa" data-auftritt="hoch">
+              <p class="marke">
+                <time datetime={b.data.datum.toISOString().slice(0, 10)}>{datum(b.data.datum)}</time>
+              </p>
+              <h2>{b.data.titel}</h2>
+              {absaetze(b.data.text).map((a) => <p>{a}</p>)}
+            </li>
+          ))}
+        </ol>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .beitraege { display: grid; gap: var(--r-8); }
+  .beitrag h2 { margin-top: var(--r-3); border-top: 0; padding-top: 0; }
+  .beitrag p { white-space: pre-line; }
+</style>

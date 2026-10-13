@@ -1,0 +1,426 @@
+---
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin — KSR Rheingau-Taunus-Kreis</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+</head>
+
+<body>
+  <main class="admin">
+    <header class="admin__kopf">
+      <p class="marke">KSR · Redaktion</p>
+      <button type="button" class="admin__abmelden" data-abmelden hidden>Abmelden</button>
+    </header>
+
+    <section data-ansicht="login" hidden>
+      <h1 class="admin__titel">Anmelden</h1>
+      <form class="formular" data-login>
+        <label>E-Mail <input type="email" name="email" autocomplete="username" required /></label>
+        <label>Passwort <input type="password" name="passwort" autocomplete="current-password" required /></label>
+        <button type="submit" class="knopf">Anmelden</button>
+      </form>
+    </section>
+
+    <section data-ansicht="kein-admin" hidden>
+      <h1 class="admin__titel">Kein Zugang</h1>
+      <p class="fliess">Dieses Konto ist angemeldet, steht aber nicht in der Liste der Admins.</p>
+    </section>
+
+    <section data-ansicht="redaktion" hidden>
+      <div class="reiter" role="group" aria-label="Bereich">
+        <button type="button" data-reiter="news" aria-pressed="true">News</button>
+        <button type="button" data-reiter="termine" aria-pressed="false">Termine</button>
+      </div>
+
+      <p class="klein admin__hinweis">
+        Gespeichertes erscheint auf der Website erst nach dem nächsten Neubau der Seite —
+        und nur, wenn „Veröffentlicht" angehakt ist.
+      </p>
+
+      <div class="admin__leiste">
+        <h1 class="admin__titel" data-bereichstitel>News</h1>
+        <button type="button" class="knopf" data-neu>Neu</button>
+      </div>
+
+      <form class="formular" data-eintrag hidden></form>
+      <ul class="eintraege" data-liste></ul>
+    </section>
+
+    <p class="admin__meldung" role="status" aria-live="polite" data-meldung></p>
+  </main>
+
+  <script>
+    import { supabase } from '../lib/supabase';
+
+    type Tabelle = 'news' | 'termine';
+    type Eintrag = Record<string, string | boolean | null>;
+    type Feld = {
+      name: string;
+      label: string;
+      art: 'text' | 'date' | 'textarea' | 'checkbox' | 'select';
+      pflicht?: boolean;
+      max?: number;
+      optionen?: [string, string][];
+    };
+
+    const felder: Record<Tabelle, Feld[]> = {
+      news: [
+        { name: 'titel', label: 'Titel', art: 'text', pflicht: true, max: 200 },
+        { name: 'datum', label: 'Datum', art: 'date', pflicht: true },
+        { name: 'text', label: 'Text (Leerzeile = neuer Absatz)', art: 'textarea', pflicht: true, max: 20000 },
+        { name: 'veroeffentlicht', label: 'Veröffentlicht', art: 'checkbox' },
+      ],
+      termine: [
+        { name: 'titel', label: 'Titel', art: 'text', pflicht: true, max: 200 },
+        { name: 'datum', label: 'Datum', art: 'date', pflicht: true },
+        { name: 'uhrzeit', label: 'Uhrzeit (z. B. 17:00 Uhr)', art: 'text', max: 40 },
+        { name: 'ort', label: 'Ort', art: 'text', max: 200 },
+        {
+          name: 'art', label: 'Art', art: 'select',
+          optionen: [['sitzung', 'Sitzung'], ['event', 'Veranstaltung'], ['workshop', 'Werkstatt'], ['treffen', 'Treffen']],
+        },
+        { name: 'beschreibung', label: 'Beschreibung', art: 'textarea', pflicht: true, max: 5000 },
+        { name: 'veroeffentlicht', label: 'Veröffentlicht', art: 'checkbox' },
+      ],
+    };
+
+    const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
+    const ansichten = document.querySelectorAll<HTMLElement>('[data-ansicht]');
+    const meldung = $('[data-meldung]');
+    const liste = $<HTMLUListElement>('[data-liste]');
+    const formular = $<HTMLFormElement>('[data-eintrag]');
+    const abmelden = $<HTMLButtonElement>('[data-abmelden]');
+
+    let tabelle: Tabelle = 'news';
+    let bearbeitet: string | null = null;
+
+    function zeige(name: string) {
+      ansichten.forEach((a) => (a.hidden = a.dataset.ansicht !== name));
+      abmelden.hidden = name === 'login';
+    }
+
+    function melde(text: string, fehler = false) {
+      meldung.textContent = text;
+      meldung.classList.toggle('ist-fehler', fehler);
+    }
+
+    async function starten() {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) return zeige('login');
+      const { data: istAdmin, error } = await supabase.rpc('ist_admin');
+      if (error) return melde(`Fehler: ${error.message}`, true);
+      if (!istAdmin) return zeige('kein-admin');
+      zeige('redaktion');
+      await laden();
+    }
+
+    async function laden() {
+      formular.hidden = true;
+      $('[data-bereichstitel]').textContent = tabelle === 'news' ? 'News' : 'Termine';
+      const { data, error } = await supabase.from(tabelle).select('*').order('datum', { ascending: false });
+      if (error) return melde(`Laden fehlgeschlagen: ${error.message}`, true);
+      liste.replaceChildren(...(data as Eintrag[]).map(zeile));
+      if (data.length === 0) {
+        const leer = document.createElement('li');
+        leer.className = 'klein';
+        leer.textContent = 'Noch keine Einträge.';
+        liste.append(leer);
+      }
+    }
+
+    function zeile(e: Eintrag) {
+      const li = document.createElement('li');
+      li.className = 'eintrag';
+
+      const text = document.createElement('div');
+      const titel = document.createElement('strong');
+      titel.textContent = String(e.titel);
+      const info = document.createElement('span');
+      info.className = 'klein';
+      const datum = new Date(String(e.datum)).toLocaleDateString('de-DE');
+      info.textContent = `${datum} · ${e.veroeffentlicht ? 'veröffentlicht' : 'Entwurf'}`;
+      text.append(titel, info);
+
+      const bearbeiten = document.createElement('button');
+      bearbeiten.type = 'button';
+      bearbeiten.textContent = 'Bearbeiten';
+      bearbeiten.addEventListener('click', () => oeffnen(e));
+
+      // Löschen braucht einen zweiten Klick — Dialoge gibt es hier bewusst nicht.
+      const loeschen = document.createElement('button');
+      loeschen.type = 'button';
+      loeschen.textContent = 'Löschen';
+      loeschen.addEventListener('click', async () => {
+        if (loeschen.dataset.sicher !== 'ja') {
+          loeschen.dataset.sicher = 'ja';
+          loeschen.textContent = 'Wirklich löschen?';
+          return;
+        }
+        const { error } = await supabase.from(tabelle).delete().eq('id', String(e.id));
+        if (error) return melde(`Löschen fehlgeschlagen: ${error.message}`, true);
+        melde('Gelöscht.');
+        await laden();
+      });
+
+      li.append(text, bearbeiten, loeschen);
+      return li;
+    }
+
+    function oeffnen(e: Eintrag | null) {
+      bearbeitet = e ? String(e.id) : null;
+      const heute = new Date().toISOString().slice(0, 10);
+
+      const elemente = felder[tabelle].map((f) => {
+        const label = document.createElement('label');
+        let eingabe: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+        const wert = e?.[f.name];
+
+        if (f.art === 'textarea') {
+          eingabe = document.createElement('textarea');
+          eingabe.rows = 8;
+          eingabe.value = String(wert ?? '');
+        } else if (f.art === 'select') {
+          eingabe = document.createElement('select');
+          for (const [w, l] of f.optionen!) eingabe.add(new Option(l, w));
+          eingabe.value = String(wert ?? 'treffen');
+        } else {
+          eingabe = document.createElement('input');
+          eingabe.type = f.art;
+          if (f.art === 'checkbox') {
+            eingabe.checked = Boolean(wert);
+            eingabe.name = f.name;
+            return veroeffentlichen(label, eingabe);
+          } else {
+            eingabe.value = String(wert ?? (f.art === 'date' ? heute : ''));
+          }
+        }
+
+        eingabe.name = f.name;
+        if (f.pflicht) eingabe.required = true;
+        if (f.max && !(eingabe instanceof HTMLSelectElement)) eingabe.maxLength = f.max;
+        label.append(f.label + ' ', eingabe);
+        return label;
+      });
+
+      const speichern = document.createElement('button');
+      speichern.type = 'submit';
+      speichern.className = 'knopf';
+      speichern.textContent = 'Speichern';
+      const abbrechen = document.createElement('button');
+      abbrechen.type = 'button';
+      abbrechen.textContent = 'Abbrechen';
+      abbrechen.addEventListener('click', () => (formular.hidden = true));
+      const knoepfe = document.createElement('div');
+      knoepfe.className = 'formular__knoepfe';
+      knoepfe.append(speichern, abbrechen);
+
+      formular.replaceChildren(...elemente, knoepfe);
+      formular.hidden = false;
+      formular.querySelector<HTMLElement>('input, textarea')?.focus();
+    }
+
+    // Der Haken entscheidet, ob etwas öffentlich wird — er bekommt eine eigene
+    // Fläche, die ihren Zustand in Worten sagt, statt eines kleinen Kästchens.
+    function veroeffentlichen(label: HTMLLabelElement, eingabe: HTMLInputElement) {
+      label.className = 'haken';
+      const titel = document.createElement('strong');
+      const erklaerung = document.createElement('span');
+      const text = document.createElement('span');
+      text.className = 'haken__text';
+      text.append(titel, erklaerung);
+
+      const aktualisieren = () => {
+        label.classList.toggle('ist-an', eingabe.checked);
+        titel.textContent = eingabe.checked ? 'Wird veröffentlicht' : 'Entwurf — nicht öffentlich';
+        erklaerung.textContent = eingabe.checked
+          ? 'Erscheint nach dem nächsten Neubau auf der Website.'
+          : 'Nur hier im Admin-Bereich sichtbar. Haken setzen, um zu veröffentlichen.';
+      };
+      eingabe.addEventListener('change', aktualisieren);
+      aktualisieren();
+
+      label.append(eingabe, text);
+      return label;
+    }
+
+    formular.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const daten = new FormData(formular);
+      const zeile: Eintrag = {};
+      for (const f of felder[tabelle]) {
+        if (f.art === 'checkbox') zeile[f.name] = daten.has(f.name);
+        else zeile[f.name] = String(daten.get(f.name) ?? '').trim() || null;
+      }
+
+      const anfrage = bearbeitet
+        ? supabase.from(tabelle).update(zeile).eq('id', bearbeitet)
+        : supabase.from(tabelle).insert(zeile);
+      const { error } = await anfrage;
+      if (error) return melde(`Speichern fehlgeschlagen: ${error.message}`, true);
+      melde('Gespeichert.');
+      await laden();
+    });
+
+    $('[data-login]').addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const daten = new FormData(ev.currentTarget as HTMLFormElement);
+      const { error } = await supabase.auth.signInWithPassword({
+        email: String(daten.get('email')),
+        password: String(daten.get('passwort')),
+      });
+      if (error) return melde('Anmeldung fehlgeschlagen. E-Mail oder Passwort stimmen nicht.', true);
+      melde('');
+      await starten();
+    });
+
+    abmelden.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      melde('Abgemeldet.');
+      zeige('login');
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-reiter]').forEach((knopf) =>
+      knopf.addEventListener('click', async () => {
+        tabelle = knopf.dataset.reiter as Tabelle;
+        document.querySelectorAll('[data-reiter]').forEach((k) =>
+          k.setAttribute('aria-pressed', String(k === knopf)),
+        );
+        melde('');
+        await laden();
+      }),
+    );
+
+    $('[data-neu]').addEventListener('click', () => oeffnen(null));
+
+    starten();
+  </script>
+</body>
+</html>
+
+<style>
+  .admin {
+    max-width: var(--breite-eng);
+    margin-inline: auto;
+    padding: var(--r-6) var(--rand) var(--r-9);
+  }
+
+  .admin__kopf {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--r-4);
+    margin-bottom: var(--r-6);
+    border-bottom: 1px solid var(--linie);
+  }
+
+  .admin__titel {
+    font-size: var(--t-h3);
+    font-variation-settings: 'wght' 700, 'wdth' 92;
+    letter-spacing: var(--sperr-titel);
+    line-height: 1.1;
+  }
+
+  .admin__leiste {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--r-4);
+    margin-block: var(--r-5);
+  }
+
+  .admin__hinweis { color: var(--ink-80); margin-top: var(--r-4); }
+
+  .admin__meldung { margin-top: var(--r-5); font-size: var(--t-klein); min-height: 1.5em; }
+  .admin__meldung.ist-fehler { color: var(--rebe); }
+
+  .reiter { display: flex; gap: var(--r-2); }
+  .reiter button,
+  .eintrag button,
+  .admin__abmelden,
+  .formular__knoepfe button[type='button'] {
+    font: inherit;
+    font-size: var(--t-klein);
+    padding: var(--r-2) var(--r-4);
+    border: 1px solid var(--linie-stark);
+    background: var(--paper-pure);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .reiter button[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .formular {
+    display: grid;
+    gap: var(--r-4);
+    padding: var(--r-5);
+    margin-bottom: var(--r-6);
+    border: 1px solid var(--linie);
+    background: var(--paper-pure);
+  }
+  /* `display: grid` schlägt sonst das hidden-Attribut — dann bleibt beim
+     Reiterwechsel das Formular der anderen Tabelle stehen. */
+  .formular[hidden] { display: none; }
+  .formular :global(label) { display: grid; gap: var(--r-1); font-size: var(--t-klein); color: var(--ink-80); }
+  .formular :global(input:not([type='checkbox'])),
+  .formular :global(textarea),
+  .formular :global(select) {
+    font: inherit;
+    font-size: var(--t-basis);
+    color: var(--ink);
+    padding: var(--r-2) var(--r-3);
+    border: 1px solid var(--linie-stark);
+    background: var(--paper);
+    width: 100%;
+  }
+  .formular :global(.haken) {
+    display: flex;
+    align-items: center;
+    gap: var(--r-4);
+    padding: var(--r-4) var(--r-5);
+    border: 2px solid var(--linie-stark);
+    background: var(--paper);
+    cursor: pointer;
+    transition: border-color var(--d-schnell), background-color var(--d-schnell);
+  }
+  .formular :global(.haken.ist-an) { border-color: var(--rebe); background: rgba(107, 27, 50, 0.06); }
+  .formular :global(.haken input) {
+    width: 1.75rem;
+    height: 1.75rem;
+    flex: none;
+    accent-color: var(--rebe);
+    cursor: pointer;
+  }
+  .formular :global(.haken:has(input:focus-visible)) { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .formular :global(.haken__text) { display: grid; gap: var(--r-1); }
+  .formular :global(.haken__text strong) {
+    font-size: var(--t-basis);
+    font-variation-settings: 'wght' 650, 'wdth' 100;
+    color: var(--ink);
+  }
+  .formular :global(.haken.ist-an .haken__text strong) { color: var(--rebe); }
+  .formular :global(.haken__text span) { font-size: var(--t-klein); color: var(--ink-80); }
+  .formular :global(.formular__knoepfe) { display: flex; gap: var(--r-3); align-items: center; }
+
+  .eintraege { display: grid; gap: var(--r-2); }
+  .eintraege :global(.eintrag) {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: var(--r-3);
+    align-items: center;
+    padding: var(--r-4);
+    border: 1px solid var(--linie);
+    background: var(--paper-pure);
+  }
+  .eintraege :global(.eintrag div) { display: grid; gap: var(--r-1); min-width: 0; }
+
+  @media (max-width: 30rem) {
+    .eintraege :global(.eintrag) { grid-template-columns: 1fr 1fr; }
+    .eintraege :global(.eintrag div) { grid-column: 1 / -1; }
+  }
+</style>
