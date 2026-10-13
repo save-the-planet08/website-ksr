@@ -1,11 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Seitenkopf from '../components/Seitenkopf.astro';
-import { getCollection } from 'astro:content';
+import { newsHolen, zwischenspeichern } from '../lib/inhalte';
 
-const beitraege = (await getCollection('news')).sort(
-  (a, b) => b.data.datum.valueOf() - a.data.datum.valueOf(),
-);
+export const prerender = false;
+zwischenspeichern(Astro.response.headers);
+
+const beitraege = await newsHolen();
 
 const datum = (d: Date) =>
   d.toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -30,10 +31,10 @@ const absaetze = (text: string) => text.split(/\n\s*\n/).map((a) => a.trim()).fi
           {beitraege.map((b) => (
             <li class="beitrag prosa" data-auftritt="hoch">
               <p class="marke">
-                <time datetime={b.data.datum.toISOString().slice(0, 10)}>{datum(b.data.datum)}</time>
+                <time datetime={b.datum.toISOString().slice(0, 10)}>{datum(b.datum)}</time>
               </p>
-              <h2>{b.data.titel}</h2>
-              {absaetze(b.data.text).map((a) => <p>{a}</p>)}
+              <h2>{b.titel}</h2>
+              {absaetze(b.text).map((a) => <p>{a}</p>)}
             </li>
           ))}
         </ol>

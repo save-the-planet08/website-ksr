@@ -1,14 +1,12 @@
 /**
  * Das Schuljahr als Band.
  *
- * Kein Ornament: hier stehen die tatsächlichen Termine aus
- * `src/content/termine/`, jeder an seinem Tag. Wer den Inhalt ändert, ändert
+ * Kein Ornament: hier stehen die tatsächlichen Termine aus Supabase,
+ * jeder an seinem Tag. Wer den Inhalt ändert, ändert
  * das Bild — sonst wäre es Tapete mit Kalendermuster.
  *
- * Der Stichtag wird beim Bauen gesetzt. Das ist dieselbe Annahme, unter der die
- * Seite ohnehin schon zwischen „kommend" und „vergangen" trennt
- * (`src/pages/termine.astro`): eine statische Seite kennt kein Heute außer dem
- * ihres letzten Builds.
+ * Der Stichtag ist der Tag des Aufrufs: `/termine` wird auf dem Server
+ * gerendert und trennt mit demselben Heute zwischen „kommend" und „vergangen".
  */
 import { achse, geplottet, knoten } from './baukasten';
 import { rechteck } from './typen';
