@@ -73,10 +73,13 @@ und Muster sind hier schon zweimal wieder rausgeflogen (`taktraster`,
   und das braucht beides. Die alte Regel „nur auf der Startseite" stimmte schon
   vor dieser Arbeit nicht mehr.
 - **Lenis** für weiches Scrollen, einmalig in `src/lib/scroll.ts`.
-- **Supabase** (Frankfurt) für News und Termine. Die öffentlichen Seiten holen
-  die Daten **beim Bauen** über Content-Loader — Besucher sprechen nie mit
-  Supabase. Nur `/admin` lädt den Client. Neue Einträge erscheinen erst nach
-  einem Neubau (lokal: Dev-Server neu starten).
+- **Supabase** (Frankfurt) für News und Termine. `/news` und `/termine` sind
+  die einzigen Seiten, die **auf dem Server** gerendert werden
+  (`prerender = false`, Adapter `@astrojs/vercel`, Funktion in `fra1`). Vercels
+  CDN hält sie eine Minute (`zwischenspeichern()` in `src/lib/inhalte.ts`) —
+  neue Einträge sind also nach spätestens einer Minute live, ohne Deploy.
+  Besucher sprechen nie mit Supabase; nur `/admin` lädt den Client im Browser.
+  Alle anderen Seiten bleiben statisch.
 - **Archivo Variable** als einzige Schrift, selbst gehostet über
   `@fontsource-variable/archivo`. Hierarchie über `wght` und `wdth`, nie über
   eine zweite Familie.
@@ -98,7 +101,7 @@ src/lib/zeichen/       Dreizehn Generatoren, laufen beim Bauen (kein Laufzeit-JS
 src/lib/scroll.ts      Der eine Scroll-Motor
 src/components/brand/  Logo.astro (Bauteile) + Zeichen.astro (alle Zeichen)
 src/data/wuensche.ts   Die acht Wünsche, einzige Quelle
-src/content/config.ts  Termine und News aus Supabase (veröffentlichte Einträge)
+src/lib/inhalte.ts     Termine und News aus Supabase + Cache-Header
 src/lib/supabase.ts    Der Client; URL und Schlüssel aus `.env`
 src/pages/admin.astro  Redaktion: Login, News und Termine pflegen
 supabase/schema.sql    Tabellen und Zugriffsregeln — Lesen nur Veröffentlichtes,
@@ -163,9 +166,9 @@ Alles davon steht als `.hinweis`-Kasten auf der jeweiligen Seite:
 - Eigene E-Mail-Adresse des KSR (die alte gehört dem Kreiselternbeirat und
   wurde bewusst entfernt). Platzhalter in `src/pages/kontakt.astro` und
   `src/components/Kopf.astro`.
-- Datenschutz: Hosting-Anbieter und Speicherdauer der Logfiles.
-- Hoster festlegen und einen Supabase-Webhook anlegen, der nach dem
-  Speichern in `/admin` einen Neubau auslöst.
+- Datenschutz: Hosting-Anbieter (Vercel) und Speicherdauer der Logfiles.
+- `src/content/termine/` löschen: die drei alten Markdown-Termine werden nicht
+  mehr gelesen; Astro erzeugt dafür nur noch eine veraltete Auto-Collection.
 - Vorstand und Mitgliedsschulen, sobald der Vorstand konstituiert ist.
 - `src/pages/muster.astro` löschen. Der Musterbogen zeigt alle elf Zeichen und
   alle sechzehn Auftritte nebeneinander — nützlich beim Bauen, hat auf der
