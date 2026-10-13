@@ -40,7 +40,7 @@ import '../styles/global.css';
       </div>
 
       <p class="klein admin__hinweis">
-        Gespeichertes erscheint auf der Website erst nach dem nächsten Neubau der Seite —
+        Gespeichertes erscheint auf der Website innerhalb von etwa einer Minute —
         und nur, wenn „Veröffentlicht" angehakt ist.
       </p>
 
@@ -240,7 +240,7 @@ import '../styles/global.css';
         label.classList.toggle('ist-an', eingabe.checked);
         titel.textContent = eingabe.checked ? 'Wird veröffentlicht' : 'Entwurf — nicht öffentlich';
         erklaerung.textContent = eingabe.checked
-          ? 'Erscheint nach dem nächsten Neubau auf der Website.'
+          ? 'Erscheint innerhalb von etwa einer Minute auf der Website.'
           : 'Nur hier im Admin-Bereich sichtbar. Haken setzen, um zu veröffentlichen.';
       };
       eingabe.addEventListener('change', aktualisieren);
