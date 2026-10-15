@@ -173,3 +173,30 @@ Alles davon steht als `.hinweis`-Kasten auf der jeweiligen Seite:
 - `src/pages/muster.astro` löschen. Der Musterbogen zeigt alle elf Zeichen und
   alle sechzehn Auftritte nebeneinander — nützlich beim Bauen, hat auf der
   fertigen Seite nichts verloren.
+
+## Betrieb
+
+- **Supabase:** Projekt `ovvrclfogndthjpmhnlx` (Frankfurt). Registrierung ist
+  abgeschaltet. SQL über die CLI: einmal
+  `supabase link --project-ref ovvrclfogndthjpmhnlx`, dann
+  `supabase db query --linked "…"`.
+- **Neuer Admin:** Nutzer im Supabase-Dashboard anlegen (Passwort setzt die
+  Person selbst), dann `insert into public.admins (user_id) values ('<uuid>');`.
+- **Vercel:** Projekt `website-ksr`, Produktion auf
+  https://website-ksr.vercel.app. `PUBLIC_SUPABASE_URL` und
+  `PUBLIC_SUPABASE_KEY` stehen dort als Umgebungsvariablen; jeder Push auf
+  `main` deployt.
+- **Grenzen für Claude:** den `service_role`-Schlüssel nie abrufen oder
+  benutzen; Daten nur gezielt per `where id = …` löschen, nie ganze Tabellen.
+
+## Nächste Schritte
+
+- Admin-Übersicht für viele Einträge: Filter (Termine: Kommend/Vergangen/
+  Entwürfe/Alle; News: Veröffentlicht/Entwürfe/Alle), Titelsuche, Gruppierung
+  nach Monat, klarere Status-Marken.
+- Bilder: offen, ob (a) ein bis zwei Bilder pro News-Beitrag über Supabase
+  Storage oder (b) feste Bilder an bestimmten Stellen. Widerspricht bisher der
+  Regel „keine Fotos“; Personen nur mit Einwilligung (bei Minderjährigen auch
+  der Eltern).
+- Umfragen, an denen jeder Schüler teilnimmt: eigenes Projekt, braucht
+  Konzept für Missbrauchsschutz und Datenschutz bei Minderjährigen.
