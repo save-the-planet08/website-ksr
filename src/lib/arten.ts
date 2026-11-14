@@ -47,6 +47,7 @@ export const zeichenArten = [
   'jahresband',     // das Schuljahr mit den echten Terminen darauf
   'leitungsplan',   // der Weg einer Nachricht zu den drei Wegen
   'aussenkanten',   // eine Kante je Quelle, über den Rand hinaus
+  'kompass',        // die Umfrage: wo man steht, und am Ende, wohin man zeigt
 ] as const;
 
 export type ZeichenArt = (typeof zeichenArten)[number];

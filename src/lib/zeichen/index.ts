@@ -1,5 +1,5 @@
 /**
- * Die Bildwelt der Seite. Elf Zeichen, jedes genau einmal vergeben — welches
+ * Die Bildwelt der Seite. Vierzehn Zeichen, jedes genau einmal vergeben — welches
  * wohin gehört, steht in `register.ts`.
  *
  * Die Generatoren laufen beim Bauen, nicht im Browser. Das fertige SVG steht
@@ -16,6 +16,7 @@ import { wappen } from './wappen';
 import { jahresband } from './jahresband';
 import { leitungsplan } from './leitungsplan';
 import { aussenkanten } from './aussenkanten';
+import { kompass } from './kompass';
 import type { Zeichnung } from './typen';
 
 const bauplan: Record<ZeichenArt, (daten?: any) => Zeichnung> = {
@@ -32,6 +33,7 @@ const bauplan: Record<ZeichenArt, (daten?: any) => Zeichnung> = {
   'jahresband': jahresband,
   'leitungsplan': leitungsplan,
   'aussenkanten': aussenkanten,
+  'kompass': kompass,
 };
 
 /**

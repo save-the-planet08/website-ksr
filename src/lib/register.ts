@@ -58,6 +58,12 @@ export const register = {
   // Das Schreibheft steht im Seitenkopf: eine Sammlung, die auf Einträge wartet.
   'links/kopf':         { zeichen: 'achsengitter',                                    auftritt: 'schere'  },
   'links/gruppen':      { zeichen: 'aussenkanten',     szene: 'links-aussen',         auftritt: 'seit'    },
+
+  // --- Umfrage --------------------------------------------------------------
+  // Ein Werkzeug, keine Erzählung: keine Szene am Scrollrad. Bewegt wird nur
+  // die Kompassnadel, wenn man den Teil wechselt.
+  'umfrage/eingang':    { zeichen: 'kompass',                                         auftritt: 'gewicht' },
+  'umfrage/danke':      {                                                             auftritt: 'zerfall' },
 } as const satisfies Record<string, Vergabe>;
 
 export type Ort = keyof typeof register;
