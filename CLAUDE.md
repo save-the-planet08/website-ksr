@@ -28,7 +28,7 @@ Die vier Bauteile und wofür sie stehen:
 
 ## Die Bildwelt
 
-Dreizehn **Zeichen** in `src/lib/zeichen/`, in drei Schichten:
+Vierzehn **Zeichen** in `src/lib/zeichen/`, in drei Schichten:
 
 **Aus dem Zeichen** (5) — die Logo-Pfade selbst, anders verarbeitet: der Löwe
 als Schnittmaske, der Doppelbalken als Partitur, die Rebe im Wachstum, die
@@ -39,7 +39,7 @@ Löwen werden zu Höhenlinien, die Kurve der Ranke zu einem Wellenfeld, die
 Streuung der Trauben zu einer Konstellation, die Achsen der Wortmarke zu einem
 Linienmaß.
 
-**Gebaut** (4) — aus einem eigenen Baukasten (`zeichen/baukasten.ts`: Ring,
+**Gebaut** (5) — aus einem eigenen Baukasten (`zeichen/baukasten.ts`: Ring,
 Bogen, Kerbe, Knoten, Achse, geführte Leitung, Pfeilspitze), und sie zeigen
 etwas, statt zu schmücken:
 
@@ -49,6 +49,7 @@ etwas, statt zu schmücken:
 | `jahresband` | `/termine` | Das Schuljahr mit den **echten** Terminen aus Supabase |
 | `leitungsplan` | `/kontakt` | Drei Leitungen zu den drei Wegen, mit Signal darauf |
 | `aussenkanten` | `/links` | Eine Kante je Quelle, nach draußen zeigend |
+| `kompass` | `/umfrage` | Die Nadel zeigt den Teil, in dem man steckt; am Ende Strahlen auf die eigenen Prioritäten |
 
 **Die Regel für neue Zeichen:** gebaut statt gemalt, ein Strich (1,4 px,
 `non-scaling-stroke`), genau ein `--rebe`-Akzent je Bild, nichts Gewürfeltes.
@@ -79,7 +80,8 @@ und Muster sind hier schon zweimal wieder rausgeflogen (`taktraster`,
   CDN hält sie eine Minute (`zwischenspeichern()` in `src/lib/inhalte.ts`) —
   neue Einträge sind also nach spätestens einer Minute live, ohne Deploy.
   Besucher sprechen nie mit Supabase; nur `/admin` lädt den Client im Browser.
-  Alle anderen Seiten bleiben statisch.
+  Ebenfalls auf dem Server: `/umfrage`, `/umfrage/danke` und `/umfrage/senden`
+  (ohne Cache). Alle anderen Seiten bleiben statisch.
 - **Archivo Variable** als einzige Schrift, selbst gehostet über
   `@fontsource-variable/archivo`. Hierarchie über `wght` und `wdth`, nie über
   eine zweite Familie.
@@ -93,11 +95,11 @@ src/lib/register.ts    Wer bekommt was — plus der Wächter gegen Doppelvergabe
 src/lib/auftritt.ts    Sechzehn Arten, wie ein Element ins Bild kommt
 src/lib/szene.ts       Registry für alles, was am Scrollrad hängt
 src/lib/szenen/        Eine Datei je Szene, eine Szene je Abschnitt
-src/lib/zeichen/       Dreizehn Generatoren, laufen beim Bauen (kein Laufzeit-JS)
+src/lib/zeichen/       Vierzehn Generatoren, laufen beim Bauen (kein Laufzeit-JS)
   ausDemZeichen.ts       die fünf aus den Logo-Pfaden
   abgeleitet.ts          die vier nach den Maßen des Logos
   baukasten.ts           Grundformen der zweiten Bildwelt + geplottet()
-  wappen.ts, jahresband.ts, leitungsplan.ts, aussenkanten.ts
+  wappen.ts, jahresband.ts, leitungsplan.ts, aussenkanten.ts, kompass.ts
 src/lib/scroll.ts      Der eine Scroll-Motor
 src/components/brand/  Logo.astro (Bauteile) + Zeichen.astro (alle Zeichen)
 src/data/wuensche.ts   Die acht Wünsche, einzige Quelle
@@ -106,6 +108,11 @@ src/lib/supabase.ts    Der Client; URL und Schlüssel aus `.env`
 src/pages/admin.astro  Redaktion: Login, News und Termine pflegen
 supabase/schema.sql    Tabellen und Zugriffsregeln — Lesen nur Veröffentlichtes,
                        Schreiben nur, wer in `admins` steht
+src/data/umfrage.ts    Der Schülerbedarfskompass: alle Fragen, feste IDs
+src/lib/umfrage.ts     Server: Schulcode prüfen, Antworten säubern, absenden
+src/lib/umfrage-ablauf.ts  Browser: Schritte, Speichern im Gerät, Logik, Nadel
+src/lib/admin-umfrage.ts   Reiter „Umfrage" in /admin: Zeitraum, Schulen, Auswertung
+supabase/umfrage.sql   Umfrage-Tabellen; Zugriff nur über Funktionen
 src/styles/            tokens.css (Variablen) + global.css (Basis)
 brand/                 Quellmaterial des Logos, nicht ausgeliefert
 ```
@@ -174,6 +181,25 @@ Alles davon steht als `.hinweis`-Kasten auf der jeweiligen Seite:
   alle sechzehn Auftritte nebeneinander — nützlich beim Bauen, hat auf der
   fertigen Seite nichts verloren.
 
+## Die Umfrage (Schülerbedarfskompass)
+
+- Vorlage der Fragen: `business/schuelerbedarfskompass.md` (Armando). Die
+  **IDs** in `src/data/umfrage.ts` sind der Vertrag mit der Datenbank — ein
+  Text darf sich ändern, die ID nicht, sonst sind die Durchgänge alle zwei
+  Jahre nicht mehr vergleichbar.
+- **Nur per Link erreichbar**, nicht in Kopf oder Fuß verlinkt, `noindex`.
+  Jede Schule hat einen Code; der Link `/umfrage?code=RTK-…` führt direkt
+  hinein (gedacht als QR-Code für die SVen).
+- **Zu, solange kein Zeitraum gesetzt ist.** Start und Ende setzt man in
+  `/admin` → Umfrage. Ohne Zeitraum nimmt die Datenbank nichts an.
+- Niemand liest einzelne Antworten, auch Admins nicht. `umfrage_auswertung`
+  liefert nur Summen und je Schule nur Fragen mit mindestens zehn Antworten.
+  Gespeichert wird keine IP und keine Uhrzeit, nur der Tag.
+- Lokal testen ohne Datenbank: Code `RTK-TEST26` — nur im Dev-Server, im
+  Build fällt der Zweig weg.
+- Offen vor dem Start: Abschnitt zur Umfrage in `/datenschutz`, die offenen
+  Punkte am Ende der Vorlage (Schulamt, Genehmigungen, Schulliste).
+
 ## Betrieb
 
 - **Supabase:** Projekt `ovvrclfogndthjpmhnlx` (Frankfurt). Registrierung ist
@@ -198,5 +224,6 @@ Alles davon steht als `.hinweis`-Kasten auf der jeweiligen Seite:
   Storage oder (b) feste Bilder an bestimmten Stellen. Widerspricht bisher der
   Regel „keine Fotos“; Personen nur mit Einwilligung (bei Minderjährigen auch
   der Eltern).
-- Umfragen, an denen jeder Schüler teilnimmt: eigenes Projekt, braucht
-  Konzept für Missbrauchsschutz und Datenschutz bei Minderjährigen.
+- Supabase pausiert im Gratis-Tarif nach etwa einer Woche ohne Anfragen —
+  dann liefern `/news` und `/termine` Fehler 500. Offen: die Seiten bei
+  Ausfall absichern und das Pausieren verhindern (täglicher Cron oder Pro).
