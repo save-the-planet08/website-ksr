@@ -1,0 +1,210 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Kompass from '../../components/umfrage/Kompass.astro';
+import Frage from '../../components/umfrage/Frage.astro';
+import { teile, pflicht, module, UMFRAGE } from '../../data/umfrage';
+import { codeNormal, keinCache, schulePruefen, type Zustand } from '../../lib/umfrage';
+import { ort } from '../../lib/register';
+import '../../styles/umfrage.css';
+
+export const prerender = false;
+keinCache(Astro.response.headers);
+
+const v = ort('umfrage/eingang');
+const eingegeben = Astro.url.searchParams.get('code');
+const code = codeNormal(eingegeben);
+
+let zustand: Zustand | 'technik' | null = null;
+let schule: string | undefined;
+if (code) {
+  try {
+    ({ zustand, schule } = await schulePruefen(code));
+  } catch (e) {
+    console.error(e);
+    zustand = 'technik';
+  }
+}
+const offen = zustand === 'offen';
+
+const meldungen = {
+  falsch: 'Diesen Code kennen wir nicht. Schau nochmal nach — er hängt bei deiner SV aus.',
+  zu: 'Die Umfrage ist gerade nicht geöffnet. Schau wieder rein, wenn deine SV Bescheid gibt.',
+  technik: 'Gerade klemmt etwas bei uns. Versuch es in ein paar Minuten nochmal.',
+};
+
+// Die Reihenfolge der Schritte: Pflicht, Zwischenhalt, Extras. Die Station ist
+// der Platz auf dem Kompass — der Zwischenhalt liegt dazwischen.
+const stationen = teile.map((t) => t.zeichen);
+const pausenStation = pflicht.length - 0.5;
+---
+
+<BaseLayout
+  titel="Schülerbedarfskompass"
+  beschreibung="Die Umfrage des Kreisschülerrats: Was an deiner Schule fehlt — anonym, in vier Minuten."
+  aktiv="" verborgen
+>
+  {!offen ? (
+    <section class="eingang">
+      <div class="eingang__raster huelle">
+        <div class="eingang__bild">
+          <Kompass beschriftung={stationen} praefix="eingang" />
+        </div>
+
+        <div class="eingang__text">
+          <p class="marke">Schülerbedarfskompass {UMFRAGE}</p>
+          <h1 class="eingang__titel" data-auftritt={v.auftritt}>Was fehlt an deiner Schule?</h1>
+          <p class="eingang__lead">
+            Sag es dem Kreis — er ist für eure Schulgebäude zuständig. Wir tragen eure Antworten dorthin.
+          </p>
+
+          <form class="code" method="get" action="/umfrage" data-code-form>
+            <label class="code__label" for="code">Code deiner Schule</label>
+            <div class="code__zeile">
+              <input
+                id="code"
+                class="code__feld"
+                name="code"
+                value={eingegeben ?? ''}
+                placeholder="RTK-XXXXXX"
+                autocomplete="off"
+                autocapitalize="characters"
+                spellcheck="false"
+                enterkeyhint="go"
+                maxlength="16"
+                required
+                aria-describedby="code-hilfe"
+                aria-invalid={zustand && zustand !== 'offen' ? 'true' : undefined}
+              />
+              <button type="submit" class="knopf code__los">Los <span aria-hidden="true">→</span></button>
+            </div>
+            {zustand && zustand !== 'offen' && (
+              <p class="code__fehler" role="alert">{meldungen[zustand]}</p>
+            )}
+            <p class="code__hilfe" id="code-hilfe">
+              Den Code bekommst du von deiner SV oder deinen Schulsprechern — oft als QR-Code.
+            </p>
+          </form>
+
+          <ul class="eingang__fakten">
+            <li><strong>4</strong> Minuten</li>
+            <li><strong>0</strong> Namen</li>
+            <li><strong>1</strong> Stimme</li>
+          </ul>
+
+          <p class="eingang__klein">
+            Anonym und freiwillig. Wir speichern keine Namen, keine E-Mail-Adressen und keine
+            IP-Adressen. Der Code verrät nur deine Schule, nicht dich.
+            <a href="/datenschutz">Datenschutz</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  ) : (
+    <form class="bogen" method="post" action="/umfrage/senden" autocomplete="off" data-bogen data-code={code}>
+      <input type="hidden" name="code" value={code} />
+      <input type="hidden" name="id" value="" data-abgabe-id />
+
+      <aside class="bogen__stand" aria-label="Fortschritt">
+        <div class="bogen__kompass">
+          <Kompass beschriftung={stationen} praefix="bogen" />
+        </div>
+        <div class="bogen__anzeige">
+          <p class="marke" data-anzeige-marke>Teil A</p>
+          <p class="bogen__titel" data-anzeige-titel>{teile[0].titel}</p>
+          <p class="bogen__schule">{schule}</p>
+        </div>
+        <p class="bogen__gesichert" data-gesichert aria-hidden="true">gespeichert</p>
+      </aside>
+
+      <div class="bogen__schritte">
+        <div class="bogen__meldung" data-wiederda hidden>
+          <p><strong>Willkommen zurück.</strong> Deine Antworten sind noch da — mach einfach weiter.</p>
+          <button type="button" data-neu>Neu anfangen</button>
+        </div>
+        <div class="bogen__meldung" data-schon hidden>
+          <p>Von diesem Gerät kam für deine Schule schon eine Antwort. Danke! Bist du jemand anderes, mach einfach mit.</p>
+        </div>
+
+        <p class="bogen__einleitung">
+          Es geht um <strong>dieses Schuljahr</strong> und den <strong>Normalfall</strong>, nicht um einzelne
+          Ausnahmen. Keine Frage ist Pflicht — überspring, was du nicht weißt.
+        </p>
+
+        {teile.map((t, i) => {
+          const istPause = !t.modul && i === pflicht.length - 1;
+          const letzte = i === teile.length - 1;
+          return (
+            <>
+              <section
+                class="schritt"
+                id={`teil-${t.id}`}
+                data-schritt
+                data-station={i}
+                data-modul={t.modul ? '' : undefined}
+                data-zeichen={t.zeichen}
+                data-titel={t.titel}
+                aria-labelledby={`teil-${t.id}-titel`}
+              >
+                <header class="schritt__kopf">
+                  <span class="schritt__zeichen" aria-hidden="true">{t.zeichen}</span>
+                  <div>
+                    <p class="marke">
+                      {t.modul ? `Extra ${t.zeichen} von ${module.length} · freiwillig` : `Teil ${t.zeichen} von ${pflicht.length}`}
+                    </p>
+                    <h2 class="schritt__titel" id={`teil-${t.id}-titel`} tabindex="-1">{t.titel}</h2>
+                  </div>
+                </header>
+
+                {t.fragen.map((f) => <Frage frage={f} />)}
+
+                <nav class="schritt__nav" data-nav aria-label="Schritte">
+                  {i > 0 && (
+                    <button type="button" class="schritt__zurueck" data-zurueck aria-label="Zurück">
+                      <span aria-hidden="true">←</span>
+                    </button>
+                  )}
+                  {istPause ? (
+                    <button type="submit" class="knopf schritt__weiter" data-senden="pflicht">Abschicken</button>
+                  ) : letzte ? (
+                    <button type="submit" class="knopf schritt__weiter" data-senden="extras">Extras abschicken</button>
+                  ) : (
+                    <button type="button" class="knopf schritt__weiter" data-weiter>Weiter</button>
+                  )}
+                </nav>
+              </section>
+
+              {istPause && (
+                <section class="schritt schritt--pause" id="geschafft" data-schritt data-pause data-station={pausenStation} data-zeichen="✓" data-titel="Angekommen" aria-labelledby="geschafft-titel">
+                  <p class="marke">Pflicht erledigt</p>
+                  <h2 class="schritt--pause__titel" id="geschafft-titel" tabindex="-1">Angekommen. Danke!</h2>
+                  <p class="schritt--pause__text">
+                    Deine Antworten sind gespeichert und zählen schon. Hast du noch eine Minute?
+                    {module.length} kurze Extras: {module.map((m) => m.titel).join(', ').replace(/, ([^,]*)$/, ' und $1')}.
+                  </p>
+                  <div class="schritt--pause__knoepfe" data-nav>
+                    <button type="button" class="knopf" data-weiter>Noch {module.length} Extras · 1 Min.</button>
+                    <a class="knopf knopf--offen" data-fertig href="/umfrage/danke">Fertig</a>
+                  </div>
+                </section>
+              )}
+            </>
+          );
+        })}
+
+        <div class="bogen__ohne-skript">
+          <button type="submit" class="knopf">Abschicken</button>
+        </div>
+
+        <p class="bogen__fehler" role="alert" data-fehler hidden></p>
+      </div>
+    </form>
+  )}
+</BaseLayout>
+
+<script>
+  import { bogenStarten, eingangStarten } from '../../lib/umfrage-ablauf';
+
+  const bogen = document.querySelector<HTMLFormElement>('[data-bogen]');
+  if (bogen) bogenStarten(bogen);
+  else eingangStarten();
+</script>

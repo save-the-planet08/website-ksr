@@ -7,12 +7,15 @@ interface Props {
   titel: string;
   beschreibung?: string;
   aktiv?: string;
+  /** Nur über einen direkten Link erreichbar: nicht in Suchmaschinen. */
+  verborgen?: boolean;
 }
 
 const {
   titel,
   beschreibung = 'Der Kreisschülerrat Rheingau-Taunus-Kreis ist die gewählte Vertretung aller Schülerinnen und Schüler im Kreis.',
   aktiv = 'start',
+  verborgen = false,
 } = Astro.props;
 
 const voll = `${titel} — KSR Rheingau-Taunus-Kreis`;
@@ -25,6 +28,7 @@ const voll = `${titel} — KSR Rheingau-Taunus-Kreis`;
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{voll}</title>
   <meta name="description" content={beschreibung} />
+  {verborgen && <meta name="robots" content="noindex, nofollow" />}
   <meta name="theme-color" content="#0B0B0C" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <meta property="og:title" content={voll} />

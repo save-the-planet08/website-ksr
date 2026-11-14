@@ -1,0 +1,80 @@
+---
+/**
+ * Der Kompass mit Beschriftung am Ring. Die Schrift steht als HTML neben dem
+ * SVG, nicht darin — so bleibt sie Archivo und skaliert mit der Seite.
+ */
+import Zeichen from '../brand/Zeichen.astro';
+import { stationsOrt } from '../../lib/zeichen/kompass';
+
+interface Props {
+  beschriftung: string[];
+  /** Ergebnis statt Fortschritt: Strahlen zu diesen Plätzen. */
+  strahlen?: number[];
+  praefix: string;
+  klasse?: string;
+}
+
+const { beschriftung, strahlen, praefix, klasse = '' } = Astro.props;
+
+// Beschriftungen rechts vom Ring laufen nach rechts, links davon nach links.
+const ausrichtung = (wert: number) => (wert > 58 ? 0 : wert < 42 ? -100 : -50);
+const orte = beschriftung.map((text, i) => {
+  const { x, y } = stationsOrt(i, strahlen ? 196 : 204);
+  return { text, x, y, ax: ausrichtung(x), ay: ausrichtung(y), an: strahlen?.includes(i) };
+});
+---
+
+<div class:list={['kompass', strahlen ? 'kompass--ergebnis' : 'kompass--weg', klasse]} data-kompass>
+  <Zeichen art="kompass" praefix={praefix} daten={strahlen ? { strahlen } : undefined} />
+  <ol class="kompass__orte" aria-hidden="true">
+    {orte.map((o, i) => (
+      <li
+        data-station={i}
+        class:list={[o.an && 'ist-gewaehlt']}
+        style={`--x:${o.x.toFixed(2)}%;--y:${o.y.toFixed(2)}%;--ax:${o.ax}%;--ay:${o.ay}%`}
+      >{o.text}</li>
+    ))}
+  </ol>
+</div>
+
+<style>
+  .kompass {
+    position: relative;
+    aspect-ratio: 1;
+    color: var(--ink);
+  }
+
+  .kompass :global(svg) { width: 100%; height: 100%; }
+
+  /* Erledigte Stationen sind gefüllt. Global, weil die Pfade den Scope von
+     Zeichen.astro tragen. */
+  .kompass :global([data-teil^='marke-'].ist-erledigt path) { fill: currentColor; }
+  .kompass :global([data-teil^='marke-'].ist-hier) { color: var(--rebe); }
+
+  .kompass__orte li {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    transform: translate(var(--ax), var(--ay));
+    font-size: var(--t-micro);
+    font-variation-settings: 'wght' 650, 'wdth' 100;
+    letter-spacing: var(--sperr-weit);
+    text-transform: uppercase;
+    color: var(--ink-60);
+    white-space: nowrap;
+    line-height: 1;
+    transition: color var(--d-normal) var(--e-weich);
+  }
+
+  .kompass--weg .kompass__orte li {
+    transform: translate(-50%, -50%);
+    font-size: var(--t-klein);
+  }
+
+  .kompass__orte li.ist-hier,
+  .kompass__orte li.ist-gewaehlt { color: var(--ink); }
+  .kompass--ergebnis .kompass__orte li.ist-gewaehlt {
+    color: var(--rebe);
+    font-variation-settings: 'wght' 760, 'wdth' 100;
+  }
+</style>

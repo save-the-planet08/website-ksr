@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Kompass from '../../components/umfrage/Kompass.astro';
+import { prioritaeten } from '../../data/umfrage';
+import { codeNormal, keinCache } from '../../lib/umfrage';
+import { ort } from '../../lib/register';
+import '../../styles/umfrage.css';
+
+export const prerender = false;
+keinCache(Astro.response.headers);
+
+const v = ort('umfrage/danke');
+const code = codeNormal(Astro.url.searchParams.get('code'));
+const gewaehlt = (Astro.url.searchParams.get('p') ?? '').split(',');
+const strahlen = prioritaeten.flatMap((p, i) => (gewaehlt.includes(p.id) ? [i] : [])).slice(0, 3);
+const namen = strahlen.map((i) => prioritaeten[i].kurz);
+const liste = namen.length > 1 ? `${namen.slice(0, -1).join(', ')} und ${namen.at(-1)}` : namen[0];
+
+const teilen = /^RTK-[A-Z0-9]{6}$/.test(code) ? `${Astro.url.origin}/umfrage?code=${code}` : null;
+---
+
+<BaseLayout titel="Danke" beschreibung="Danke fürs Mitmachen beim Schülerbedarfskompass." aktiv="" verborgen>
+  <section class="danke" data-danke data-code={teilen ? code : undefined}>
+    <div class="danke__raster huelle">
+      <div class="danke__bild">
+        {strahlen.length > 0 && (
+          <Kompass beschriftung={prioritaeten.map((p) => p.kurz)} strahlen={strahlen} praefix="danke" />
+        )}
+      </div>
+
+      <div class="danke__text">
+        <p class="marke">Angekommen</p>
+        <h1 class="danke__titel" data-auftritt={v.auftritt}>Danke fürs Mitmachen!</h1>
+        {liste ? (
+          <p class="danke__lead">Dein Kompass zeigt auf <strong>{liste}</strong>. Genau das tragen wir zum Kreis.</p>
+        ) : (
+          <p class="danke__lead">Deine Antworten sind angekommen. Genau das tragen wir zum Kreis.</p>
+        )}
+        <p class="danke__klein">
+          Wenn die Umfrage vorbei ist, werten wir alle Antworten aus und veröffentlichen die
+          Ergebnisse. Einzelne Antworten sieht dabei niemand.
+        </p>
+
+        {teilen && (
+          <div class="teilen">
+            <p class="teilen__text">
+              <strong>Je mehr von deiner Schule mitmachen, desto lauter.</strong> Schick den Link an deine Klasse — der
+              Code ist schon drin.
+            </p>
+            <div class="teilen__zeile">
+              <button type="button" class="knopf" data-teilen={teilen}>Link teilen</button>
+              <input class="teilen__link" value={teilen} readonly aria-label="Link zur Umfrage" />
+            </div>
+            <p class="teilen__status" role="status" data-teilen-status></p>
+          </div>
+        )}
+
+        <a href="/" class="verweis danke__heim">Zur Website des KSR</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { dankeStarten } from '../../lib/umfrage-ablauf';
+  dankeStarten();
+</script>

@@ -1,0 +1,108 @@
+---
+/**
+ * Eine Frage des Kompasses. Echte Radio- und Ankreuzfelder, nur anders
+ * angezogen — Tastatur, Vorleser und Formular ohne Skript funktionieren damit
+ * von selbst.
+ */
+import { FREITEXT_MAX, KEINE_NAMEN, type Frage } from '../../data/umfrage';
+
+interface Props { frage: Frage }
+const { frage: f } = Astro.props;
+
+const hinweisId = f.hinweis ? `${f.id}-hinweis` : undefined;
+const notenSchluessel = f.art === 'matrix' && f.noten;
+---
+
+<fieldset
+  class={`frage frage--${f.art}`}
+  data-frage={f.id}
+  data-wenn={f.wenn ? JSON.stringify(f.wenn) : undefined}
+  data-max={f.art === 'mehr' ? f.max : undefined}
+  data-allein={f.art === 'mehr' ? f.allein : undefined}
+  aria-describedby={hinweisId}
+>
+  <legend class="frage__text">
+    {f.nr && <span class="frage__nr">Frage {f.nr}</span>}
+    {f.text}
+  </legend>
+
+  {(f.hinweis || f.art === 'mehr') && (
+    <p class="frage__hinweis" id={hinweisId}>
+      {f.art === 'mehr' && !f.max && 'Mehrere Antworten möglich. '}
+      {f.hinweis}
+      {f.art === 'mehr' && f.max && <span class="frage__zaehler" data-zaehler aria-live="polite"></span>}
+    </p>
+  )}
+
+  {f.art === 'einzel' && (
+    <div class="wahl">
+      {f.optionen.map((o) => (
+        <label class="wahl__option">
+          <input type="radio" name={f.id} value={o.id} />
+          <span class="wahl__marke" aria-hidden="true"></span>
+          <span>{o.text}</span>
+        </label>
+      ))}
+    </div>
+  )}
+
+  {f.art === 'einzel' && f.unterfeld && (
+    <label class="frage__zusatz" data-unterfeld={f.unterfeld.bei.join(' ')}>
+      <span>{f.unterfeld.text} <em>(freiwillig)</em></span>
+      <input type="text" name={`${f.id}.${f.unterfeld.id}`} maxlength={FREITEXT_MAX} autocomplete="off" enterkeyhint="done" />
+      <small>{KEINE_NAMEN}</small>
+    </label>
+  )}
+
+  {f.art === 'mehr' && (
+    <div class="wahl wahl--mehr">
+      {f.optionen.map((o) => (
+        <label class:list={['wahl__option', o.id === f.allein && 'wahl__option--allein']}>
+          <input type="checkbox" name={f.id} value={o.id} />
+          <span class="wahl__marke" aria-hidden="true"></span>
+          <span>{o.text}</span>
+        </label>
+      ))}
+    </div>
+  )}
+
+  {f.art === 'mehr' && f.sonstiges && (
+    <label class="frage__zusatz" data-sonstiges>
+      <span>Was genau? <em>(freiwillig)</em></span>
+      <input type="text" name={`${f.id}.sonstiges`} maxlength={FREITEXT_MAX} autocomplete="off" enterkeyhint="done" />
+      <small>{KEINE_NAMEN}</small>
+    </label>
+  )}
+
+  {f.art === 'matrix' && (
+    <div class:list={['matrix', f.noten && 'matrix--noten']}>
+      {notenSchluessel && (
+        <p class="matrix__schluessel" aria-hidden="true">
+          <span>1 sehr gut</span><span>6 ungenügend</span><span>— nutze ich nicht</span>
+        </p>
+      )}
+      {f.zeilen.map((z) => (
+        <div class="zeile" role="radiogroup" aria-labelledby={`${f.id}-${z.id}`}>
+          <span class:list={['zeile__text', f.zeilen.length === 1 && 'nur-vorleser']} id={`${f.id}-${z.id}`}>{z.text}</span>
+          <div class="skala" style={`--spalten:${f.skala.length}`}>
+            {f.skala.map((s) => (
+              <label class="skala__feld">
+                <input type="radio" name={`${f.id}.${z.id}`} value={s.id} />
+                {f.noten && s.id === 'nein'
+                  ? <span><span aria-hidden="true">—</span><span class="nur-vorleser">{s.text}</span></span>
+                  : <span>{s.text}</span>}
+              </label>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+
+  {f.art === 'text' && (
+    <label class="frage__frei">
+      <span class="nur-vorleser">{f.text}</span>
+      <textarea name={f.id} rows="3" maxlength={f.max} autocomplete="off" data-zeichenzahl></textarea>
+    </label>
+  )}
+</fieldset>

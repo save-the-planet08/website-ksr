@@ -1,0 +1,654 @@
+/* ===========================================================================
+   Schülerbedarfskompass
+   Fürs Handy gebaut: große Flächen zum Tippen, ein Teil je Bildschirm, der
+   Weiter-Knopf immer unter dem Daumen. Monochrom wie die Seite, der Akzent
+   gehört der Nadel.
+   =========================================================================== */
+
+.nur-vorleser {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   Eingang und Danke teilen sich Leiste und Raster
+   --------------------------------------------------------------------------- */
+
+.eingang,
+.danke {
+  /* Die Kopfzeile der Seite liegt fest darüber. */
+  --kopf: 4.75rem;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--kopf);
+  padding-bottom: var(--r-8);
+}
+
+.eingang__raster,
+.danke__raster {
+  flex: 1;
+  display: grid;
+  /* minmax(0, …): sonst drückt das Code-Feld seine Mindestbreite durch und
+     die ganze Spalte läuft auf dem Handy über den Rand. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--r-6);
+  align-content: center;
+  padding-top: var(--r-6);
+}
+
+/* Platz links und rechts für die Beschriftung am Ring. */
+.eingang__bild,
+.danke__bild {
+  width: min(100%, 24rem);
+  padding: var(--r-5);
+  justify-self: center;
+}
+/* Auf dem Handy muss das Code-Feld in den ersten Bildschirm passen. */
+.eingang__bild { width: min(64vw, 15rem); padding: var(--r-4); }
+.eingang__raster { padding-top: var(--r-4); gap: var(--r-4); }
+.danke__bild { padding-inline: 4.5rem; width: min(100%, 30rem); }
+
+.eingang__text,
+.danke__text { max-width: 36rem; }
+
+.eingang__titel,
+.danke__titel {
+  margin-top: var(--r-3);
+  font-size: var(--t-h2);
+  font-variation-settings: 'wght' 780, 'wdth' 86;
+  line-height: 0.98;
+  letter-spacing: var(--sperr-eng);
+  text-transform: uppercase;
+  text-wrap: balance;
+  hyphens: auto;
+}
+
+.eingang__lead,
+.danke__lead {
+  margin-top: var(--r-5);
+  font-size: var(--t-gross);
+  line-height: 1.4;
+  color: var(--ink-80);
+  text-wrap: pretty;
+}
+.danke__lead strong { color: var(--ink); font-variation-settings: 'wght' 700, 'wdth' 100; }
+
+.eingang__fakten {
+  display: flex;
+  margin-top: var(--r-6);
+  border-block: 1px solid var(--linie);
+}
+.eingang__fakten li {
+  flex: 1;
+  display: grid;
+  padding: var(--r-3) 0 var(--r-3) var(--r-4);
+  font-size: var(--t-micro);
+  letter-spacing: var(--sperr-weit);
+  text-transform: uppercase;
+  color: var(--ink-60);
+}
+.eingang__fakten li + li { border-left: 1px solid var(--linie); }
+.eingang__fakten li:first-child { padding-left: 0; }
+.eingang__fakten strong {
+  font-size: var(--t-h3);
+  font-variation-settings: 'wght' 760, 'wdth' 88;
+  letter-spacing: var(--sperr-titel);
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+/* --- Der Code -------------------------------------------------------------- */
+
+.code { margin-top: var(--r-5); }
+
+.code__label {
+  display: block;
+  font-size: var(--t-klein);
+  font-variation-settings: 'wght' 650, 'wdth' 100;
+  margin-bottom: var(--r-2);
+}
+
+.code__zeile { display: flex; gap: var(--r-2); }
+
+.code__feld {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: var(--t-gross);
+  font-variation-settings: 'wght' 650, 'wdth' 118;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: var(--r-3) var(--r-4);
+  min-height: 56px;
+  color: var(--ink);
+  background: var(--paper-pure);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+}
+.code__feld::placeholder { color: var(--ink-40); letter-spacing: 0.12em; }
+.code__feld:focus-visible { outline: 3px solid var(--rebe); outline-offset: 2px; }
+.code__feld[aria-invalid='true'] { border-color: var(--rebe); }
+
+.code__los { min-height: 56px; flex: none; }
+
+.code__fehler {
+  margin-top: var(--r-3);
+  padding: var(--r-3) var(--r-4);
+  border-left: 3px solid var(--rebe);
+  background: var(--paper-warm);
+  font-size: var(--t-klein);
+  color: var(--ink);
+}
+
+.code__hilfe,
+.eingang__klein,
+.danke__klein {
+  margin-top: var(--r-4);
+  font-size: var(--t-klein);
+  line-height: 1.55;
+  color: var(--ink-80);
+  max-width: 32rem;
+}
+.eingang__klein { margin-top: var(--r-6); }
+.eingang__klein a { text-decoration: underline; text-underline-offset: 0.2em; }
+
+@media (min-width: 62rem) {
+  .eingang__raster,
+  .danke__raster {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--r-9);
+  }
+  .eingang__bild { order: 2; width: min(100%, 32rem); }
+  .danke__bild { width: min(100%, 36rem); }
+}
+
+/* ---------------------------------------------------------------------------
+   Der Bogen
+   --------------------------------------------------------------------------- */
+
+.bogen {
+  --leiste: 4.25rem;
+  --kopf: 4.75rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 100svh;
+}
+
+/* Oben klebt der Stand: kleiner Kompass, welcher Teil, gespeichert. */
+/* Der Stand reicht nach oben bis unter die Kopfzeile der Seite. Ist die
+   Kopfzeile weg (Runterscrollen), schiebt er diesen Teil aus dem Bild; kommt
+   sie zurück, gleitet er im selben Takt mit. Weil darunter immer seine eigene
+   Fläche liegt, scheint nie Text zwischen Kopf und Kompass durch. */
+.bogen__stand {
+  position: sticky;
+  top: calc(var(--kopf) * -1);
+  /* Eine Ebene unter der Kopfzeile — sie liegt auf seinem oberen Teil. */
+  z-index: calc(var(--z-kopf) - 1);
+  display: flex;
+  align-items: center;
+  gap: var(--r-3);
+  height: calc(var(--leiste) + var(--kopf));
+  padding: var(--kopf) var(--rand) 0;
+  background: var(--paper);
+  border-bottom: 1px solid var(--linie);
+  /* Gleicher Takt wie die Kopfzeile (Kopf.astro). */
+  transition: top var(--d-normal) var(--e-aus);
+}
+body:has(.kopf:not([data-versteckt])) .bogen__stand { top: 0; }
+
+.bogen__kompass { width: 3.25rem; flex: none; }
+.bogen__kompass .kompass__orte { display: none; }
+
+.bogen__anzeige { min-width: 0; flex: 1; }
+.bogen__anzeige .marke { line-height: 1.2; }
+.bogen__titel {
+  font-size: var(--t-basis);
+  font-variation-settings: 'wght' 700, 'wdth' 92;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bogen__schule { display: none; }
+
+.bogen__gesichert {
+  font-size: var(--t-micro);
+  letter-spacing: var(--sperr-weit);
+  text-transform: uppercase;
+  color: var(--ink-60);
+  opacity: 0;
+  transition: opacity var(--d-ruhig) var(--e-weich);
+}
+.bogen__gesichert::before { content: '✓ '; }
+.bogen__gesichert.ist-an { opacity: 1; transition-duration: var(--d-schnell); }
+
+.bogen__schritte {
+  width: 100%;
+  max-width: 40rem;
+  margin-inline: auto;
+  padding: var(--r-5) var(--rand) var(--r-8);
+}
+
+.bogen__einleitung {
+  font-size: var(--t-klein);
+  line-height: 1.55;
+  color: var(--ink-80);
+  padding-bottom: var(--r-5);
+  border-bottom: 1px solid var(--linie);
+}
+.bogen__einleitung strong { color: var(--ink); font-variation-settings: 'wght' 650, 'wdth' 100; }
+/* Nur am Anfang — in späteren Teilen wäre sie Ballast. */
+.ist-schrittweise .bogen__einleitung { display: none; }
+.ist-schrittweise:has(#teil-a[data-aktiv='true']) .bogen__einleitung { display: block; }
+
+.bogen__meldung {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--r-3);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--r-5);
+  padding: var(--r-4);
+  border-left: 3px solid var(--ink);
+  background: var(--paper-warm);
+  font-size: var(--t-klein);
+}
+.bogen__meldung[hidden] { display: none; }
+.bogen__meldung button {
+  font-size: var(--t-micro);
+  font-variation-settings: 'wght' 650, 'wdth' 100;
+  letter-spacing: var(--sperr-weit);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+  min-height: 44px;
+}
+
+.bogen__fehler {
+  position: fixed;
+  left: var(--rand);
+  right: var(--rand);
+  bottom: calc(5.5rem + env(safe-area-inset-bottom));
+  z-index: var(--z-schub);
+  max-width: 36rem;
+  margin-inline: auto;
+  padding: var(--r-4);
+  background: var(--rebe);
+  color: var(--paper);
+  font-size: var(--t-klein);
+}
+.bogen__fehler[hidden] { display: none; }
+
+.bogen__ohne-skript { padding-top: var(--r-6); }
+.js .bogen__ohne-skript { display: none; }
+
+@media (min-width: 62rem) {
+  .bogen {
+    grid-template-columns: minmax(22rem, 1fr) minmax(0, 44rem) 1fr;
+    gap: var(--r-7);
+    padding-top: var(--kopf);
+  }
+
+  .bogen__stand,
+  body:has(.kopf:not([data-versteckt])) .bogen__stand {
+    grid-column: 1;
+    top: var(--kopf);
+    height: calc(100svh - var(--kopf));
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: var(--r-6);
+    padding: var(--r-7) var(--r-7) var(--r-7) var(--rand);
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 0;
+    border-right: 1px solid var(--linie);
+  }
+  .bogen__kompass { width: 100%; max-width: 20rem; padding: var(--r-5); align-self: center; }
+  .bogen__kompass .kompass__orte { display: block; }
+  .bogen__anzeige { flex: none; text-align: center; }
+  .bogen__titel { font-size: var(--t-h3); white-space: normal; }
+  .bogen__schule { display: block; margin-top: var(--r-2); font-size: var(--t-klein); color: var(--ink-60); }
+  .bogen__gesichert { text-align: center; }
+
+  .bogen__schritte { grid-column: 2; max-width: none; padding-top: var(--r-8); }
+}
+
+/* --- Schritte -------------------------------------------------------------- */
+
+.schritt { padding-top: var(--r-6); }
+.schritt + .schritt { margin-top: var(--r-8); border-top: 1px solid var(--linie); }
+
+.ist-schrittweise .schritt { display: none; margin-top: 0; border-top: 0; }
+.ist-schrittweise .schritt[data-aktiv='true'] { display: block; }
+html:not(.js) .schritt--pause { display: none; }
+
+.schritt__kopf {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--r-4);
+  padding-bottom: var(--r-5);
+}
+
+.schritt__zeichen {
+  font-size: clamp(4.5rem, 3rem + 7vw, 7.5rem);
+  font-variation-settings: 'wght' 820, 'wdth' 62;
+  line-height: 0.74;
+  letter-spacing: var(--sperr-eng);
+  color: var(--ink);
+}
+[data-modul] .schritt__zeichen {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--ink);
+}
+
+.schritt__titel {
+  margin-top: var(--r-1);
+  font-size: var(--t-h3);
+  font-variation-settings: 'wght' 720, 'wdth' 90;
+  line-height: 1.05;
+  letter-spacing: var(--sperr-titel);
+  text-wrap: balance;
+}
+.schritt__titel:focus { outline: none; }
+
+/* Unten klebt die Navigation — der nächste Schritt ist immer einen Daumen weit. */
+.schritt__nav {
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-inhalt);
+  display: flex;
+  gap: var(--r-3);
+  margin-top: var(--r-6);
+  margin-inline: calc(var(--rand) * -1);
+  padding: var(--r-4) var(--rand) calc(var(--r-4) + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--paper) 72%, color-mix(in srgb, var(--paper) 0%, transparent));
+}
+html:not(.js) .schritt__nav { display: none; }
+
+.schritt__weiter { flex: 1; min-height: 56px; font-size: var(--t-basis); }
+.schritt__weiter:disabled { opacity: 0.6; cursor: progress; }
+
+.schritt__zurueck {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--linie-stark);
+  font-size: var(--t-gross);
+  transition: box-shadow var(--d-schnell);
+}
+.schritt__zurueck:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+
+@media (min-width: 62rem) {
+  .schritt__nav { margin-inline: 0; padding-inline: 0; }
+}
+
+/* --- Zwischenhalt ---------------------------------------------------------- */
+
+.schritt--pause { padding-top: var(--r-8); }
+.schritt--pause__titel {
+  margin-top: var(--r-3);
+  font-size: var(--t-h2);
+  font-variation-settings: 'wght' 780, 'wdth' 86;
+  line-height: 1;
+  letter-spacing: var(--sperr-eng);
+  text-transform: uppercase;
+}
+.schritt--pause__text {
+  margin-top: var(--r-5);
+  font-size: var(--t-gross);
+  line-height: 1.4;
+  color: var(--ink-80);
+  text-wrap: pretty;
+}
+.schritt--pause__knoepfe {
+  display: grid;
+  gap: var(--r-3);
+  margin-top: var(--r-7);
+}
+.schritt--pause__knoepfe .knopf { min-height: 56px; font-size: var(--t-basis); }
+
+/* ---------------------------------------------------------------------------
+   Fragen
+   --------------------------------------------------------------------------- */
+
+.frage {
+  margin: 0;
+  padding: var(--r-6) 0 0;
+  border: 0;
+  min-width: 0;
+}
+.frage[hidden] { display: none; }
+.frage + .frage { margin-top: var(--r-5); border-top: 1px solid var(--linie); }
+
+/* Eine Legende sitzt sonst im Rahmen des Fieldsets, und dessen Innenabstand
+   landet unter ihr statt darüber. Float holt sie in den normalen Fluss. */
+.frage__text {
+  float: left;
+  width: 100%;
+  padding: 0;
+  font-size: var(--t-gross);
+  font-variation-settings: 'wght' 640, 'wdth' 100;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+.frage__text + * { clear: both; }
+
+.frage__nr {
+  display: block;
+  margin-bottom: var(--r-2);
+  font-size: var(--t-micro);
+  font-variation-settings: 'wght' 600, 'wdth' 100;
+  letter-spacing: var(--sperr-weiter);
+  text-transform: uppercase;
+  color: var(--ink-60);
+}
+
+.frage__hinweis {
+  margin-top: var(--r-2);
+  font-size: var(--t-klein);
+  color: var(--ink-60);
+}
+.frage__zaehler { color: var(--ink); font-variation-settings: 'wght' 650, 'wdth' 100; }
+
+/* --- Wahl: eine Zeile je Antwort ------------------------------------------- */
+
+.wahl { display: grid; gap: var(--r-2); margin-top: var(--r-4); }
+
+.wahl__option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--r-3);
+  min-height: 52px;
+  padding: var(--r-3) var(--r-4);
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1.5px var(--linie-stark);
+  background: var(--paper-pure);
+  font-size: var(--t-basis);
+  line-height: 1.3;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--d-schnell) var(--e-weich),
+    color var(--d-schnell) var(--e-weich),
+    box-shadow var(--d-schnell) var(--e-weich),
+    transform var(--d-schnell) var(--e-weich);
+}
+.wahl__option:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+.wahl__option:active { transform: scale(0.985); }
+
+.wahl__option input,
+.skala__feld input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.wahl__marke {
+  flex: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+  position: relative;
+  transition: box-shadow var(--d-schnell) var(--e-weich);
+}
+.wahl--mehr .wahl__marke { border-radius: 4px; }
+
+.wahl__option:has(input:checked) {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}
+/* Gewählt: der Kreis füllt sich von innen. */
+.wahl__option:has(input:checked) .wahl__marke { box-shadow: inset 0 0 0 0.3125rem currentColor; }
+.wahl--mehr .wahl__option:has(input:checked) .wahl__marke { box-shadow: inset 0 0 0 1.5px currentColor; }
+.wahl--mehr .wahl__option:has(input:checked) .wahl__marke::after {
+  content: '';
+  position: absolute;
+  left: 0.42rem;
+  top: 0.18rem;
+  width: 0.35rem;
+  height: 0.65rem;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.wahl__option:has(input:focus-visible),
+.skala__feld:has(input:focus-visible) {
+  outline: 3px solid var(--rebe);
+  outline-offset: 2px;
+}
+
+.wahl__option:has(input:disabled:not(:checked)) { opacity: 0.4; cursor: not-allowed; }
+.wahl__option--allein { margin-top: var(--r-2); }
+
+/* --- Zusatzfelder ---------------------------------------------------------- */
+
+.frage__zusatz,
+.frage__frei {
+  display: grid;
+  gap: var(--r-2);
+  margin-top: var(--r-4);
+  font-size: var(--t-klein);
+  color: var(--ink-80);
+}
+.frage__zusatz[hidden] { display: none; }
+.frage__zusatz em { font-style: normal; color: var(--ink-60); }
+.frage__zusatz small,
+.frage__frei small { font-size: var(--t-micro); color: var(--ink-60); }
+
+.frage__zusatz input,
+.frage__frei textarea {
+  font: inherit;
+  font-size: max(16px, var(--t-basis)); /* unter 16px zoomt iOS beim Tippen hinein */
+  color: var(--ink);
+  padding: var(--r-3) var(--r-4);
+  border-radius: 14px;
+  border: 0;
+  box-shadow: inset 0 0 0 1.5px var(--linie-stark);
+  background: var(--paper-pure);
+  width: 100%;
+}
+.frage__frei textarea { resize: vertical; min-height: 6.5rem; line-height: 1.45; }
+.frage__zusatz input:focus-visible,
+.frage__frei textarea:focus-visible { outline: 3px solid var(--rebe); outline-offset: 1px; }
+
+/* --- Matrix ---------------------------------------------------------------- */
+
+.matrix { display: grid; gap: var(--r-5); margin-top: var(--r-4); }
+
+.matrix__schluessel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--r-1) var(--r-4);
+  font-size: var(--t-micro);
+  letter-spacing: 0.04em;
+  color: var(--ink-60);
+}
+
+.zeile { display: grid; gap: var(--r-2); }
+.zeile__text { font-size: var(--t-basis); font-variation-settings: 'wght' 560, 'wdth' 100; }
+
+.skala {
+  display: grid;
+  grid-template-columns: repeat(var(--spalten), minmax(0, 1fr));
+  gap: 0;
+  border-radius: 14px;
+  box-shadow: inset 0 0 0 1.5px var(--linie-stark);
+  background: var(--paper-pure);
+  overflow: hidden;
+}
+
+.skala__feld {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 52px;
+  padding: var(--r-2) var(--r-1);
+  font-size: var(--t-klein);
+  line-height: 1.15;
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color var(--d-schnell) var(--e-weich), color var(--d-schnell) var(--e-weich);
+}
+.skala__feld + .skala__feld { box-shadow: inset 1.5px 0 0 var(--linie); }
+.skala__feld:hover { background: var(--paper-warm); }
+.skala__feld:has(input:checked) { background: var(--ink); color: var(--paper); }
+
+/* Schulnoten: Ziffern groß, wie auf dem Zeugnis. */
+.matrix--noten .skala__feld {
+  font-size: var(--t-gross);
+  font-variation-settings: 'wght' 700, 'wdth' 90;
+  min-height: 56px;
+}
+
+/* ---------------------------------------------------------------------------
+   Danke
+   --------------------------------------------------------------------------- */
+
+.danke__titel { margin-top: var(--r-3); }
+
+.teilen {
+  margin-top: var(--r-7);
+  padding: var(--r-5);
+  border-radius: 18px;
+  background: var(--ink);
+  color: var(--paper);
+}
+.teilen__text { font-size: var(--t-basis); line-height: 1.45; color: rgba(244, 241, 234, 0.82); }
+.teilen__text strong { color: var(--paper); font-variation-settings: 'wght' 700, 'wdth' 100; }
+.teilen__zeile { display: grid; gap: var(--r-3); margin-top: var(--r-4); }
+.teilen .knopf { background: var(--paper); color: var(--ink); min-height: 52px; }
+.teilen .knopf:hover { color: var(--paper); }
+.teilen__link {
+  font: inherit;
+  font-size: var(--t-klein);
+  min-width: 0;
+  padding: var(--r-3) var(--r-4);
+  border: 1px solid var(--auf-dunkel-linie);
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(244, 241, 234, 0.82);
+}
+.teilen__status { margin-top: var(--r-2); font-size: var(--t-klein); min-height: 1.4em; }
+
+.danke__heim { margin-top: var(--r-6); }
+
+@media (min-width: 40rem) {
+  .teilen__zeile { grid-template-columns: auto 1fr; }
+}
