@@ -37,7 +37,12 @@ import '../styles/global.css';
       <div class="reiter" role="group" aria-label="Bereich">
         <button type="button" data-reiter="news" aria-pressed="true">News</button>
         <button type="button" data-reiter="termine" aria-pressed="false">Termine</button>
+        <button type="button" data-reiter="umfrage" aria-pressed="false">Umfrage</button>
       </div>
+
+      <div data-umfrage-bereich hidden></div>
+
+      <div data-redaktion-inhalt>
 
       <p class="klein admin__hinweis">
         Gespeichertes erscheint auf der Website innerhalb von etwa einer Minute —
@@ -51,6 +56,7 @@ import '../styles/global.css';
 
       <form class="formular" data-eintrag hidden></form>
       <ul class="eintraege" data-liste></ul>
+      </div>
     </section>
 
     <p class="admin__meldung" role="status" aria-live="polite" data-meldung></p>
@@ -58,6 +64,7 @@ import '../styles/global.css';
 
   <script>
     import { supabase } from '../lib/supabase';
+    import { umfrageZeigen } from '../lib/admin-umfrage';
 
     type Tabelle = 'news' | 'termine';
     type Eintrag = Record<string, string | boolean | null>;
@@ -288,11 +295,15 @@ import '../styles/global.css';
 
     document.querySelectorAll<HTMLButtonElement>('[data-reiter]').forEach((knopf) =>
       knopf.addEventListener('click', async () => {
-        tabelle = knopf.dataset.reiter as Tabelle;
         document.querySelectorAll('[data-reiter]').forEach((k) =>
           k.setAttribute('aria-pressed', String(k === knopf)),
         );
         melde('');
+        const umfrage = knopf.dataset.reiter === 'umfrage';
+        $('[data-redaktion-inhalt]').hidden = umfrage;
+        $('[data-umfrage-bereich]').hidden = !umfrage;
+        if (umfrage) return umfrageZeigen($('[data-umfrage-bereich]'), melde);
+        tabelle = knopf.dataset.reiter as Tabelle;
         await laden();
       }),
     );
@@ -408,6 +419,60 @@ import '../styles/global.css';
   .formular :global(.formular__knoepfe) { display: flex; gap: var(--r-3); align-items: center; }
 
   .eintraege { display: grid; gap: var(--r-2); }
+
+  /* --- Umfrage ------------------------------------------------------------ */
+  [data-umfrage-bereich] :global(.umfrage-block) { margin-top: var(--r-7); display: grid; gap: var(--r-4); }
+  [data-umfrage-bereich] :global(.umfrage-block:first-child) { margin-top: var(--r-5); }
+  [data-umfrage-bereich] :global(.umfrage-block__titel) {
+    font-size: var(--t-gross);
+    font-variation-settings: 'wght' 700, 'wdth' 92;
+    padding-top: var(--r-4);
+    border-top: 1px solid var(--linie);
+  }
+  [data-umfrage-bereich] :global(.formular) { margin-bottom: 0; }
+  [data-umfrage-bereich] :global(select) {
+    font: inherit;
+    font-size: var(--t-klein);
+    padding: var(--r-2) var(--r-3);
+    border: 1px solid var(--linie-stark);
+    background: var(--paper-pure);
+  }
+  [data-umfrage-bereich] :global(.eintrag button) { white-space: nowrap; }
+
+  [data-umfrage-bereich] :global(.auswertung) { display: grid; gap: var(--r-3); }
+  [data-umfrage-bereich] :global(.auswertung__teil) {
+    margin-top: var(--r-5);
+    font-size: var(--t-basis);
+    font-variation-settings: 'wght' 700, 'wdth' 92;
+  }
+  [data-umfrage-bereich] :global(.auswertung__frage) { margin-top: var(--r-3); font-variation-settings: 'wght' 600, 'wdth' 100; }
+  [data-umfrage-bereich] :global(.auswertung__zeile) { padding-left: var(--r-4); }
+
+  [data-umfrage-bereich] :global(.balken) { display: grid; gap: 2px; }
+  [data-umfrage-bereich] :global(.balken li) {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--r-3);
+    padding: var(--r-1) var(--r-3);
+    font-size: var(--t-klein);
+    background: var(--paper-pure);
+    isolation: isolate;
+  }
+  /* Der Balken steht hinter dem Text in --ink-20 — `--ink` darauf bleibt lesbar. */
+  [data-umfrage-bereich] :global(.balken li::before) {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--anteil) * 100%);
+    background: var(--ink-20);
+    z-index: -1;
+  }
+  [data-umfrage-bereich] :global(.balken__zahl) { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  [data-umfrage-bereich] :global(.freitexte) { font-size: var(--t-klein); }
+  [data-umfrage-bereich] :global(.freitexte summary) { cursor: pointer; color: var(--ink-80); }
+  [data-umfrage-bereich] :global(.freitexte ul) { display: grid; gap: var(--r-2); margin-top: var(--r-2); padding-left: var(--r-4); border-left: 2px solid var(--linie); }
   .eintraege :global(.eintrag) {
     display: grid;
     grid-template-columns: 1fr auto auto;
