@@ -8,4 +8,13 @@ export default defineConfig({
   adapter: vercel(),
   site: 'https://ksr-rheingau-taunus.de',
   build: { inlineStylesheets: 'auto' },
+  // Ohne diese Liste kennt Astro auf Vercel die öffentliche Domain nicht und
+  // weist das Absenden der Umfrage als „Cross-site“ ab (403).
+  security: {
+    allowedDomains: [
+      { protocol: 'https', hostname: 'website-ksr.vercel.app' },
+      { protocol: 'https', hostname: 'ksr-rheingau-taunus.de' },
+      { protocol: 'https', hostname: 'www.ksr-rheingau-taunus.de' },
+    ],
+  },
 });
